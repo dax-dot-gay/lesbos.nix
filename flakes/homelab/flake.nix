@@ -1,5 +1,5 @@
 {
-    description = "Flake containing common configs specific to this repository (i.e. not nixos-utilities)";
+    description = "Flake containing configs for my homelab";
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
         sops-nix = {
@@ -19,6 +19,13 @@
             inputs.nixpkgs.follows = "nixpkgs";
             inputs.sops-nix.follows = "sops-nix";
             inputs.comin.follows = "comin";
+        };
+        lesbos-common = {
+            url = "path:../common";
+            inputs.nixpkgs.follows = "nixpkgs";
+            inputs.sops-nix.follows = "sops-nix";
+            inputs.comin.follows = "comin";
+            inputs.nixos-utilities.follows = "nixos-utilities";
         };
     };
 
