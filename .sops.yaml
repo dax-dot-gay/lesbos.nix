@@ -1,0 +1,16 @@
+keys:
+    - &root age177zdzvkyya5lzm0xfet99etw09347wggaqqkxf7ys8qq2aguyghs8glvtn
+
+creation_rules:
+  - path_regex: secrets/global.yaml$
+    key_groups:
+      - age:
+          - *root
+  - path_regex: secrets/homelab/global.yaml$
+    key_groups:
+      - age:
+          - *root
+  - path_regex: secrets/personal/global.yaml$
+    key_groups:
+      - age:
+          - *root

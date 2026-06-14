@@ -10,5 +10,26 @@
         }
       }
     }
+  },
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/chri11g6/sops-schema/refs/heads/master/sops.schema.json": [
+      ".sops.yaml"
+    ]
+  },
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.autoIndent": "keep",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.defaultColorDecorators": "never",
+    "editor.quickSuggestions": {
+      "strings": true,
+      "other": true,
+      "comments": false
+    }
+  },
+  "[nix]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4
   }
 }
