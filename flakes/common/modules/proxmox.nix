@@ -189,7 +189,7 @@ in
                     default = 2048;
                 };
             };
-            network_interfaces = mkSubmodule "Network interfaces to assign to the guest" {
+            network = mkSubmodule "Network interfaces to assign to the guest" {
                 primary = mkOption {
                     description = "Primary network interface (net0 - maps to ens18)";
                     type = networkInterface;
@@ -242,7 +242,7 @@ in
                 bios = "ovmf";
                 cores = cfg.resources.cores;
                 memory = cfg.resources.memory;
-                net0 = "${cfg.network_interfaces.primary.model}=00:00:00:00:00:00,bridge=${cfg.network_interfaces.primary.bridge},firewall=0";
+                net0 = "${cfg.network.primary.model}=00:00:00:00:00:00,bridge=${cfg.network.primary.bridge},firewall=0";
                 agent = cfg.agent;
             };
             qemuExtraConf = mkMerge [

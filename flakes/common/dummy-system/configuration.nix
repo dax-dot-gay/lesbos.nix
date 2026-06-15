@@ -53,7 +53,7 @@
         resources = {
             cores = 4;
         };
-        network_interfaces = {
+        network = {
             extra_interfaces = [
                 {
                     bridge = "vmbr3";
