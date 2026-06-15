@@ -52,5 +52,8 @@
                     self.nixosModules.default
                 ];
             };
+            packages.${system} = {
+                vm-dummy = self.nixosConfigurations.dummy.config.system.build.VMA;
+            };
         };
 }
