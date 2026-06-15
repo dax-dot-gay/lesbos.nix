@@ -234,10 +234,10 @@ in
     config = mkIf cfg.enable {
         proxmox = {
             qemuConf = {
-                name = "${cfg.metadata.name} [${cfg.metadata.id}]";
+                name = "${cfg.metadata.name}";
                 scsihw = "virtio-scsi-single";
                 boot = "order=virtio0;ide2";
-                virtio0 = "${cfg.storage.volume}:vm-${cfg.metadata.id}-disk-0";
+                virtio0 = "${cfg.storage.volume}:vm-${toString cfg.metadata.id}-disk-0";
                 ostype = "l26";
                 bios = "ovmf";
                 cores = cfg.resources.cores;
@@ -259,12 +259,12 @@ in
                             [
                                 "file=${
                                     if (isNull disk.volume) then cfg.storage.volume else disk.volume
-                                }:vm-${cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}"
+                                }:vm-${toString cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}"
                                 "cache=${disk.cache}"
                                 "format=${disk.format}"
                                 "media=${disk.media}"
                             ]
-                            (optional (disk.read_only && (isNull (match "sata" disk.device)) "ro=1"))
+                            (optional (disk.read_only && (isNull (match "sata" disk.device))) "ro=1")
                         ]);
                     }) cfg.storage.extra_disks
                 ))
