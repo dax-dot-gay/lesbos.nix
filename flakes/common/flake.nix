@@ -32,5 +32,17 @@
             };
         in
         {
+            nixosModules = {
+                default = {...}: {
+                    imports = [
+                        inputs.sops-nix.nixosModules.sops
+                        inputs.comin.nixosModules.comin
+                        inputs.disko.nixosModules.disko
+                        inputs.nixos-utilities.nixosModules.default
+                        "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
+                        ./modules
+                    ];
+                };
+            };
         };
 }
