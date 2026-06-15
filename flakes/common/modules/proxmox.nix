@@ -105,13 +105,13 @@ let
           }) cfg.storage.extra_disks
       ))
     */
-    setupScript = mkIf cfg.enable (
+    setupScript = if cfg.enable then  (
         pkgs.writeScript "setup-vm.sh" ''
             #! /usr/bin/env bash
 
-            STORAGE_PATH=$(pvesh get /storage --output-format json | jq '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
+            STORAGE_PATH=$(pvesh get /storage --output-format json | jq -r '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
 
-            qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id}
+            qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id} --unique
             qm set ${toString cfg.metadata.id} --efidisk0 ${cfg.storage.volume}:1,format=raw,efitype=4m,pre-enrolled-keys=0
             ${concatStringsSep "\n" (
                 imap1 (index: disk: ''
@@ -123,18 +123,17 @@ let
                 '') cfg.storage.extra_disks
             )}
         ''
-    );
+    ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
 
-    deployScript = mkIf cfg.enable (
+    deployScript = if cfg.enable then (
         pkgs.writeScript "deploy-vm.sh" ''
-            # bash
-                   #! /usr/bin/env bash
+            #! /usr/bin/env bash
 
-                   STORAGE_PATH=$(ssh root@192.168.0.225 "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
-                   scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
-                   ssh $PROXMOX_ADDR 'bash -s' < result/setup/setup-vm.sh
+            STORAGE_PATH=$(ssh root@192.168.0.225 "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
+            scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
+            ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
         ''
-    );
+    ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
 in
 {
     options = {
@@ -142,14 +141,14 @@ in
             enable = mkEnableOption "expanded proxmox configuration";
             __deploy_script = mkOption {
                 description = "internal deploy script";
-                type = types.package;
+                type = types.anything;
                 internal = true;
                 readOnly = true;
                 default = deployScript;
             };
             __setup_script = mkOption {
                 description = "internal setup script";
-                type = types.package;
+                type = types.anything;
                 internal = true;
                 readOnly = true;
                 default = setupScript;
