@@ -36,7 +36,7 @@
         enable = true;
         metadata = {
             id = 502;
-            name = "test-dummy.lesbos";
+            name = "testing-dummy";
             tags = ["lesbos.nix" "testing"];
         };
         storage = {
