@@ -291,7 +291,7 @@ in
                 })
             ];
             partitionTableType = "efi";
-            filenameSuffix = "${cfg.metadata.id}-${cfg.metadata.name}";
+            filenameSuffix = "${toString cfg.metadata.id}-${cfg.metadata.name}";
             cloudInit.enable = false;
         };
 
