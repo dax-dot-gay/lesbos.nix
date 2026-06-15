@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+    lib,
+    config,
+    pkgs,
+    ...
+}:
 with lib;
 let
     cfg = config.lesbos.proxmox;
@@ -25,10 +30,10 @@ let
                 type = types.strMatching "^(virtio|sata|scsi)[0-9]{1,2}$";
                 example = "virtio1";
             };
-            name = mkOption {
-                description = "Optional disk name to add as a suffix to the full disk name";
-                type = types.nullOr types.singleLineStr;
-                default = null;
+            size = mkOption {
+                description = "Size of this disk in GiB";
+                type = types.ints.positive;
+                default = 64;
             };
             volume = mkOption {
                 description = "Proxmox storage volume (if `null`, defaults to `storage.volume`)";
@@ -58,14 +63,6 @@ let
                 ];
                 default = "raw";
             };
-            media = mkOption {
-                description = "Drive's media type";
-                type = types.enum [
-                    "disk"
-                    "cdrom"
-                ];
-                default = "disk";
-            };
             read_only = mkOption {
                 description = "Whether disk is read-only";
                 type = types.bool;
@@ -89,11 +86,74 @@ let
             };
         };
     };
+
+    /*
+      (listToAttrs (
+          imap1 (index: disk: {
+              name = disk.device;
+              value = concatStringsSep "," (concatLists [
+                  [
+                      "file=${
+                          if (isNull disk.volume) then cfg.storage.volume else disk.volume
+                      }:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}.${disk.format}"
+                      "cache=${disk.cache}"
+                      "format=${disk.format}"
+                      "media=${disk.media}"
+                  ]
+                  (optional (disk.read_only && (isNull (match "sata" disk.device))) "ro=1")
+              ]);
+          }) cfg.storage.extra_disks
+      ))
+    */
+    setupScript = mkIf cfg.enable (
+        pkgs.writeScript "setup-vm.sh" ''
+            #! /usr/bin/env bash
+
+            STORAGE_PATH=$(pvesh get /storage --output-format json | jq '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
+
+            qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id}
+            qm set ${toString cfg.metadata.id} --efidisk0 ${cfg.storage.volume}:1,format=raw,efitype=4m,pre-enrolled-keys=0
+            ${concatStringsSep "\n" (
+                imap1 (index: disk: ''
+                    qm set ${toString cfg.metadata.id} --${disk.device} ${
+                        if (isNull disk.volume) then cfg.storage.volume else disk.volume
+                    }:${toString disk.size},cache=${disk.cache},format=${disk.format}${
+                        if (disk.read_only && (isNull (match "sata" disk.device))) then ",ro=1" else ""
+                    }
+                '') cfg.storage.extra_disks
+            )}
+        ''
+    );
+
+    deployScript = mkIf cfg.enable (
+        pkgs.writeScript "deploy-vm.sh" ''
+            # bash
+                   #! /usr/bin/env bash
+
+                   STORAGE_PATH=$(ssh root@192.168.0.225 "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
+                   scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
+                   ssh $PROXMOX_ADDR 'bash -s' < result/setup/setup-vm.sh
+        ''
+    );
 in
 {
     options = {
         lesbos.proxmox = {
             enable = mkEnableOption "expanded proxmox configuration";
+            __deploy_script = mkOption {
+                description = "internal deploy script";
+                type = types.package;
+                internal = true;
+                readOnly = true;
+                default = deployScript;
+            };
+            __setup_script = mkOption {
+                description = "internal setup script";
+                type = types.package;
+                internal = true;
+                readOnly = true;
+                default = setupScript;
+            };
             metadata = {
                 id = mkOption {
                     description = "VM ID - Mapped into filename and VM name";
@@ -248,26 +308,9 @@ in
             qemuExtraConf = mkMerge [
                 {
                     tags = concatStringsSep "," cfg.metadata.tags;
-                    efidisk0 = "${cfg.storage.volume}:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-efidisk0.raw,efitype=4m,pre-enrolled-keys=0,format=raw";
                     cpu = cfg.resources.cpu_type;
                     sockets = cfg.resources.sockets;
                 }
-                (listToAttrs (
-                    imap1 (index: disk: {
-                        name = disk.device;
-                        value = concatStringsSep "," (concatLists [
-                            [
-                                "file=${
-                                    if (isNull disk.volume) then cfg.storage.volume else disk.volume
-                                }:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}.${disk.format}"
-                                "cache=${disk.cache}"
-                                "format=${disk.format}"
-                                "media=${disk.media}"
-                            ]
-                            (optional (disk.read_only && (isNull (match "sata" disk.device))) "ro=1")
-                        ]);
-                    }) cfg.storage.extra_disks
-                ))
                 (listToAttrs (
                     imap0 (index: share: {
                         name = "virtiofs${index}";

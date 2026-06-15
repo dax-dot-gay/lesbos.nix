@@ -46,7 +46,6 @@
             extra_disks = [
                 {
                     device = "virtio1";
-                    name = "test-disk";
                 }
             ];
         };
