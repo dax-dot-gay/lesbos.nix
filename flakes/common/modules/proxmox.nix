@@ -2,6 +2,15 @@
 with lib;
 let
     cfg = config.lesbos.proxmox;
+    mkSubmodule =
+        description: options:
+        mkOption {
+            description = description;
+            type = types.submodule {
+                options = options;
+            };
+            default = { };
+        };
     extraDisk = types.submodule {
         options = {
             device = mkOption {
@@ -91,7 +100,7 @@ in
                     type = types.ints.positive;
                 };
                 name = mkOption {
-                    description = "VM Name";
+                    description = "VM Name & hostname";
                     type = types.singleLineStr;
                 };
                 tags = mkOption {
@@ -99,7 +108,7 @@ in
                     type = types.listOf types.singleLineStr;
                 };
             };
-            storage = {
+            storage = mkSubmodule "VM Storage configuration" {
                 volume = mkOption {
                     description = "Proxmox storage volume";
                     type = types.singleLineStr;
@@ -158,7 +167,7 @@ in
                     default = [ ];
                 };
             };
-            resources = {
+            resources = mkSubmodule "VM resources (RAM, CPU, etc)" {
                 cpu_type = mkOption {
                     description = "CPU type (full `cpu` string from proxmox)";
                     type = types.singleLineStr;
@@ -180,7 +189,7 @@ in
                     default = 2048;
                 };
             };
-            network_interfaces = {
+            network_interfaces = mkSubmodule "Network interfaces to assign to the guest" {
                 primary = mkOption {
                     description = "Primary network interface (net0 - maps to ens18)";
                     type = networkInterface;
@@ -204,7 +213,7 @@ in
                 type = types.bool;
                 default = true;
             };
-            watchdog = {
+            watchdog = mkSubmodule "Configuration of system watchdog" {
                 enable = mkEnableOption "hardware watchdog device, and enables basic watchdog functions on the guest";
                 action = mkOption {
                     description = "Watchdog action on failure";
@@ -222,13 +231,13 @@ in
         };
     };
 
-    config = {
+    config = mkIf cfg.enable {
         proxmox = {
             qemuConf = {
                 name = "${cfg.metadata.name} [${cfg.metadata.id}]";
                 scsihw = "virtio-scsi-single";
                 boot = "order=virtio0;ide2";
-                virtio = "${cfg.storage.volume}:vm-${cfg.metadata.id}-disk-0";
+                virtio0 = "${cfg.storage.volume}:vm-${cfg.metadata.id}-disk-0";
                 ostype = "l26";
                 bios = "ovmf";
                 cores = cfg.resources.cores;
@@ -294,5 +303,6 @@ in
                 interval = mkDefault 10;
             };
         };
+        networking.hostName = mkForce cfg.metadata.name;
     };
 }
