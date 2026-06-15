@@ -292,7 +292,10 @@ in
             ];
             partitionTableType = "efi";
             filenameSuffix = "${toString cfg.metadata.id}-${cfg.metadata.name}";
-            cloudInit.enable = false;
+            cloudInit = {
+                enable = false;
+                defaultStorage = cfg.storage.volume;
+            };
         };
 
         virtualisation.diskSize = cfg.storage.disk_size;
