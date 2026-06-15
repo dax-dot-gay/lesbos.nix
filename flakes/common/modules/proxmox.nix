@@ -248,7 +248,7 @@ in
             qemuExtraConf = mkMerge [
                 {
                     tags = concatStringsSep "," cfg.metadata.tags;
-                    efidisk0 = "${cfg.storage.volume}:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-efidisk0,efitype=4m,pre-enrolled-keys=0,format=raw";
+                    efidisk0 = "${cfg.storage.volume}:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-efidisk0.raw,efitype=4m,pre-enrolled-keys=0,format=raw";
                     cpu = cfg.resources.cpu_type;
                     sockets = cfg.resources.sockets;
                 }
@@ -259,7 +259,7 @@ in
                             [
                                 "file=${
                                     if (isNull disk.volume) then cfg.storage.volume else disk.volume
-                                }:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}"
+                                }:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}.${disk.format}"
                                 "cache=${disk.cache}"
                                 "format=${disk.format}"
                                 "media=${disk.media}"
