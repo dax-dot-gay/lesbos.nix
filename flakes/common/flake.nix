@@ -44,5 +44,13 @@
                     ];
                 };
             };
+            nixosConfigurations.dummy = inputs.nixpkgs.lib.nixosSystem {
+                inherit system;
+                specialArgs = {inherit inputs system;};
+                modules = [
+                    ./dummy-system/configuration.nix
+                    self.nixosModules.default
+                ];
+            };
         };
 }
