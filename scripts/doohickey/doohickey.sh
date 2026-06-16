@@ -72,11 +72,15 @@ build::proxmox() {
     rm -rf ./result
     mkdir result
 
+    cp ../../templates/proxmox_autoprovision_secrets_filled.nix "./hosts/$argc_config/autoprovision-secrets.nix"
+
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
     nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh
 
     echo "Build artifacts in: $(git rev-parse --show-toplevel)/flakes/$argc_flake"
+
+    cp ../../templates/proxmox_autoprovision_secrets_empty.nix "./hosts/$argc_config/autoprovision-secrets.nix"
 }
 
 # @cmd                                      Deploy nixosConfigurations
@@ -91,6 +95,8 @@ deploy::proxmox() {
     rm -rf ./result
     mkdir result
 
+    cp ../../templates/proxmox_autoprovision_secrets_filled.nix "./hosts/$argc_config/autoprovision-secrets.nix"
+
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
     nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh
@@ -99,6 +105,7 @@ deploy::proxmox() {
 
     echo "Deployed $argc_flake.$argc_config to $PROXMOX_ADDR"
     rm -rf result
+    cp ../../templates/proxmox_autoprovision_secrets_empty.nix "./hosts/$argc_config/autoprovision-secrets.nix"
 }
 
 # @cmd                                      Create new resource
