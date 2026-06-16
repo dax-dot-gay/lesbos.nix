@@ -6,6 +6,9 @@
     ...
 }:
 {
+    imports = [
+        ./provision-secrets.nix
+    ];
     lesbos.proxmox = {
         enable = true;
         network = {
