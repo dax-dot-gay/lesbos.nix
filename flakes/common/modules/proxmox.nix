@@ -87,31 +87,13 @@ let
         };
     };
 
-    /*
-      (listToAttrs (
-          imap1 (index: disk: {
-              name = disk.device;
-              value = concatStringsSep "," (concatLists [
-                  [
-                      "file=${
-                          if (isNull disk.volume) then cfg.storage.volume else disk.volume
-                      }:${toString cfg.metadata.id}/vm-${toString cfg.metadata.id}-disk-${toString index}${if (isNull disk.name) then "" else "-${disk.name}"}.${disk.format}"
-                      "cache=${disk.cache}"
-                      "format=${disk.format}"
-                      "media=${disk.media}"
-                  ]
-                  (optional (disk.read_only && (isNull (match "sata" disk.device))) "ro=1")
-              ]);
-          }) cfg.storage.extra_disks
-      ))
-    */
     setupScript = if cfg.enable then  (
         pkgs.writeScript "setup-vm.sh" ''
             #! /usr/bin/env bash
 
             STORAGE_PATH=$(pvesh get /storage --output-format json | jq -r '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
 
-            qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id} --unique
+            qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id} --unique --force
             qm set ${toString cfg.metadata.id} --efidisk0 ${cfg.storage.volume}:1,format=raw,efitype=4m,pre-enrolled-keys=0
             ${concatStringsSep "\n" (
                 imap1 (index: disk: ''
@@ -287,6 +269,28 @@ in
                     default = "reset";
                 };
             };
+            start = mkSubmodule "VM startup configuration" {
+                on_boot = mkOption {
+                    description = "Whether to start on boot";
+                    type = types.bool;
+                    default = true;
+                };
+                order = mkOption {
+                    description = "What order to start in";
+                    type = types.nullOr types.ints.positive;
+                    default = null;
+                };
+                delay_up = mkOption {
+                    description = "Delay in seconds before starting the next VM";
+                    type = types.nullOr types.ints.positive;
+                    default = null;
+                };
+                delay_down = mkOption {
+                    description = "Delay in seconds before stopping the next VM";
+                    type = types.nullOr types.ints.positive;
+                    default = null;
+                };
+            };
         };
     };
 
@@ -309,6 +313,7 @@ in
                     tags = concatStringsSep "," cfg.metadata.tags;
                     cpu = cfg.resources.cpu_type;
                     sockets = cfg.resources.sockets;
+                    onboot = if cfg.start.on_boot then "1" else "0";
                 }
                 (listToAttrs (
                     imap0 (index: share: {
@@ -330,6 +335,13 @@ in
                 ))
                 (optionalAttrs cfg.watchdog.enable {
                     watchdog = "model=i6300esb,action=${cfg.watchdog.action}";
+                })
+                (optionalAttrs ((!isNull cfg.start.order) || (!isNull cfg.start.delay_up) || (!isNull cfg.start.delay_down)) {
+                    startup = concatStringsSep "," (concatLists [
+                        (optional (!isNull cfg.start.order) "order=${toString cfg.start.order}")
+                        (optional (!isNull cfg.start.delay_up) "up=${toString cfg.start.delay_up}")
+                        (optional (!isNull cfg.start.delay_down) "down=${toString cfg.start.delay_down}")
+                    ]);
                 })
             ];
             partitionTableType = "efi";

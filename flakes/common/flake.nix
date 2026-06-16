@@ -53,9 +53,9 @@
                 ];
             };
             packages.${system} = {
-                vm-dummy = self.nixosConfigurations.dummy.config.system.build.VMA;
-                vm-dummy-deploy = self.nixosConfigurations.dummy.config.lesbos.proxmox.__deploy_script;
-                vm-dummy-setup = self.nixosConfigurations.dummy.config.lesbos.proxmox.__setup_script;
+                host-dummy = self.nixosConfigurations.dummy.config.system.build.VMA;
+                host-dummy-deploy = self.nixosConfigurations.dummy.config.lesbos.proxmox.__deploy_script;
+                host-dummy-setup = self.nixosConfigurations.dummy.config.lesbos.proxmox.__setup_script;
             };
         };
 }

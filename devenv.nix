@@ -21,4 +21,10 @@
         };
     };
     dotenv.enable = true;
+    scripts = {
+        doohickey.exec = '' #bash
+            cd $(git rev-parse --show-toplevel)
+            ./scripts/doohickey/doohickey.sh $@
+        '';
+    };
 }

@@ -46,6 +46,7 @@
             extra_disks = [
                 {
                     device = "virtio1";
+                    size = 128;
                 }
             ];
         };
@@ -61,5 +62,9 @@
         };
         agent = true;
         watchdog.enable = true;
+        start = {
+            on_boot = true;
+            order = 20;
+        };
     };
 }
