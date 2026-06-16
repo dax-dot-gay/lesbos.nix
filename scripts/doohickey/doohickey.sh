@@ -26,7 +26,7 @@ inquire_pass() {
         read -s -p "$a_prompt: " result
         echo "" >&2
         if [ "$(l.str_len "$result")" = "0" ]; then
-            echo $(spwgen ridiculous)
+            echo $(pwgen -s -c 24 1)
         else
             echo $result
         fi

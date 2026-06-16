@@ -15,7 +15,7 @@
         killall
         openssl
         mo
-        pwgen-secure
+        pwgen
         inetutils
     ];
     languages.python = {
