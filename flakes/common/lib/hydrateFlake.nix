@@ -86,7 +86,7 @@ lib.filterAttrs checkToRemove (
                                     };
                                 };
                             }
-                            (processHostConfiguration hostConfig)
+                            ({pkgs, config, lib, ...}: (processHostConfiguration config hostConfig))
                         ]
                         ++ modules;
                     };
@@ -97,7 +97,7 @@ lib.filterAttrs checkToRemove (
                     };
                 };
 
-            processHostConfiguration = {
+            processHostConfiguration = config: {
                 thisflake,
                 hostname,
                 enable_root,
@@ -124,7 +124,7 @@ lib.filterAttrs checkToRemove (
                         mode = "0400";
                     };
                     users.users.root = {
-                        hashedPasswordFile = "/run/secrets-for-users/users/root/password";
+                        hashedPasswordFile = config.sops.secrets."users/root/password".path;
                         openssh.authorizedKeys.keyFiles = [
                             "/run/secrets/ssh/root_key"
                         ];
@@ -145,7 +145,7 @@ lib.filterAttrs checkToRemove (
                     };
                     users.users.${username} = {
                         extraGroups = if enable_user_wheel then ["wheel"] else [];
-                        hashedPasswordFile = "/run/secrets-for-users/users/${username}/password";
+                        hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
                         openssh.authorizedKeys.keyFiles = [
                             "/run/secrets/ssh/user_key"
                         ];
