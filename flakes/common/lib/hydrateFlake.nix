@@ -32,6 +32,19 @@ let
     ];
 
     checkToRemove = name: _: !(lib.any (x: x == name) toRemove);
+
+    recursiveUpdateAttrs =
+        attrs:
+        (
+            if (lib.length attrs) == 0 then
+                [ ]
+            else if (lib.length attrs) == 0 then
+                lib.head attrs
+            else
+                (lib.foldl (accumulator: current: lib.recursiveUpdate accumulator current) (lib.head attrs) (
+                    lib.tail attrs
+                ))
+        );
 in
 lib.filterAttrs checkToRemove (
     resolved
@@ -53,7 +66,8 @@ lib.filterAttrs checkToRemove (
                         inherit system;
                         specialArgs = {
                             inherit inputs system;
-                        } // extraSpecialArgs;
+                        }
+                        // extraSpecialArgs;
                         modules = [
                             "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
                             inputs.sops-nix.nixosModules.sops
@@ -71,7 +85,8 @@ lib.filterAttrs checkToRemove (
                                     };
                                 };
                             }
-                        ] ++ modules;
+                        ]
+                        ++ modules;
                     };
                     packages.${system} = {
                         "host-${key}" = self.nixosConfigurations."${key}".config.system.build.VMA;
@@ -80,8 +95,12 @@ lib.filterAttrs checkToRemove (
                     };
                 };
         in
-        mergeAttrsList [
-            (mergeAttrsList (mapAttrsToList (key: config: processProxmoxConfiguration key config) (resolved.proxmoxConfigurations or {})))
+        recursiveUpdateAttrs [
+            (recursiveUpdateAttrs (
+                mapAttrsToList (key: config: processProxmoxConfiguration key config) (
+                    resolved.proxmoxConfigurations or { }
+                )
+            ))
         ]
     )
 )
