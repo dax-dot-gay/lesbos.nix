@@ -72,7 +72,12 @@ build::proxmox() {
     mkdir -p ~/.cache/doohickey
     cp -R ./** ~/.cache/doohickey
     cd ~/.cache/doohickey
+    sed -i 's/host-secrets/null/g' .gitignore
     rm -rf .git
+    git init -b main .
+
+    git add -A
+    git commit -m "nul"
 
     cd "flakes/$argc_flake"
     rm -rf ./result
@@ -106,7 +111,12 @@ deploy::proxmox() {
     mkdir -p ~/.cache/doohickey
     cp -R ./** ~/.cache/doohickey
     cd ~/.cache/doohickey
+    sed -i 's/host-secrets/null/g' .gitignore
     rm -rf .git
+    git init -b main .
+
+    git add -A
+    git commit -m "nul"
 
     cd "flakes/$argc_flake"
     rm -rf ./result
