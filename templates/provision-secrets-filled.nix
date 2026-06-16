@@ -50,5 +50,6 @@
         setupSecrets.text = lib.mkDefault "";
         setupSecretsForUsers.deps = [ "provisionHostKeys" ];
         setupSecretsForUsers.text = lib.mkDefault "";
+        users.deps = ["provisionHostKeys"];
     };
 }
