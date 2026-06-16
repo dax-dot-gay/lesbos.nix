@@ -30,17 +30,27 @@
     };
 
     outputs =
-        { lesbos-common, ... }@inputs:
-        lesbos-common.lib.hydrateFlake (
-            { self, ... }@inputs:
-            let
-                system = "x86_64-linux";
-                pkgs = import ../../util/pkgsconf.nix {
-                    inherit inputs system;
-                    extraOverlays = [ ];
-                };
-            in
+        { self, lesbos-common, ... }@inputs:
+        lesbos-common.lib.hydrateFlake
             {
+                inherit self inputs;
+                system = "x86_64-linux";
+                extraOverlays = [ ];
             }
-        ) inputs;
+            (
+                {
+                    self,
+                    pkgs,
+                    system,
+                    ...
+                }@inputs:
+                {
+                    proxmoxConfigurations = {
+                        router = {
+                            id = 501;
+                            tags = ["infra"];
+                        };
+                    };
+                }
+            );
 }
