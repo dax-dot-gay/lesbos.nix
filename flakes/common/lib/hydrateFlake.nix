@@ -163,7 +163,7 @@ lib.filterAttrs checkToRemove (
                                     };
                                     systemd.services.rebuild_actual = {
                                         wantedBy = ["multi-user.target"];
-                                        wants = ["local-fs.target" "network.target"];
+                                        wants = ["systemd-networkd-wait-online.service"];
                                         serviceConfig = {
                                             User = "root";
                                             Group = "root";
@@ -174,6 +174,7 @@ lib.filterAttrs checkToRemove (
                                         '';
                                         path = ["/run/current-system/sw"];
                                     };
+                                    systemd.network.wait-online.enable = true;
                                 })
                             ];
                         };
