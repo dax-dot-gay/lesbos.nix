@@ -132,37 +132,37 @@ lib.filterAttrs checkToRemove (
                                     environment.etc = {
                                         "provisioning/ssh/ssh_host_ecdsa_key" = {
                                             mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostname}/.host-secrets/etc/ssh/ssh_host_ecdsa_key;
+                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ecdsa_key;
                                             user = "root";
                                             group = "root";
                                         };
                                         "provisioning/ssh/ssh_host_ecdsa_key.pub" = {
                                             mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostname}/.host-secrets/etc/ssh/ssh_host_ecdsa_key.pub;
+                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ecdsa_key.pub;
                                             user = "root";
                                             group = "root";
                                         };
                                         "provisioning/ssh/ssh_host_ed25519_key" = {
                                             mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostname}/.host-secrets/etc/ssh/ssh_host_ed25519_key;
+                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ed25519_key;
                                             user = "root";
                                             group = "root";
                                         };
                                         "provisioning/ssh/ssh_host_ed25519_key.pub" = {
                                             mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostname}/.host-secrets/etc/ssh/ssh_host_ed25519_key.pub;
+                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ed25519_key.pub;
                                             user = "root";
                                             group = "root";
                                         };
                                         "provisioning/ssh/ssh_host_rsa_key" = {
                                             mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostname}/.host-secrets/etc/ssh/ssh_host_rsa_key;
+                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_rsa_key;
                                             user = "root";
                                             group = "root";
                                         };
                                         "provisioning/ssh/ssh_host_rsa_key.pub" = {
                                             mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostname}/.host-secrets/etc/ssh/ssh_host_rsa_key.pub;
+                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_rsa_key.pub;
                                             user = "root";
                                             group = "root";
                                         };
