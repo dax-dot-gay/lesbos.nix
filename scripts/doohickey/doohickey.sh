@@ -68,7 +68,13 @@ build() { :; }
 
 # @cmd                                      Build this as a proxmoxConfiguration
 build::proxmox() {
-    cd "$(git rev-parse --show-toplevel)/flakes/$argc_flake"
+    ORIGINAL_PWD=$(git rev-parse --show-toplevel)
+    mkdir -p ~/.cache/doohickey
+    cp -R ./** ~/.cache/doohickey
+    cd ~/.cache/doohickey
+    rm -rf .git
+
+    cd "flakes/$argc_flake"
     rm -rf ./result
     mkdir result
 
@@ -81,6 +87,11 @@ build::proxmox() {
     echo "Build artifacts in: $(git rev-parse --show-toplevel)/flakes/$argc_flake"
 
     cp ../../templates/proxmox_autoprovision_secrets_empty.nix "./hosts/$argc_config/autoprovision-secrets.nix"
+    rm -rf "$ORIGINAL_PWD/flakes/$argc_flake/result"
+    mkdir -p "$ORIGINAL_PWD/flakes/$argc_flake/result"
+    cp -R result/** "$ORIGINAL_PWD/flakes/$argc_flake/result/"
+    cd $ORIGINAL_PWD
+    rm -rf ~/.cache/doohickey
 }
 
 # @cmd                                      Deploy nixosConfigurations
@@ -91,7 +102,13 @@ deploy() { :; }
 
 # @cmd                                      Deploy this configuration to Proxmox
 deploy::proxmox() {
-    cd "$(git rev-parse --show-toplevel)/flakes/$argc_flake"
+    ORIGINAL_PWD=$(git rev-parse --show-toplevel)
+    mkdir -p ~/.cache/doohickey
+    cp -R ./** ~/.cache/doohickey
+    cd ~/.cache/doohickey
+    rm -rf .git
+
+    cd "flakes/$argc_flake"
     rm -rf ./result
     mkdir result
 
@@ -104,8 +121,12 @@ deploy::proxmox() {
     ./result/deploy-vm.sh
 
     echo "Deployed $argc_flake.$argc_config to $PROXMOX_ADDR"
-    rm -rf result
-    cp ../../templates/proxmox_autoprovision_secrets_empty.nix "./hosts/$argc_config/autoprovision-secrets.nix"
+    rm -rf "$ORIGINAL_PWD/flakes/$argc_flake/result"
+    mkdir -p "$ORIGINAL_PWD/flakes/$argc_flake/result"
+    cp -R result/** "$ORIGINAL_PWD/flakes/$argc_flake/result/"
+
+    cd $ORIGINAL_PWD
+    rm -rf ~/.cache/doohickey
 }
 
 # @cmd                                      Create new resource
