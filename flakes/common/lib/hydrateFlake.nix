@@ -106,7 +106,6 @@ lib.filterAttrs checkToRemove (
                             };
                             modules = [
                                 "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
-                                inputs.comin.nixosModules.comin
                                 inputs.lesbos-common.nixosModules.default
                                 ({lib, self, inputs, system, ...}: {
                                     networking.hostName = key;
@@ -114,20 +113,6 @@ lib.filterAttrs checkToRemove (
                                     lesbos.proxmox = self.nixosConfigurations."${key}".config.lesbos.proxmox;
                                     users.users.root = {
                                         password = "root";
-                                    };
-                                    services.comin = {
-                                        enable = true;
-                                        package = lib.mkForce inputs.comin.packages.${system}.default;
-                                        repositorySubdir = "./flakes/${hostConfig.thisflake}";
-                                        repositoryType = "flake";
-                                        remotes = [
-                                            {
-                                                name = "origin";
-                                                url = "https://github.com/dax-dot-gay/lesbos.nix.git";
-                                                branches.main.name = "main";
-                                            }
-                                        ];
-                                        hostname = key;
                                     };
                                     environment.etc = {
                                         "provisioning/ssh/ssh_host_ecdsa_key" = {
@@ -175,6 +160,19 @@ lib.filterAttrs checkToRemove (
                                                 cp /etc/provisioning/ssh/* /etc/ssh/
                                             '';
                                         };
+                                    };
+                                    systemd.services.rebuild_actual = {
+                                        requires = ["default.target"];
+                                        after = ["default.target"];
+                                        serviceConfig = {
+                                            User = "root";
+                                            Group = "root";
+                                            Type = "oneshot";
+                                        };
+                                        script = ''
+                                            nixos-rebuild --flake "github:dax-dot-gay/lesbos.nix?dir=flakes/${hostConfig.thisflake}#${key}" --refresh switch
+                                        '';
+                                        path = ["/run/current-system/sw"];
                                     };
                                 })
                             ];
