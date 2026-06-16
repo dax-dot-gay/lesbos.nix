@@ -30,7 +30,7 @@
     };
 
     outputs =
-        { lesbos-common, ... }:
+        { lesbos-common, ... }@inputs:
         lesbos-common.lib.hydrateFlake (
             { self, ... }@inputs:
             let
@@ -42,5 +42,5 @@
             in
             {
             }
-        );
+        ) inputs;
 }
