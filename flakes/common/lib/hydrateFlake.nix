@@ -26,8 +26,14 @@ let
             inherit self system pkgs;
         }
     );
+
+    toRemove = [
+        "proxmoxConfigurations"
+    ];
+
+    checkToRemove = name: _: !(lib.any (x: x == name) toRemove);
 in
-(
+lib.filterAttrs checkToRemove (
     resolved
     // (
         with lib;
@@ -36,9 +42,9 @@ in
                 key:
                 {
                     id,
+                    path,
                     name ? key,
                     tags ? [ ],
-                    path ? ./hosts/${key},
                     modules ? [ ],
                     extraSpecialArgs ? { },
                 }:
@@ -67,13 +73,15 @@ in
                             }
                         ] ++ modules;
                     };
-                    packages.${system}."host-${key}" = self.nixosConfigurations."${key}".config.system.build.VMA;
-                    packages.${system}."host-${key}-deploy" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__deploy_script;
-                    packages.${system}."host-${key}-setup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__setup_script;
+                    packages.${system} = {
+                        "host-${key}" = self.nixosConfigurations."${key}".config.system.build.VMA;
+                        "host-${key}-deploy" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__deploy_script;
+                        "host-${key}-setup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__setup_script;
+                    };
                 };
         in
-        mkMerge [
-            (mkMerge (mapAttrsToList (key: config: processProxmoxConfiguration key config) (resolved.proxmoxConfigurations or {})))
+        mergeAttrsList [
+            (mergeAttrsList (mapAttrsToList (key: config: processProxmoxConfiguration key config) (resolved.proxmoxConfigurations or {})))
         ]
     )
 )

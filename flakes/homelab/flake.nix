@@ -48,6 +48,7 @@
                     proxmoxConfigurations = {
                         router = {
                             id = 501;
+                            path = ./hosts/router;
                             tags = ["infra"];
                         };
                     };
