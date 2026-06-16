@@ -6,7 +6,4 @@
     ...
 }:
 {
-    imports = [
-        ./autoprovision-secrets.nix
-    ];
 }
