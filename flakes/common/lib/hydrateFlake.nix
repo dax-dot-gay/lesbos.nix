@@ -164,6 +164,7 @@ lib.filterAttrs checkToRemove (
                                     systemd.services.rebuild_actual = {
                                         wantedBy = ["multi-user.target"];
                                         wants = ["systemd-networkd-wait-online.service"];
+                                        requires = ["systemd-networkd-wait-online.service"];
                                         serviceConfig = {
                                             User = "root";
                                             Group = "root";
