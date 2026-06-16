@@ -109,6 +109,10 @@ lib.filterAttrs checkToRemove (
                 {
                     networking.hostName = hostname;
                     system.stateVersion = stateVersion;
+                    sops = {
+                        defaultSopsFile = ../../secrets/global.yaml;
+                        age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+                    };
                 }
                 (optionalAttrs enable_root {
                     sops.secrets."users/root/password" = {

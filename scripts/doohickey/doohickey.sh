@@ -152,7 +152,8 @@ add::host::proxmox() {
     fi
 
     mkdir -p "hosts/$a_hostname"
-    echo "{...}: {}" > "hosts/$a_hostname/default.nix"
+    cp ../../templates/proxmox_default.nix "hosts/$a_hostname/default.nix"
+    cp ../../templates/proxmox_autoprovision_secrets_empty.nix "hosts/$a_hostname/autoprovision-secrets.nix"
     generated="$(cat ../../templates/proxmox_host.mo | mo)"
 
     escaped_rhs=$(printf '%s\n' "$generated" | sed 's:[\\/&]:\\&:g; $!s/$/\\/')

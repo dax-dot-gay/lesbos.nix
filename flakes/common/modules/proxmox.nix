@@ -123,9 +123,13 @@ let
         pkgs.writeScript "deploy-vm.sh" ''
             #! /usr/bin/env bash
 
+            cp ../../templates/proxmox_autoprovision_secrets_filled.nix ./hosts/${cfg.metadata.name}/autoprovision-secrets.nix
+
             STORAGE_PATH=$(ssh $PROXMOX_ADDR "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
             scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
             ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
+
+            cp ../../templates/proxmox_autoprovision_secrets_empty.nix ./hosts/${cfg.metadata.name}/autoprovision-secrets.nix
         ''
     ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
 in
