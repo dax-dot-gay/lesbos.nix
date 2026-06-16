@@ -218,8 +218,8 @@ lib.filterAttrs checkToRemove (
                         };
                         users.users.root = {
                             hashedPasswordFile = config.sops.secrets."users/root/password".path;
-                            openssh.authorizedKeys.keyFiles = [
-                                config.sops.secrets."ssh/root_key".path
+                            openssh.authorizedKeys.keys = [
+                                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFsoY66q/ej1AfjYuJ1d2t7RWdKizRi2TCJ73vEP0iq root@lesbos.peer"
                             ];
                         };
                     })
@@ -241,8 +241,8 @@ lib.filterAttrs checkToRemove (
                         users.users.${username} = {
                             extraGroups = if enable_user_wheel then [ "wheel" ] else [ ];
                             hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
-                            openssh.authorizedKeys.keyFiles = [
-                                config.sops.secrets."ssh/user_key".path
+                            openssh.authorizedKeys.keys = [
+                                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFsoY66q/ej1AfjYuJ1d2t7RWdKizRi2TCJ73vEP0iq root@lesbos.peer"
                             ];
                         };
                     })
