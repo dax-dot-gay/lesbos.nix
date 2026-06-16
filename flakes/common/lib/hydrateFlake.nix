@@ -175,8 +175,6 @@ lib.filterAttrs checkToRemove (
                                                 cp /etc/provisioning/ssh/* /etc/ssh/
                                             '';
                                         };
-                                        setupSecretsForUsers.deps = [ "provisionHostKeys" ];
-                                        setupSecrets.deps = [ "provisionHostKeys" ];
                                     };
                                 })
                             ];
