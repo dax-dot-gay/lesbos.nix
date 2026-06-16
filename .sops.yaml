@@ -1,5 +1,6 @@
 keys:
     - &root age177zdzvkyya5lzm0xfet99etw09347wggaqqkxf7ys8qq2aguyghs8glvtn
+    - &homelab-host-router age1mdmfu76m5743s04dlgpp7g62c0usgetrz0jug5q9e4zqjq8wqpyqssyjge
     # @add:key-def
 
 creation_rules:
@@ -7,15 +8,22 @@ creation_rules:
     key_groups:
       - age:
           - *root
+          - *homelab-host-router
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
       - age:
           - *root
+          - *homelab-host-router
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
       - age:
           - *root
           # @add:personal:key-ref
+  - path_regex: secrets/homelab/per-system/router/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-router
   # @add:new-path
