@@ -72,7 +72,6 @@ build::proxmox() {
     mkdir -p ~/.cache/doohickey
     cp -R ./** ~/.cache/doohickey
     cd ~/.cache/doohickey
-    sed -i 's/host-secrets/null/g' .gitignore
     rm -rf .git
     git init -b main .
 
@@ -111,7 +110,6 @@ deploy::proxmox() {
     mkdir -p ~/.cache/doohickey
     cp -R ./** ~/.cache/doohickey
     cd ~/.cache/doohickey
-    sed -i 's/host-secrets/null/g' .gitignore
     rm -rf .git
     git init -b main .
 
