@@ -111,7 +111,7 @@ let
         pkgs.writeScript "deploy-vm.sh" ''
             #! /usr/bin/env bash
 
-            STORAGE_PATH=$(ssh root@192.168.0.225 "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
+            STORAGE_PATH=$(ssh $PROXMOX_ADDR "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
             scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
             ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
         ''
