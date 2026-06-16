@@ -82,7 +82,7 @@ build::proxmox() {
     rm -rf ./result
     mkdir result
 
-    cp ../../templates/provision-secrets-filled ./hosts/$argc_config/provision-secrets.nix
+    cp ../../templates/provision-secrets-filled.nix ./hosts/$argc_config/provision-secrets.nix
 
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
@@ -118,7 +118,7 @@ deploy::proxmox() {
     rm -rf ./result
     mkdir result
 
-    cp ../../templates/provision-secrets-filled ./hosts/$argc_config/provision-secrets.nix
+    cp ../../templates/provision-secrets-filled.nix ./hosts/$argc_config/provision-secrets.nix
 
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
