@@ -63,7 +63,7 @@
                 host-dummy-setup = self.nixosConfigurations.dummy.config.lesbos.proxmox.__setup_script;
             };
             lib = {
-                hydrateFlake = import ./lib/hydrateFlake;
+                hydrateFlake = import ./lib/hydrateFlake.nix;
             };
         };
 }
