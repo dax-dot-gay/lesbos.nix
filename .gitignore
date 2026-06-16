@@ -21,3 +21,6 @@ devenv.local.yaml
 
 # Dev secrets
 .env
+
+scripts/lobash.bash
+flakes/*/hosts/*/.host-secrets

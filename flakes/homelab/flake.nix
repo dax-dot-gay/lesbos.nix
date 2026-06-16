@@ -47,15 +47,29 @@
                 {
                     proxmoxConfigurations = {
                         router = {
-                            id = 501;
+                            id = 500;
                             path = ./hosts/router;
-                            tags = ["infra"];
+                            hostConfig = {
+                                thisflake = "homelab";
+                                hostname = "router";
+                                enable_root = true;
+                                enable_user = false;
+                                enable_user_wheel = false;
+                                username = "";
+                                stateVersion = "26.05";
+                            };
+                            name = "router";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
                         };
-                        nas = {
-                            id = 502;
-                            path = ./hosts/nas;
-                            tags = ["infra"];
-                        };
+                        # @add:host:proxmox
                     };
                 }
             );

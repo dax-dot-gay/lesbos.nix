@@ -10,6 +10,13 @@
         ssh-to-age
         age
         jq
+        yq-go
+        mkpasswd
+        killall
+        openssl
+        mo
+        pwgen-secure
+        inetutils
     ];
     languages.python = {
         enable = true;
@@ -23,8 +30,13 @@
     dotenv.enable = true;
     scripts = {
         doohickey.exec = '' #bash
+            export CALLPWD=$PWD
             cd $(git rev-parse --show-toplevel)
             ./scripts/doohickey/doohickey.sh $@
         '';
     };
+    enterShell = '' #bash
+        cd $(git rev-parse --show-toplevel)
+        ./scripts/get_lobash.sh
+    '';
 }

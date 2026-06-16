@@ -56,6 +56,7 @@ lib.filterAttrs checkToRemove (
                 {
                     id,
                     path,
+                    hostConfig,
                     name ? key,
                     tags ? [ ],
                     modules ? [ ],
@@ -85,6 +86,7 @@ lib.filterAttrs checkToRemove (
                                     };
                                 };
                             }
+                            (processHostConfiguration hostConfig)
                         ]
                         ++ modules;
                     };
@@ -94,6 +96,58 @@ lib.filterAttrs checkToRemove (
                         "host-${key}-setup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__setup_script;
                     };
                 };
+
+            processHostConfiguration = {
+                thisflake,
+                hostname,
+                enable_root,
+                enable_user,
+                stateVersion,
+                enable_user_wheel ? false,
+                username ? ""
+            }: recursiveUpdateAttrs [
+                {
+                    networking.hostName = hostname;
+                    system.stateVersion = stateVersion;
+                }
+                (optionalAttrs enable_root {
+                    sops.secrets."users/root/password" = {
+                        sopsFile = ../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
+                        neededForUsers = true;
+                    };
+                    sops.secrets."ssh/root_key" = {
+                        sopsFile = ../../secrets/${thisflake}/global.yaml;
+                        mode = "0400";
+                    };
+                    users.users.root = {
+                        hashedPasswordFile = "/run/secrets-for-users/users/root/password";
+                        openssh.authorizedKeys.keyFiles = [
+                            "/run/secrets/ssh/root_key"
+                        ];
+                    };
+                })
+                (optionalAttrs enable_user {
+                    assertions = [ {
+                        assertion = (length username) > 0;
+                        message = "Username must be set!";
+                    } ];
+                    sops.secrets."users/${username}/password" = {
+                        sopsFile = ../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
+                        neededForUsers = true;
+                    };
+                    sops.secrets."ssh/user_key" = {
+                        sopsFile = ../../secrets/${thisflake}/global.yaml;
+                        mode = "0444";
+                    };
+                    users.users.${username} = {
+                        extraGroups = if enable_user_wheel then ["wheel"] else [];
+                        hashedPasswordFile = "/run/secrets-for-users/users/${username}/password";
+                        openssh.authorizedKeys.keyFiles = [
+                            "/run/secrets/ssh/user_key"
+                        ];
+                    };
+                })
+            ];
         in
         recursiveUpdateAttrs [
             (recursiveUpdateAttrs (

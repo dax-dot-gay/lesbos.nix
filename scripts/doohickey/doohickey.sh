@@ -2,14 +2,91 @@
 
 # @describe lesbos.nix build/deploy script
 
-# @cmd                                      Proxmox-related commands
-# @meta     inherit-flag-options
-# @option   -f  --flake=homelab             Select flake
-proxmox() { :; }
+# Setup lobash
+set -o errexit -o nounset -o pipefail -o errtrace
+(shopt -p inherit_errexit &>/dev/null) && shopt -s inherit_errexit
+source "$(git rev-parse --show-toplevel)/scripts/lobash.bash"
 
-# @cmd                                      Deploy a selected nixosConfiguration to Proxmox
-# @arg      config!                         nixosConfigurations key to deploy
-proxmox::deploy() {
+inquire_arg() {
+    a_value=$1
+    a_prompt=$2
+
+    if [ "$(l.str_len "$a_value")" = "0" ]; then
+        echo "$(l.ask_input "$a_prompt:")"
+    else
+        echo "$a_value"
+    fi
+}
+
+inquire_pass() {
+    a_value=$1
+    a_prompt=$2
+
+    if [ "$(l.str_len "$a_value")" = "0" ]; then
+        read -s -p "$a_prompt: " result
+        echo "" >&2
+        if [ "$(l.str_len "$result")" = "0" ]; then
+            echo $(spwgen strong)
+        else
+            echo $result
+        fi
+    else
+        echo "$a_value"
+    fi
+}
+
+replace() {
+    lhs="$1"
+    rhs="$2"
+    output="$3"
+
+    escaped_lhs=$(printf '%s\n' "$lhs" | sed 's:[][\\/.^$*]:\\&:g')
+    escaped_rhs=$(printf '%s\n' "$rhs" | sed 's:[\\/&]:\\&:g; $!s/$/\\/')
+
+    sed -i "s/$escaped_lhs/$escaped_rhs/g" "$output"
+}
+
+_default_flake() {
+    flake=$(printf '%q\n' "${CALLPWD##*/}")
+    if [ "$flake" = "common" ]; then
+        echo "common"
+    elif [ "$flake" = "homelab" ]; then
+        echo "homelab"
+    elif [ "$flake" = "personal" ]; then
+        echo "personal"
+    else
+        echo "ERROR: Not in a flake directory!!!" >&2
+        kill -SIGPIPE "$$"
+    fi
+}
+
+# @cmd                                      Build nixosConfigurations
+# @meta     inherit-flag-options
+# @option   -f  --flake=`_default_flake`    Select a flake
+# @option   -c  --config!                   Configuration key to build
+build() { :; }
+
+# @cmd                                      Build this as a proxmoxConfiguration
+build::proxmox() {
+    cd "$(git rev-parse --show-toplevel)/flakes/$argc_flake"
+    rm -rf ./result
+    mkdir result
+
+    nix build ".#host-${argc_config}" -o result/vm
+    nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
+    nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh
+
+    echo "Build artifacts in: $(git rev-parse --show-toplevel)/flakes/$argc_flake"
+}
+
+# @cmd                                      Deploy nixosConfigurations
+# @meta     inherit-flag-options
+# @option   -f  --flake=`_default_flake`    Select a flake
+# @option   -c  --config!                   Configuration key to deploy
+deploy() { :; }
+
+# @cmd                                      Deploy this configuration to Proxmox
+deploy::proxmox() {
     cd "$(git rev-parse --show-toplevel)/flakes/$argc_flake"
     rm -rf ./result
     mkdir result
@@ -24,19 +101,102 @@ proxmox::deploy() {
     rm -rf result
 }
 
-# @cmd                                      Build a selected nixosConfiguration for deployment to Proxmox
-# @arg      config!                         nixosConfigurations key to build
-proxmox::build() {
+# @cmd                                      Create new resource
+# @meta     inherit-flag-options
+# @option   -f  --flake=`_default_flake`    Select a flake
+add() { :; }
+
+# @cmd                                      Create a new host (nixosConfiguration) in the target flake (options not specified will be asked for interactively)
+# @meta     inherit-flag-options
+# @option       --state-version=26.05       Set the stateVersion
+# @option       --hostname=                 Set the hostname
+# @flag         --enable-root               Enable the root account
+# @option       --root-password=            Set the root password
+# @flag         --enable-user               Enable the user account
+# @flag         --enable-user-wheel         Allow the created user to run sudo
+# @option       --user-name=                Set username
+# @option       --user-password=            Set user password
+add::host() { :; }
+
+# @cmd                                      Create a proxmox host
+# @option       --vmid=                     VM ID
+add::host::proxmox() {
     cd "$(git rev-parse --show-toplevel)/flakes/$argc_flake"
-    rm -rf ./result
-    mkdir result
+    export a_flake="$argc_flake"
+    export a_vmid="$(inquire_arg "$argc_vmid" "Enter VM ID")"
+    export a_hostname="$(inquire_arg "$argc_hostname" "Enter hostname (also VM name)")"
+    export a_state_version="$argc_state_version"
+    if [ "${argc_enable_root:-"0"}" = "1" ] || [ "$(l.ask "Enable root account?" "N" )" = "YES" ]; then
+        export a_enable_root="true"
+        export a_root_password="$(inquire_pass "$argc_root_password" "Enter password for root account")"
+    else
+        export a_enable_root="false"
+        export a_root_password=""
+    fi
 
-    nix build ".#host-${argc_config}" -o result/vm
-    nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
-    nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh
+    if [ "${argc_enable_user:-"0"}" = "1" ] || [ "$(l.ask "Enable primary user account?" "N" )" = "YES" ]; then
+        export a_enable_user="true"
+        export a_user_name="$(inquire_arg "$argc_user_name" "Enter username for primary user")"
+        export a_user_password="$(inquire_pass "$argc_user_password" "Enter password for primary user")"
 
-    echo "Build artifacts in: $(git rev-parse --show-toplevel)/flakes/$argc_flake"
+        if [ "${argc_enable_user_wheel:-"0"}" = "1" ] || [ "$(l.ask "Allow primary user account to sudo?" "N" )" = "YES" ]; then
+            export a_user_wheel="true"
+        else
+            export a_user_wheel="false"
+        fi
+    else
+        export a_enable_user="false"
+        export a_user_name=""
+        export a_user_password=""
+        export a_user_wheel="false"
+    fi
+
+    mkdir -p "hosts/$a_hostname"
+    echo "{...}: {}" > "hosts/$a_hostname/default.nix"
+    generated="$(cat ../../templates/proxmox_host.mo | mo)"
+
+    escaped_rhs=$(printf '%s\n' "$generated" | sed 's:[\\/&]:\\&:g; $!s/$/\\/')
+    sed -i "s/# @add:host:proxmox/$escaped_rhs/g" ./flake.nix
+    nixfmt --width=100 --indent=4 ./flake.nix
+
+    mkdir -p "hosts/$a_hostname/.host-secrets"
+    install -d "hosts/$a_hostname/.host-secrets/etc/ssh"
+    ssh-keygen -A -f "hosts/$a_hostname/.host-secrets"
+    sed -i -e "s/$(id -un)@$(hostname)/root@$a_hostname/g" hosts/$a_hostname/.host-secrets/etc/ssh/*.pub
+    chmod 600 hosts/$a_hostname/.host-secrets/etc/ssh/*
+
+    mkdir -p "../../secrets/$a_flake/per-system/$a_hostname"
+    age_key=$(ssh-to-age -i "hosts/$a_hostname/.host-secrets/etc/ssh/ssh_host_ed25519_key.pub")
+
+    replace "# @add:key-def" "- &$a_flake-host-$a_hostname $age_key\n    # @add:key-def" ../../.sops.yaml
+    replace "# @add:key-ref" "- *$a_flake-host-$a_hostname\n          # @add:key-ref" ../../.sops.yaml
+
+    if [ "$a_flake" = "homelab" ]; then
+        replace "# @add:homelab:key-ref" "- *$a_flake-host-$a_hostname\n          # @add:homelab:key-ref" ../../.sops.yaml
+    else
+        replace "# @add:personal:key-ref" "- *$a_flake-host-$a_hostname\n          # @add:personal:key-ref" ../../.sops.yaml
+    fi
+
+    sed -i 's/\\n/\n/g' ../../.sops.yaml
+
+    new_entry=$(cat << EOF
+- path_regex: secrets/$a_flake/per-system/$a_hostname/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *$a_flake-host-$a_hostname
+  # @add:new-path
+EOF
+)
+
+    replace "# @add:new-path" "$new_entry" ../../.sops.yaml
+    echo "---" > "../../secrets/$a_flake/per-system/$a_hostname/system.yaml"
+    sops encrypt -i "../../secrets/$a_flake/per-system/$a_hostname/system.yaml"
+    sops updatekeys -y ../../secrets/global.yaml
+    sops updatekeys -y ../../secrets/$a_flake/global.yaml
 }
+
+
 
 eval "$(argc --argc-eval "$0" "$@")"
 
