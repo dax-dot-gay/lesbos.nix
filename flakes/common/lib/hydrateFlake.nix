@@ -126,7 +126,7 @@ lib.filterAttrs checkToRemove (
                     users.users.root = {
                         hashedPasswordFile = config.sops.secrets."users/root/password".path;
                         openssh.authorizedKeys.keyFiles = [
-                            "/run/secrets/ssh/root_key"
+                            config.sops.secrets."ssh/root_key".path
                         ];
                     };
                 })
@@ -147,7 +147,7 @@ lib.filterAttrs checkToRemove (
                         extraGroups = if enable_user_wheel then ["wheel"] else [];
                         hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
                         openssh.authorizedKeys.keyFiles = [
-                            "/run/secrets/ssh/user_key"
+                            config.sops.secrets."ssh/user_key".path
                         ];
                     };
                 })
