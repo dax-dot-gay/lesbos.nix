@@ -108,7 +108,7 @@ lib.filterAttrs checkToRemove (
                                 "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
                                 inputs.comin.nixosModules.comin
                                 inputs.lesbos-common.nixosModules.default
-                                ({config, pkgs, lib, self, inputs, system, ...}: {
+                                ({lib, self, inputs, system, ...}: {
                                     networking.hostName = key;
                                     system.stateVersion = hostConfig.stateVersion;
                                     lesbos.proxmox = self.nixosConfigurations."${key}".config.lesbos.proxmox;
