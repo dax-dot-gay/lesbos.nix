@@ -107,9 +107,8 @@ lib.filterAttrs checkToRemove (
                             modules = [
                                 "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
                                 inputs.comin.nixosModules.comin
-                                inputs.nixos-utilities.nixosModules.default
                                 inputs.lesbos-common.nixosModules.default
-                                ({config, pkgs, lib, self, ...}: {
+                                ({config, pkgs, lib, self, inputs, system, ...}: {
                                     networking.hostName = key;
                                     system.stateVersion = hostConfig.stateVersion;
                                     lesbos.proxmox = self.nixosConfigurations."${key}".config.lesbos.proxmox;
@@ -118,6 +117,7 @@ lib.filterAttrs checkToRemove (
                                     };
                                     services.comin = {
                                         enable = true;
+                                        package = lib.mkForce inputs.comin.packages.${system}.default;
                                         repositorySubdir = "./flakes/${hostConfig.thisflake}";
                                         repositoryType = "flake";
                                         remotes = [
