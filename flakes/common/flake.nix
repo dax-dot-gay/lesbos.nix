@@ -20,6 +20,7 @@
             inputs.sops-nix.follows = "sops-nix";
             inputs.comin.follows = "comin";
         };
+        #@sh:add-input
     };
 
     outputs =
@@ -33,29 +34,36 @@
         in
         {
             nixosModules = {
-                default = {...}: {
-                    imports = [
-                        inputs.sops-nix.nixosModules.sops
-                        inputs.comin.nixosModules.comin
-                        inputs.disko.nixosModules.disko
-                        inputs.nixos-utilities.nixosModules.default
-                        "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
-                        ./modules
+                default =
+                    { ... }:
+                    {
+                        imports = [
+                            inputs.sops-nix.nixosModules.sops
+                            inputs.comin.nixosModules.comin
+                            inputs.disko.nixosModules.disko
+                            inputs.nixos-utilities.nixosModules.default
+                            "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
+                            ./modules
+                        ];
+                    };
+            };
+            nixosConfigurations = {
+                dummy = inputs.nixpkgs.lib.nixosSystem {
+                    inherit system;
+                    specialArgs = { inherit inputs system; };
+                    modules = [
+                        ./dummy-system/configuration.nix
+                        self.nixosModules.default
                     ];
                 };
-            };
-            nixosConfigurations.dummy = inputs.nixpkgs.lib.nixosSystem {
-                inherit system;
-                specialArgs = {inherit inputs system;};
-                modules = [
-                    ./dummy-system/configuration.nix
-                    self.nixosModules.default
-                ];
             };
             packages.${system} = {
                 host-dummy = self.nixosConfigurations.dummy.config.system.build.VMA;
                 host-dummy-deploy = self.nixosConfigurations.dummy.config.lesbos.proxmox.__deploy_script;
                 host-dummy-setup = self.nixosConfigurations.dummy.config.lesbos.proxmox.__setup_script;
+            };
+            lib = {
+                hydrateFlake = import ./lib/hydrateFlake;
             };
         };
 }
