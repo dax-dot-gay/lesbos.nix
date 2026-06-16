@@ -203,18 +203,14 @@ lib.filterAttrs checkToRemove (
                         networking.hostName = hostname;
                         system.stateVersion = stateVersion;
                         sops = {
-                            defaultSopsFile = ../../secrets/global.yaml;
+                            defaultSopsFile = ../../../secrets/global.yaml;
                             age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
                         };
                     }
                     (optionalAttrs enable_root {
                         sops.secrets."users/root/password" = {
-                            sopsFile = ../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
+                            sopsFile = ../../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
                             neededForUsers = true;
-                        };
-                        sops.secrets."ssh/root_key" = {
-                            sopsFile = ../../secrets/${thisflake}/global.yaml;
-                            mode = "0400";
                         };
                         users.users.root = {
                             hashedPasswordFile = config.sops.secrets."users/root/password".path;
@@ -231,12 +227,8 @@ lib.filterAttrs checkToRemove (
                             }
                         ];
                         sops.secrets."users/${username}/password" = {
-                            sopsFile = ../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
+                            sopsFile = ../../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
                             neededForUsers = true;
-                        };
-                        sops.secrets."ssh/user_key" = {
-                            sopsFile = ../../secrets/${thisflake}/global.yaml;
-                            mode = "0444";
                         };
                         users.users.${username} = {
                             extraGroups = if enable_user_wheel then [ "wheel" ] else [ ];
