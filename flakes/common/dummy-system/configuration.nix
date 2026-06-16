@@ -64,6 +64,7 @@
         watchdog.enable = true;
         start = {
             on_boot = true;
+            on_deploy = true;
             order = 20;
         };
     };

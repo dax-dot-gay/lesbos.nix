@@ -104,6 +104,18 @@ let
                     }
                 '') cfg.storage.extra_disks
             )}
+
+            ${
+                if cfg.start.on_deploy then ''
+                    echo "Deployed! Starting..."
+                    qm start ${toString cfg.metadata.id}
+
+                    echo "Waiting to confirm status..."
+                    qm status ${toString cfg.metadata.id}
+                '' else ''
+                    echo "Deployed but not started -- further configuration may be required"
+                ''
+            }
         ''
     ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
 
@@ -272,6 +284,11 @@ in
             start = mkSubmodule "VM startup configuration" {
                 on_boot = mkOption {
                     description = "Whether to start on boot";
+                    type = types.bool;
+                    default = true;
+                };
+                on_deploy = mkOption {
+                    description = "Whether to start on deploy";
                     type = types.bool;
                     default = true;
                 };
