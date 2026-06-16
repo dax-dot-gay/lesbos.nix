@@ -51,6 +51,11 @@
                             path = ./hosts/router;
                             tags = ["infra"];
                         };
+                        nas = {
+                            id = 502;
+                            path = ./hosts/nas;
+                            tags = ["infra"];
+                        };
                     };
                 }
             );
