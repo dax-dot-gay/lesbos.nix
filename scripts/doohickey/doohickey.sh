@@ -82,6 +82,8 @@ build::proxmox() {
     rm -rf ./result
     mkdir result
 
+    cp ../../templates/provision-secrets-filled ./hosts/$argc_config/provision-secrets.nix
+
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
     nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh
@@ -115,6 +117,8 @@ deploy::proxmox() {
     cd "flakes/$argc_flake"
     rm -rf ./result
     mkdir result
+
+    cp ../../templates/provision-secrets-filled ./hosts/$argc_config/provision-secrets.nix
 
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
@@ -183,6 +187,7 @@ add::host::proxmox() {
 
     mkdir -p "hosts/$a_hostname"
     cp ../../templates/proxmox_default.nix "hosts/$a_hostname/default.nix"
+    cp ../../templates/provision-secrets-empty.nix "hosts/$a_hostname/provision-secrets.nix"
     generated="$(cat ../../templates/proxmox_host.mo | mo)"
 
     escaped_rhs=$(printf '%s\n' "$generated" | sed 's:[\\/&]:\\&:g; $!s/$/\\/')

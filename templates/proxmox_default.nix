@@ -6,4 +6,7 @@
     ...
 }:
 {
+    imports = [
+        ./provision-secrets.nix
+    ];
 }

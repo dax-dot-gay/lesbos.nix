@@ -99,89 +99,9 @@ lib.filterAttrs checkToRemove (
                             ]
                             ++ modules;
                         };
-                        "${key}-initializer" = inputs.nixpkgs.lib.nixosSystem {
-                            inherit system;
-                            specialArgs = {
-                                inherit inputs system self;
-                            };
-                            modules = [
-                                "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
-                                inputs.lesbos-common.nixosModules.default
-                                ({lib, self, inputs, system, ...}: {
-                                    networking.hostName = key;
-                                    system.stateVersion = hostConfig.stateVersion;
-                                    lesbos.proxmox = self.nixosConfigurations."${key}".config.lesbos.proxmox;
-                                    users.users.root = {
-                                        password = "root";
-                                    };
-                                    environment.etc = {
-                                        "provisioning/ssh/ssh_host_ecdsa_key" = {
-                                            mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ecdsa_key;
-                                            user = "root";
-                                            group = "root";
-                                        };
-                                        "provisioning/ssh/ssh_host_ecdsa_key.pub" = {
-                                            mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ecdsa_key.pub;
-                                            user = "root";
-                                            group = "root";
-                                        };
-                                        "provisioning/ssh/ssh_host_ed25519_key" = {
-                                            mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ed25519_key;
-                                            user = "root";
-                                            group = "root";
-                                        };
-                                        "provisioning/ssh/ssh_host_ed25519_key.pub" = {
-                                            mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_ed25519_key.pub;
-                                            user = "root";
-                                            group = "root";
-                                        };
-                                        "provisioning/ssh/ssh_host_rsa_key" = {
-                                            mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_rsa_key;
-                                            user = "root";
-                                            group = "root";
-                                        };
-                                        "provisioning/ssh/ssh_host_rsa_key.pub" = {
-                                            mode = "0600";
-                                            source = ../../${hostConfig.thisflake}/hosts/${hostConfig.hostname}/.host-secrets/etc/ssh/ssh_host_rsa_key.pub;
-                                            user = "root";
-                                            group = "root";
-                                        };
-                                    };
-                                    system.activationScripts = {
-                                        provisionHostKeys = {
-                                            # Run after /dev has been mounted
-                                            deps = [ "specialfs" ];
-                                            text = ''
-                                                cp /etc/provisioning/ssh/* /etc/ssh/
-                                            '';
-                                        };
-                                    };
-                                    systemd.services.rebuild_actual = {
-                                        wantedBy = ["multi-user.target"];
-                                        wants = ["systemd-networkd-wait-online.service"];
-                                        requires = ["systemd-networkd-wait-online.service"];
-                                        serviceConfig = {
-                                            User = "root";
-                                            Group = "root";
-                                            Type = "oneshot";
-                                        };
-                                        script = ''
-                                            nixos-rebuild --flake "github:dax-dot-gay/lesbos.nix?dir=flakes/${hostConfig.thisflake}#${key}" --refresh switch
-                                        '';
-                                        path = ["/run/current-system/sw"];
-                                    };
-                                    systemd.network.wait-online.enable = true;
-                                })
-                            ];
-                        };
                     };
                     packages.${system} = {
-                        "host-${key}" = self.nixosConfigurations."${key}-initializer".config.system.build.VMA;
+                        "host-${key}" = self.nixosConfigurations."${key}".config.system.build.VMA;
                         "host-${key}-deploy" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__deploy_script;
                         "host-${key}-setup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__setup_script;
                     };
