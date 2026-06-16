@@ -30,14 +30,17 @@
     };
 
     outputs =
-        { self, ... }@inputs:
-        let
-            system = "x86_64-linux";
-            pkgs = import ../../util/pkgsconf.nix {
-                inherit inputs system;
-                extraOverlays = [ ];
-            };
-        in
-        {
-        };
+        { lesbos-common, ... }@inputs:
+        lesbos-common.lib.hydrateFlake (
+            { self, ... }@inputs:
+            let
+                system = "x86_64-linux";
+                pkgs = import ../../util/pkgsconf.nix {
+                    inherit inputs system;
+                    extraOverlays = [ ];
+                };
+            in
+            {
+            }
+        ) inputs;
 }
