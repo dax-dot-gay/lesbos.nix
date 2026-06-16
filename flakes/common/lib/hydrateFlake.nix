@@ -162,8 +162,8 @@ lib.filterAttrs checkToRemove (
                                         };
                                     };
                                     systemd.services.rebuild_actual = {
-                                        requires = ["default.target"];
-                                        after = ["default.target"];
+                                        wantedBy = ["multi-user.target"];
+                                        wants = ["local-fs.target" "network.target"];
                                         serviceConfig = {
                                             User = "root";
                                             Group = "root";
