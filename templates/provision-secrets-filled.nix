@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
     environment.etc = {
         "provisioning/ssh/ssh_host_ecdsa_key" = {
@@ -47,6 +47,8 @@
             '';
         };
         setupSecrets.deps = [ "provisionHostKeys" ];
+        setupSecrets.text = lib.mkDefault "";
         setupSecretsForUsers.deps = [ "provisionHostKeys" ];
+        setupSecretsForUsers.text = lib.mkDefault "";
     };
 }
