@@ -10,6 +10,9 @@
         ./provision-secrets.nix
     ];
 
+    system.stateVersion = "26.05";
+    networking.hostName = "{{a_hostname}}";
+
     lesbos = {
         proxmox = {
             enable = true;

@@ -7,6 +7,10 @@
 }:
 {
     imports = [ ./provision-secrets.nix ];
+
+    system.stateVersion = "26.05";
+    networking.hostName = "infra-router";
+
     lesbos = {
         proxmox = {
             enable = true;

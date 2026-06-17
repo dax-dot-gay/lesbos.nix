@@ -69,7 +69,6 @@ in
                             config.users.defaultUserShell
                         else
                             cfg.root.shell;
-                    isNormalUser = true;
                 };
             })
             (mapAttrs (username: settings: {
