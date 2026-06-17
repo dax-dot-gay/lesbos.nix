@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
     programs.zsh = {
         ohMyZsh = {
@@ -6,4 +6,5 @@
             theme = "candy";
         };
     };
+    environment.systemPackages = [pkgs.killall];
 }
