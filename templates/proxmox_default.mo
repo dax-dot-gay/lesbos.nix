@@ -23,7 +23,7 @@
 @root                ssh.enable = true;
 @root                password = {
 @root                    enable = true;
-@root                    hash = "{{a_root_passhash}}";
+@root                    hash = "{{root_passhash}}";
 @root                };
 @root            };
             
@@ -33,7 +33,7 @@
 @user                    ssh.enable = true;
 @user                    password = {
 @user                        enable = true;
-@user                        hash = "{{a_user_password}}";
+@user                        hash = "{{user_passhash}}";
 @user                    };
 @user                    sudo = {{a_user_wheel}};
 @user                };

@@ -40,7 +40,7 @@
                 ssh.enable = true;
                 password = {
                     enable = true;
-                    hash = "";
+                    hash = "$y$j9T$lDCZN.P1xT5FqTxK/6O5P0$jkAhvlTFb.o4h8TpdjwKhx0yzMT2QKkq84HjlskUqlB";
                 };
             };
             users = { };
