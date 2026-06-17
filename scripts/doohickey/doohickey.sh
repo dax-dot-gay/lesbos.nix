@@ -163,15 +163,18 @@ add::host::proxmox() {
     if [ "${argc_enable_root:-"0"}" = "1" ] || [ "$(l.ask "Enable root account?" "N" )" = "YES" ]; then
         export a_enable_root="true"
         export a_root_password="$(inquire_pass "$argc_root_password" "Enter password for root account")"
+        export root_passhash="$(mkpasswd $a_root_password)"
     else
         export a_enable_root="false"
         export a_root_password=""
+        export root_passhash=""
     fi
 
     if [ "${argc_enable_user:-"0"}" = "1" ] || [ "$(l.ask "Enable primary user account?" "N" )" = "YES" ]; then
         export a_enable_user="true"
         export a_user_name="$(inquire_arg "$argc_user_name" "Enter username for primary user")"
         export a_user_password="$(inquire_pass "$argc_user_password" "Enter password for primary user")"
+        export user_passhash="$(mkpasswd $a_user_password)"
 
         if [ "${argc_enable_user_wheel:-"0"}" = "1" ] || [ "$(l.ask "Allow primary user account to sudo?" "N" )" = "YES" ]; then
             export a_user_wheel="true"
@@ -183,6 +186,7 @@ add::host::proxmox() {
         export a_user_name=""
         export a_user_password=""
         export a_user_wheel="false"
+        export user_passhash=""
     fi
 
     mkdir -p "hosts/$a_hostname"
