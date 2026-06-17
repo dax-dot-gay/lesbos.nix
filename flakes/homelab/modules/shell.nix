@@ -1,14 +1,13 @@
 { pkgs, ... }:
 {
-    programs.starship = {
-        enable = true;
-        presets = [
-            "plain-text-symbols"
-            "bracketed-segments"
-        ];
+    programs.zsh = {
+        ohMyZsh = {
+            enable = true;
+            theme = "candy";
+        };
+        interactiveShellInit = ''
+            afetch
+        '';
     };
-    programs.zsh.interactiveShellInit = ''
-        fastfetch --config examples/8.jsonc --thread true
-    '';
-    environment.systemPackages = [ pkgs.fastfetch pkgs.nerd-fonts.fira-code ];
+    environment.systemPackages = [pkgs.afetch];
 }
