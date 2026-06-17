@@ -46,6 +46,21 @@
                 }@inputs:
                 {
                     proxmoxConfigurations = {
+                        infra-router = {
+                            id = 500;
+                            path = ./hosts/infra-router;
+                            flake = "homelab";
+                            name = "infra-router";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }
