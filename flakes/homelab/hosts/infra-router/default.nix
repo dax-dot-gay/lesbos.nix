@@ -32,7 +32,7 @@
             };
             resources.cores = 4;
             resources.memory = 4096;
-            storage.additional_space = "32G";
+            storage.disk_size = 65536;
         };
         base.users = {
             root = {

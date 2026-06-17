@@ -96,6 +96,7 @@ lib.filterAttrs checkToRemove (
                         "host-${key}" = self.nixosConfigurations."${key}".config.system.build.VMA;
                         "host-${key}-deploy" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__deploy_script;
                         "host-${key}-setup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__setup_script;
+                        "host-${key}-presetup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__presetup_script;
                     };
                 };
         in

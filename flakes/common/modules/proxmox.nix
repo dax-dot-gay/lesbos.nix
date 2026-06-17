@@ -159,6 +159,13 @@ in
                 readOnly = true;
                 default = setupScript;
             };
+            __prsetup_script = mkOption {
+                description = "internal presetup script";
+                type = types.anything;
+                internal = true;
+                readOnly = true;
+                default = presetupScript;
+            };
             metadata = {
                 id = mkOption {
                     description = "VM ID - Mapped into filename and VM name";
