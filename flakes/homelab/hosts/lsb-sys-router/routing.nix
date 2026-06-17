@@ -85,11 +85,7 @@ in
                             name = client.dns;
                             value = {
                                 target = client.address;
-                                comment = ''
-                                    ${client.dns} -> ${client.address} (${host})
-
-                                    ${if (stringLength client.description) > 0 then client.description else "No description provided."}
-                                '';
+                                comment = "${client.dns} -> ${client.address} (${host})";
                             };
                         }) (filterAttrs (_: client: isString client.dns) net.clients);
                     };
