@@ -15,7 +15,7 @@
             enable = true;
         };
         base.users = {
-            #root{
+            @root<
             root = {
                 enable = {{a_enable_root}};
                 ssh.enable = true;
@@ -24,9 +24,9 @@
                     hash = "{{a_root_passhash}}";
                 };
             };
-            #}root
+            >root
             
-            #users{
+            @users<
             users = {
                 "{{a_user_name}}" = {
                     enable = true;
@@ -38,7 +38,7 @@
                     sudo = {{a_user_wheel}};
                 };
             };
-            #}users
+            >users
         };
     };
 }
