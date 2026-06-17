@@ -191,20 +191,21 @@ add::host::proxmox() {
 
     mkdir -p "hosts/$a_hostname"
     cp ../../templates/proxmox_default.mo "hosts/$a_hostname/default.nix"
-    templated_config="$(cat ../../templates/proxmox_default.mo | mo)"
-    echo $templated_config > "hosts/$a_hostname/default.nix"
 
     if [ "$a_enable_root" = "false" ]; then
-        sed -i 's/@root.*//g' "hosts/$a_hostname/default.nix"
+        sed -i 's/@root.*$//g' "hosts/$a_hostname/default.nix"
     else
         sed -i 's/@root//g' "hosts/$a_hostname/default.nix"
     fi
 
     if [ "$a_enable_user" = "false" ]; then
-        sed -i 's/@user.*//g' "hosts/$a_hostname/default.nix"
+        sed -i 's/@user.*$//g' "hosts/$a_hostname/default.nix"
     else 
         sed -i 's/@user//g' "hosts/$a_hostname/default.nix"
     fi
+
+    templated_config="$(cat "hosts/$a_hostname/default.nix" | mo)"
+    echo $templated_config > "hosts/$a_hostname/default.nix"
 
     nixfmt --width=100 --indent=4 "hosts/$a_hostname/default.nix"
 
