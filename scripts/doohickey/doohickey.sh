@@ -84,9 +84,6 @@ build::proxmox() {
 
     cp ../../templates/provision-secrets-filled.nix ./hosts/$argc_config/provision-secrets.nix
 
-    nix build ".#host-${argc_config}-presetup" -o result/presetup-vm.sh
-    ./result/presetup-vm.sh
-
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
     nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh
@@ -123,9 +120,6 @@ deploy::proxmox() {
 
     cp ../../templates/provision-secrets-filled.nix ./hosts/$argc_config/provision-secrets.nix
 
-    nix build ".#host-${argc_config}-presetup" -o result/presetup-vm.sh
-    ./result/presetup-vm.sh
-    
     nix build ".#host-${argc_config}" -o result/vm
     nix build ".#host-${argc_config}-deploy" -o result/deploy-vm.sh
     nix build ".#host-${argc_config}-setup" -o result/setup-vm.sh

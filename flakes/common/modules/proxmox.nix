@@ -105,6 +105,8 @@ let
                 '') cfg.storage.extra_disks
             )}
 
+            qm disk resize ${toString cfg.metadata.id} virtio0 ${cfg.storage.disk_size}
+
             ${
                 if cfg.start.on_deploy then ''
                     echo "Deployed! Starting..."
@@ -126,20 +128,8 @@ let
             STORAGE_PATH=$(ssh $PROXMOX_ADDR "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
             scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
             ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
-
-            echo "Setting tmpfs back to initial size..."
-            sudo mount -o remount,size=32G /tmp
         ''
     ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
-
-    presetupScript = if cfg.enable then (
-        pkgs.writeScript "deploy-vm.sh" ''
-            #! /usr/bin/env bash
-
-            echo "Ensuring /tmp has enough space..."
-            sudo mount -o remount,size=${toString (cfg.storage.disk_size * 2)}M /tmp
-        ''
-    ) else (pkgs.writeScript "presetup-vm.sh" "echo DOES NOTHING");
 in
 {
     options = {
@@ -158,13 +148,6 @@ in
                 internal = true;
                 readOnly = true;
                 default = setupScript;
-            };
-            __presetup_script = mkOption {
-                description = "internal presetup script";
-                type = types.anything;
-                internal = true;
-                readOnly = true;
-                default = presetupScript;
             };
             metadata = {
                 id = mkOption {
@@ -187,9 +170,10 @@ in
                     default = "core-encrypted";
                 };
                 disk_size = mkOption {
-                    description = "Root disk size in MiB";
-                    type = types.ints.positive;
-                    default = 20480; # 20 GiB
+                    description = "Root disk size (will resize to this size on proxmox!! Shrinking is not allowed)";
+                    type = types.str;
+                    default = "+8G";
+                    example = "64G";
                 };
                 boot_size = mkOption {
                     description = "Size of the boot partition";
@@ -388,7 +372,7 @@ in
             };
         };
 
-        virtualisation.diskSize = cfg.storage.disk_size;
+        virtualisation.diskSize = "auto";
         services.qemuGuest.enable = cfg.agent;
         services.watchdogd = mkIf cfg.watchdog.enable {
             enable = true;
