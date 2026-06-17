@@ -195,18 +195,18 @@ add::host::proxmox() {
     echo $templated_config > "hosts/$a_hostname/default.nix"
 
     if [ "$a_enable_root" = "false" ]; then
-        sed -i 's/@root<.*>root/ /g' "hosts/$a_hostname/default.nix"
+        sed -i 's/@root.*//g' "hosts/$a_hostname/default.nix"
     else
-        sed -i 's/@root</ /g' "hosts/$a_hostname/default.nix"
-        sed -i 's/>root/ /g' "hosts/$a_hostname/default.nix"
+        sed -i 's/@root//g' "hosts/$a_hostname/default.nix"
     fi
 
     if [ "$a_enable_user" = "false" ]; then
-        sed -i 's/@user<.*>user/ /g' "hosts/$a_hostname/default.nix"
+        sed -i 's/@user.*//g' "hosts/$a_hostname/default.nix"
     else 
-        sed -i 's/@user</ /g' "hosts/$a_hostname/default.nix"
-        sed -i 's/>user/ /g' "hosts/$a_hostname/default.nix"
+        sed -i 's/@user//g' "hosts/$a_hostname/default.nix"
     fi
+
+    nixfmt --width=100 --indent=4 "hosts/$a_hostname/default.nix"
 
     cp ../../templates/provision-secrets-empty.nix "hosts/$a_hostname/provision-secrets.nix"
     generated="$(cat ../../templates/proxmox_host.mo | mo)"
