@@ -21,7 +21,7 @@
             inputs.comin.follows = "comin";
         };
         lesbos-common = {
-            url = "path:../common";
+            url = "github:dax-dot-gay/lesbos.nix?dir=flakes/common"; # Can't reference locally because nixd >:(
             inputs.nixpkgs.follows = "nixpkgs";
             inputs.sops-nix.follows = "sops-nix";
             inputs.comin.follows = "comin";
@@ -46,15 +46,16 @@
                 }@inputs:
                 {
                     proxmoxConfigurations = {
-                        infra-router = {
+                        lsb-sys-router = {
                             id = 500;
-                            path = ./hosts/infra-router;
+                            path = ./hosts/lsb-sys-router;
                             flake = "homelab";
-                            name = "infra-router";
+                            name = "lsb-sys-router";
                             tags = [
                                 # Add tags here
                             ];
                             modules = [
+                                ./modules
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {

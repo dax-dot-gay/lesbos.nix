@@ -98,14 +98,20 @@
         ]
       },
       "locked": {
-        "path": "../common",
-        "type": "path"
+        "dir": "flakes/common",
+        "lastModified": 1781703508,
+        "narHash": "sha256-VrYDX9RgRhOY/Wm6zPOdsxPP+ZGkIE/Al0oEyW088+s=",
+        "owner": "dax-dot-gay",
+        "repo": "lesbos.nix",
+        "rev": "f2e99dac1f9995802db553bec0c3fa5fd331d95e",
+        "type": "github"
       },
       "original": {
-        "path": "../common",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "flakes/common",
+        "owner": "dax-dot-gay",
+        "repo": "lesbos.nix",
+        "type": "github"
+      }
     },
     "nixos-utilities": {
       "inputs": {

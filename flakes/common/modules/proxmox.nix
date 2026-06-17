@@ -87,49 +87,56 @@ let
         };
     };
 
-    setupScript = if cfg.enable then  (
-        pkgs.writeScript "setup-vm.sh" ''
-            #! /usr/bin/env bash
+    setupScript =
+        if cfg.enable then
+            (pkgs.writeScript "setup-vm.sh" ''
+                #! /usr/bin/env bash
 
-            STORAGE_PATH=$(pvesh get /storage --output-format json | jq -r '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
+                STORAGE_PATH=$(pvesh get /storage --output-format json | jq -r '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
 
-            qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id} --unique --force
-            qm set ${toString cfg.metadata.id} --efidisk0 ${cfg.storage.volume}:1,format=raw,efitype=4m,pre-enrolled-keys=0
-            ${concatStringsSep "\n" (
-                imap1 (index: disk: ''
-                    qm set ${toString cfg.metadata.id} --${disk.device} ${
-                        if (isNull disk.volume) then cfg.storage.volume else disk.volume
-                    }:${toString disk.size},cache=${disk.cache},format=${disk.format}${
-                        if (disk.read_only && (isNull (match "sata" disk.device))) then ",ro=1" else ""
-                    }
-                '') cfg.storage.extra_disks
-            )}
+                qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id} --unique --force
+                qm set ${toString cfg.metadata.id} --efidisk0 ${cfg.storage.volume}:1,format=raw,efitype=4m,pre-enrolled-keys=0
+                ${concatStringsSep "\n" (
+                    imap1 (index: disk: ''
+                        qm set ${toString cfg.metadata.id} --${disk.device} ${
+                            if (isNull disk.volume) then cfg.storage.volume else disk.volume
+                        }:${toString disk.size},cache=${disk.cache},format=${disk.format}${
+                            if (disk.read_only && (isNull (match "sata" disk.device))) then ",ro=1" else ""
+                        }
+                    '') cfg.storage.extra_disks
+                )}
 
-            qm disk resize ${toString cfg.metadata.id} virtio0 ${cfg.storage.disk_size}
+                qm disk resize ${toString cfg.metadata.id} virtio0 ${cfg.storage.disk_size}
 
-            ${
-                if cfg.start.on_deploy then ''
-                    echo "Deployed! Starting..."
-                    qm start ${toString cfg.metadata.id}
+                ${
+                    if cfg.start.on_deploy then
+                        ''
+                            echo "Deployed! Starting..."
+                            qm start ${toString cfg.metadata.id}
 
-                    echo "Waiting to confirm status..."
-                    qm status ${toString cfg.metadata.id}
-                '' else ''
-                    echo "Deployed but not started -- further configuration may be required"
-                ''
-            }
-        ''
-    ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
+                            echo "Waiting to confirm status..."
+                            qm status ${toString cfg.metadata.id}
+                        ''
+                    else
+                        ''
+                            echo "Deployed but not started -- further configuration may be required"
+                        ''
+                }
+            '')
+        else
+            (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
 
-    deployScript = if cfg.enable then (
-        pkgs.writeScript "deploy-vm.sh" ''
-            #! /usr/bin/env bash
+    deployScript =
+        if cfg.enable then
+            (pkgs.writeScript "deploy-vm.sh" ''
+                #! /usr/bin/env bash
 
-            STORAGE_PATH=$(ssh $PROXMOX_ADDR "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
-            scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
-            ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
-        ''
-    ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
+                STORAGE_PATH=$(ssh $PROXMOX_ADDR "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
+                scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
+                ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
+            '')
+        else
+            (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
 in
 {
     options = {
@@ -263,6 +270,20 @@ in
                     type = types.listOf networkInterface;
                     default = [ ];
                 };
+                interface_names = mkOption {
+                    description = "Read-only mapping of `net[n]` names to real hardware names (ie ens18)";
+                    readOnly = true;
+                    type = types.attrsOf types.singleLineStr;
+                    default = {
+                        net0 = "ens18";
+                    }
+                    // (listToAttrs (
+                        imap1 (n: iface: {
+                            name = "net${toString n}";
+                            value = "ens${toString (18 + n)}";
+                        }) cfg.network.extra_interfaces
+                    ));
+                };
             };
             agent = mkOption {
                 description = "Enable the QEMU agent & the guest agent on the host";
@@ -356,13 +377,16 @@ in
                 (optionalAttrs cfg.watchdog.enable {
                     watchdog = "model=i6300esb,action=${cfg.watchdog.action}";
                 })
-                (optionalAttrs ((!isNull cfg.start.order) || (!isNull cfg.start.delay_up) || (!isNull cfg.start.delay_down)) {
-                    startup = concatStringsSep "," (concatLists [
-                        (optional (!isNull cfg.start.order) "order=${toString cfg.start.order}")
-                        (optional (!isNull cfg.start.delay_up) "up=${toString cfg.start.delay_up}")
-                        (optional (!isNull cfg.start.delay_down) "down=${toString cfg.start.delay_down}")
-                    ]);
-                })
+                (optionalAttrs
+                    ((!isNull cfg.start.order) || (!isNull cfg.start.delay_up) || (!isNull cfg.start.delay_down))
+                    {
+                        startup = concatStringsSep "," (concatLists [
+                            (optional (!isNull cfg.start.order) "order=${toString cfg.start.order}")
+                            (optional (!isNull cfg.start.delay_up) "up=${toString cfg.start.delay_up}")
+                            (optional (!isNull cfg.start.delay_down) "down=${toString cfg.start.delay_down}")
+                        ]);
+                    }
+                )
             ];
             partitionTableType = "efi";
             filenameSuffix = "${toString cfg.metadata.id}-${cfg.metadata.name}";

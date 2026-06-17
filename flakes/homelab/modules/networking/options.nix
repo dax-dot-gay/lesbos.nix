@@ -72,7 +72,7 @@ let
 in
 {
     options = {
-        lesbos.base.net = {
+        lesbos.homelab.net = {
             wan = {
                 hostname = mkOption {
                     description = "Hostname to present to the external network";

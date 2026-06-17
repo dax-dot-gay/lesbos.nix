@@ -9,7 +9,7 @@
     imports = [ ./provision-secrets.nix ];
 
     system.stateVersion = "26.05";
-    networking.hostName = "infra-router";
+    networking.hostName = "lsb-sys-router";
 
     lesbos = {
         proxmox = {

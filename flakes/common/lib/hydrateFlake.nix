@@ -76,7 +76,6 @@ lib.filterAttrs checkToRemove (
                                 inputs.comin.nixosModules.comin
                                 inputs.nixos-utilities.nixosModules.default
                                 inputs.lesbos-common.nixosModules.default
-                                ../../${flake}/modules
                                 path
                                 {
                                     lesbos.proxmox = {

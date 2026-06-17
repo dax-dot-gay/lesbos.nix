@@ -4,7 +4,6 @@
         enable = true;
         comin = {
             repositorySubdir = "flakes/homelab";
-            package = inputs.comin.packages.${system}.default;
         };
         identification = {
             hostname = config.lesbos.proxmox.metadata.name;

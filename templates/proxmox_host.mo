@@ -7,6 +7,7 @@
         # Add tags here
     ];
     modules = [
+        ./modules
         # Add extra modules here
     ];
     extraSpecialArgs = {
