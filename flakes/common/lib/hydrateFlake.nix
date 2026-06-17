@@ -128,7 +128,7 @@ lib.filterAttrs checkToRemove (
                     (optionalAttrs enable_root {
                         assertions = [
                             {
-                                assertion = (length root_passhash) > 0;
+                                assertion = (builtins.stringLength root_passhash) > 0;
                                 message = "Root password hash must be set!";
                             }
                         ];
@@ -142,11 +142,11 @@ lib.filterAttrs checkToRemove (
                     (optionalAttrs enable_user {
                         assertions = [
                             {
-                                assertion = (length username) > 0;
+                                assertion = (builtins.stringLength username) > 0;
                                 message = "Username must be set!";
                             }
                             {
-                                assertion = (length user_passhash) > 0;
+                                assertion = (builtins.stringLength user_passhash) > 0;
                                 message = "User password hash must be set!";
                             }
                         ];
