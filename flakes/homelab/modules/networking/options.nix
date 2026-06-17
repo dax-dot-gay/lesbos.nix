@@ -61,7 +61,7 @@ let
                     default = null;
                     example = "host.example.com";
                 };
-                forwardPorts = mkOption {
+                forward_ports = mkOption {
                     description = "List of ports to forward from this host";
                     type = types.listOf portForwardRequest;
                     default = [ ];

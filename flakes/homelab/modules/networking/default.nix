@@ -31,7 +31,7 @@
                 '';
                 address = "192.168.64.11";
                 dns = "ingress.sys.lesbos.nix";
-                forwardPorts = [
+                forward_ports = [
                     {
                         protocol = "tcp";
                         externalPort = 80;

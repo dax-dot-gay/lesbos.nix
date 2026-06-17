@@ -6,7 +6,10 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ];
+    imports = [
+        ./provision-secrets.nix
+        ./routing.nix
+    ];
 
     system.stateVersion = "26.05";
     networking.hostName = "lsb-sys-router";
