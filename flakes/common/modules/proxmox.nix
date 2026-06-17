@@ -137,7 +137,7 @@ let
             #! /usr/bin/env bash
 
             echo "Ensuring /tmp has enough space..."
-            sudo mount -o remount,size=${toString (cfg.storage.disk_size * 2)}M /tmp
+            sudo mount -o remount,size=${toString (cfg.storage.disk_size * 5)}M /tmp
         ''
     ) else (pkgs.writeScript "presetup-vm.sh" "echo DOES NOTHING");
 in
