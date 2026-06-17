@@ -7,7 +7,7 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
         comin = {
-            url = "github:nlewo/comin";
+            url = "github:nlewo/comin/v0.12.0";
             inputs.nixpkgs.follows = "nixpkgs";
         };
         disko = {
