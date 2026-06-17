@@ -40,7 +40,6 @@ in
             domain = net.lan.domain;
             nameservers = [
                 "1.1.1.1"
-                "9.9.9.9"
                 net.lan.gateway
             ];
             wan = {
@@ -54,7 +53,6 @@ in
                     };
                     dnsServers = [
                         "1.1.1.1"
-                        "9.9.9.9"
                         net.lan.gateway
                     ];
                 };
@@ -107,7 +105,6 @@ in
                 enable = true;
                 upstreamServers = [
                     "1.1.1.1"
-                    "9.9.9.9"
                 ];
             };
             firewall = {
