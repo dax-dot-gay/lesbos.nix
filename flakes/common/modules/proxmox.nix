@@ -324,6 +324,7 @@ in
                 memory = cfg.resources.memory;
                 net0 = "${cfg.network.primary.model}=00:00:00:00:00:00,bridge=${cfg.network.primary.bridge},firewall=0";
                 agent = cfg.agent;
+                additionalSpace = cfg.storage.additional_space;
             };
             qemuExtraConf = mkMerge [
                 {
