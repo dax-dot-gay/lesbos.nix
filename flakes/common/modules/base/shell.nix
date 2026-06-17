@@ -21,5 +21,6 @@
         git
         neovim
         ghostty.terminfo
+        bat
     ];
 }
