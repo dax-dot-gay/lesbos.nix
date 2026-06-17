@@ -126,8 +126,20 @@ let
             STORAGE_PATH=$(ssh $PROXMOX_ADDR "bash -c 'pvesh get /storage --output-format json | jq -r \".[] | select(.storage | contains(\\\"core-encrypted\\\")) | .path\"'")
             scp result/vm/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst "$PROXMOX_ADDR:$STORAGE_PATH/dump/"
             ssh $PROXMOX_ADDR 'bash -s' < result/setup-vm.sh
+
+            echo "Setting tmpfs back to initial size..."
+            sudo mount -o remount,size=32G /tmp
         ''
     ) else (pkgs.writeScript "deploy-vm.sh" "echo DOES NOTHING");
+
+    presetupScript = if cfg.enable then (
+        pkgs.writeScript "deploy-vm.sh" ''
+            #! /usr/bin/env bash
+
+            echo "Ensuring /tmp has enough space..."
+            sudo mount -o remount,size=${toString (cfg.storage.disk_size * 2)} /tmp
+        ''
+    ) else (pkgs.writeScript "presetup-vm.sh" "echo DOES NOTHING");
 in
 {
     options = {
@@ -167,10 +179,10 @@ in
                     type = types.singleLineStr;
                     default = "core-encrypted";
                 };
-                additional_space = mkOption {
-                    description = "Free space to add to the root FS";
-                    type = types.str;
-                    default = "8G";
+                disk_size = mkOption {
+                    description = "Root disk size in MiB";
+                    type = types.ints.positive;
+                    default = 20480; # 20 GiB
                 };
                 boot_size = mkOption {
                     description = "Size of the boot partition";
@@ -324,7 +336,6 @@ in
                 memory = cfg.resources.memory;
                 net0 = "${cfg.network.primary.model}=00:00:00:00:00:00,bridge=${cfg.network.primary.bridge},firewall=0";
                 agent = cfg.agent;
-                additionalSpace = cfg.storage.additional_space;
             };
             qemuExtraConf = mkMerge [
                 {
@@ -370,7 +381,7 @@ in
             };
         };
 
-        virtualisation.diskSize = "auto";
+        virtualisation.diskSize = cfg.storage.disk_size;
         services.qemuGuest.enable = cfg.agent;
         services.watchdogd = mkIf cfg.watchdog.enable {
             enable = true;
