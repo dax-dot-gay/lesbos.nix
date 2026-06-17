@@ -380,6 +380,9 @@ in
                 interval = mkDefault 10;
             };
         };
+        systemd.tmpfiles.rules = mkIf cfg.watchdog.enable [
+            "d /var/lib/misc 0755 root root -"
+        ];
         networking.hostName = mkForce cfg.metadata.name;
     };
 }
