@@ -56,7 +56,7 @@ lib.filterAttrs checkToRemove (
                 {
                     id,
                     path,
-                    hostConfig,
+                    flake ? "homelab",
                     name ? key,
                     tags ? [ ],
                     modules ? [ ],
@@ -76,6 +76,7 @@ lib.filterAttrs checkToRemove (
                                 inputs.comin.nixosModules.comin
                                 inputs.nixos-utilities.nixosModules.default
                                 inputs.lesbos-common.nixosModules.default
+                                ../../${flake}/modules
                                 path
                                 {
                                     lesbos.proxmox = {
@@ -87,15 +88,6 @@ lib.filterAttrs checkToRemove (
                                         };
                                     };
                                 }
-                                (
-                                    {
-                                        pkgs,
-                                        config,
-                                        lib,
-                                        ...
-                                    }:
-                                    (processHostConfiguration config hostConfig)
-                                )
                             ]
                             ++ modules;
                         };
@@ -106,59 +98,6 @@ lib.filterAttrs checkToRemove (
                         "host-${key}-setup" = self.nixosConfigurations."${key}".config.lesbos.proxmox.__setup_script;
                     };
                 };
-
-            processHostConfiguration =
-                config:
-                {
-                    thisflake,
-                    hostname,
-                    enable_root,
-                    root_passhash ? "",
-                    enable_user,
-                    stateVersion,
-                    enable_user_wheel ? false,
-                    username ? "",
-                    user_passhash ? ""
-                }:
-                recursiveUpdateAttrs [
-                    {
-                        networking.hostName = hostname;
-                        system.stateVersion = stateVersion;
-                    }
-                    (optionalAttrs enable_root {
-                        assertions = [
-                            {
-                                assertion = (builtins.stringLength root_passhash) > 0;
-                                message = "Root password hash must be set!";
-                            }
-                        ];
-                        users.users.root = {
-                            hashedPassword = root_passhash;
-                            openssh.authorizedKeys.keys = [
-                                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFsoY66q/ej1AfjYuJ1d2t7RWdKizRi2TCJ73vEP0iq root@lesbos.peer"
-                            ];
-                        };
-                    })
-                    (optionalAttrs enable_user {
-                        assertions = [
-                            {
-                                assertion = (builtins.stringLength username) > 0;
-                                message = "Username must be set!";
-                            }
-                            {
-                                assertion = (builtins.stringLength user_passhash) > 0;
-                                message = "User password hash must be set!";
-                            }
-                        ];
-                        users.users.${username} = {
-                            extraGroups = if enable_user_wheel then [ "wheel" ] else [ ];
-                            hashedPassword = user_passhash;
-                            openssh.authorizedKeys.keys = [
-                                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFsoY66q/ej1AfjYuJ1d2t7RWdKizRi2TCJ73vEP0iq root@lesbos.peer"
-                            ];
-                        };
-                    })
-                ];
         in
         recursiveUpdateAttrs [
             (recursiveUpdateAttrs (

@@ -46,31 +46,6 @@
                 }@inputs:
                 {
                     proxmoxConfigurations = {
-                        router = {
-                            id = 500;
-                            path = ./hosts/router;
-                            hostConfig = {
-                                thisflake = "homelab";
-                                hostname = "router";
-                                enable_root = true;
-                                root_passhash = "$y$j9T$mQUClNbWsAEb9th3PenMR/$gpmhP8E7cgEqJqBN8DV5OGF3dkDv0Fzi4w4g8RNgJ.8";
-                                enable_user = false;
-                                enable_user_wheel = false;
-                                username = "";
-                                user_passhash = "";
-                                stateVersion = "26.05";
-                            };
-                            name = "router";
-                            tags = [
-                                # Add tags here
-                            ];
-                            modules = [
-                                # Add extra modules here
-                            ];
-                            extraSpecialArgs = {
-                                # Add extra specialArgs here
-                            };
-                        };
                         # @add:host:proxmox
                     };
                 }

@@ -2,5 +2,6 @@
 {
     imports = [
         ./proxmox.nix
+        ./base
     ];
 }

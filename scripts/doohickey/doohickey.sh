@@ -190,7 +190,18 @@ add::host::proxmox() {
     fi
 
     mkdir -p "hosts/$a_hostname"
-    cp ../../templates/proxmox_default.nix "hosts/$a_hostname/default.nix"
+    cp ../../templates/proxmox_default.mo "hosts/$a_hostname/default.nix"
+    templated_config="$(cat ../../templates/proxmox_default.mo | mo)"
+    echo $templated_config > "hosts/$a_hostname/default.nix"
+
+    if [ "$a_enable_root" = "false" ]; then
+        sed -i 's/#root{.*#}root//g' "hosts/$a_hostname/default.nix"
+    fi
+
+    if [ "$a_enable_user" = "false" ]; then
+        sed -i 's/#user{.*#}user//g' "hosts/$a_hostname/default.nix"
+    fi
+
     cp ../../templates/provision-secrets-empty.nix "hosts/$a_hostname/provision-secrets.nix"
     generated="$(cat ../../templates/proxmox_host.mo | mo)"
 
