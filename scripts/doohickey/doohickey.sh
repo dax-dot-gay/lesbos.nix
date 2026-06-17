@@ -203,10 +203,10 @@ add::host::proxmox() {
 
     if [ "$a_enable_user" = "false" ]; then
         sed -i 's/@user<.*>user/ /g' "hosts/$a_hostname/default.nix"
-    else {
+    else 
         sed -i 's/@user</ /g' "hosts/$a_hostname/default.nix"
         sed -i 's/>user/ /g' "hosts/$a_hostname/default.nix"
-    }
+    fi
 
     cp ../../templates/provision-secrets-empty.nix "hosts/$a_hostname/provision-secrets.nix"
     generated="$(cat ../../templates/proxmox_host.mo | mo)"
