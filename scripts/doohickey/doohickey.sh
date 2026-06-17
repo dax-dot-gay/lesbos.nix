@@ -26,7 +26,7 @@ inquire_pass() {
         read -s -p "$a_prompt: " result
         echo "" >&2
         if [ "$(l.str_len "$result")" = "0" ]; then
-            echo $(pwgen -s -c 24 1)
+            echo $(pwgen -s -c 64 1)
         else
             echo $result
         fi
@@ -232,12 +232,10 @@ EOF
 
     if [ "$a_enable_root" = "true" ]; then
         sops set "../../secrets/$a_flake/per-system/$a_hostname/system.yaml" "[\"users\"][\"root\"][\"password-raw\"]" "\"$a_root_password\""
-        sops set "../../secrets/$a_flake/per-system/$a_hostname/system.yaml" "[\"users\"][\"root\"][\"password\"]" "\"$(mkpasswd $a_root_password)\""
     fi
 
     if [ "$a_enable_user" = "true" ]; then
         sops set "../../secrets/$a_flake/per-system/$a_hostname/system.yaml" "[\"users\"][\"$a_user_name\"][\"password-raw\"]" "\"$a_user_password\""
-        sops set "../../secrets/$a_flake/per-system/$a_hostname/system.yaml" "[\"users\"][\"$a_user_name\"][\"password\"]" "\"$(mkpasswd $a_user_password)\""
     fi
     
 }

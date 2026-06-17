@@ -113,27 +113,27 @@ lib.filterAttrs checkToRemove (
                     thisflake,
                     hostname,
                     enable_root,
+                    root_passhash ? "",
                     enable_user,
                     stateVersion,
                     enable_user_wheel ? false,
                     username ? "",
+                    user_passhash ? ""
                 }:
                 recursiveUpdateAttrs [
                     {
                         networking.hostName = hostname;
                         system.stateVersion = stateVersion;
-                        sops = {
-                            defaultSopsFile = ../../../secrets/global.yaml;
-                            age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-                        };
                     }
                     (optionalAttrs enable_root {
-                        sops.secrets."users/root/password" = {
-                            sopsFile = ../../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
-                            neededForUsers = true;
-                        };
+                        assertions = [
+                            {
+                                assertion = (length root_passhash) > 0;
+                                message = "Root password hash must be set!";
+                            }
+                        ];
                         users.users.root = {
-                            hashedPasswordFile = config.sops.secrets."users/root/password".path;
+                            hashedPassword = root_passhash;
                             openssh.authorizedKeys.keys = [
                                 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFsoY66q/ej1AfjYuJ1d2t7RWdKizRi2TCJ73vEP0iq root@lesbos.peer"
                             ];
@@ -145,14 +145,14 @@ lib.filterAttrs checkToRemove (
                                 assertion = (length username) > 0;
                                 message = "Username must be set!";
                             }
+                            {
+                                assertion = (length user_passhash) > 0;
+                                message = "User password hash must be set!";
+                            }
                         ];
-                        sops.secrets."users/${username}/password" = {
-                            sopsFile = ../../../secrets/${thisflake}/per-system/${hostname}/system.yaml;
-                            neededForUsers = true;
-                        };
                         users.users.${username} = {
                             extraGroups = if enable_user_wheel then [ "wheel" ] else [ ];
-                            hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
+                            hashedPassword = user_passhash;
                             openssh.authorizedKeys.keys = [
                                 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFsoY66q/ej1AfjYuJ1d2t7RWdKizRi2TCJ73vEP0iq root@lesbos.peer"
                             ];
