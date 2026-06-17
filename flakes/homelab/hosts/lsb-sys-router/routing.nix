@@ -30,6 +30,10 @@ let
 in
 {
     networking.hostName = mkForce net.wan.hostname;
+    networking.defaultGateway = mkForce {
+        address = net.wan.gateway;
+        interface = wan_iface;
+    };
     nixos-utilities.systems.router = {
         enable = true;
         config = {
