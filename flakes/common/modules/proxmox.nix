@@ -167,10 +167,10 @@ in
                     type = types.singleLineStr;
                     default = "core-encrypted";
                 };
-                disk_size = mkOption {
-                    description = "Root disk size in MiB";
-                    type = types.ints.positive;
-                    default = 20480; # 2 GiB
+                additional_space = mkOption {
+                    description = "Free space to add to the root FS";
+                    type = types.str;
+                    default = "8G";
                 };
                 boot_size = mkOption {
                     description = "Size of the boot partition";
@@ -369,7 +369,7 @@ in
             };
         };
 
-        virtualisation.diskSize = cfg.storage.disk_size;
+        virtualisation.diskSize = "auto";
         services.qemuGuest.enable = cfg.agent;
         services.watchdogd = mkIf cfg.watchdog.enable {
             enable = true;
