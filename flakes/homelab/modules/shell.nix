@@ -3,7 +3,7 @@
     programs.starship = {
         enable = true;
         presets = [
-            "plain-text"
+            "plain-text-symbols"
             "bracketed-segments"
         ];
     };
