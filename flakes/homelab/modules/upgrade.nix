@@ -1,9 +1,10 @@
-{ config, inputs, system, ... }:
+{ config, inputs, system, lib, ... }:
 {
     nixos-utilities.services.autoUpgrade = {
         enable = true;
         comin = {
             repositorySubdir = "flakes/homelab";
+            package = lib.mkForce inputs.comin.packages.${system}.default;
         };
         identification = {
             hostname = config.lesbos.proxmox.metadata.name;

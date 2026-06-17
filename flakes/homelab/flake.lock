@@ -99,11 +99,11 @@
       },
       "locked": {
         "dir": "flakes/common",
-        "lastModified": 1781712227,
-        "narHash": "sha256-kNEmx+f1JL9nbZYkTOtl3dWfqb/OUlGgzg0/gkoMdkc=",
+        "lastModified": 1781715636,
+        "narHash": "sha256-Bz+YSoIgryQHuQM/JY1LJYBkzO4YCRh+gfb+CNbVQOM=",
         "owner": "dax-dot-gay",
         "repo": "lesbos.nix",
-        "rev": "48ca071fc7e16565e88ae0b8255ce6b1705eed22",
+        "rev": "c6efe6dd9ce86cec3b62a27e2c3d768034724fb8",
         "type": "github"
       },
       "original": {
@@ -126,11 +126,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781702891,
-        "narHash": "sha256-7hqMfpJFTB/WV+uWVaKueN/RUHkgljZ+7a4NJEw9S+4=",
+        "lastModified": 1781716015,
+        "narHash": "sha256-MayrJQ3RQmp3IuGjLEYaiG2jImRPtUtwPdoXn+KJGqg=",
         "owner": "dax-dot-gay",
         "repo": "nixos-utilities",
-        "rev": "8d31e87337eb04d57a01d5bc377d4dd980faa2bf",
+        "rev": "de14c6a34d015e99f5ac38fde454acbf227a8fb5",
         "type": "github"
       },
       "original": {
