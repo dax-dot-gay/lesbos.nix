@@ -39,21 +39,6 @@
             resources.cores = 4;
             resources.memory = 4096;
             storage.disk_size = "128G";
-            storage.extra_disks = [
-                {
-                    name = "data";
-                    device = "virtio1";
-                    size = 16;
-                }
-            ];
-            storage.virtiofs = [
-                {
-                    name = "shared";
-                    id = "TEST";
-                    expose_acl = true;
-                    expose_xattr = true;
-                }
-            ];
         };
         base.users = {
             root = {
