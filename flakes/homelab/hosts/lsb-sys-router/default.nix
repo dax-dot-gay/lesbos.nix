@@ -41,24 +41,17 @@
             storage.disk_size = "128G";
             storage.extra_disks = [
                 {
+                    name = "data";
                     device = "virtio1";
                     size = 16;
                 }
+            ];
+            storage.virtiofs = [
                 {
-                    device = "sata0";
-                    size = 16;
-                }
-                {
-                    device = "sata1";
-                    size = 16;
-                }
-                {
-                    device = "scsi0";
-                    size = 16;
-                }
-                {
-                    device = "scsi1";
-                    size = 16;
+                    name = "shared";
+                    id = "DATA";
+                    expose_acl = true;
+                    expose_xattr = true;
                 }
             ];
         };

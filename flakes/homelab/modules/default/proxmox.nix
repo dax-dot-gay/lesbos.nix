@@ -217,37 +217,56 @@ in
                 virtiofs = mkOption {
                     description = "List of virtiofs shares to expose from the host";
                     type = types.listOf (
-                        types.submodule {
-                            id = mkOption {
-                                description = "Mapping identifier and mount tag";
-                                type = types.singleLineStr;
-                            };
-                            cache = mkOption {
-                                description = "Caching mode";
-                                type = types.enum [
-                                    "auto"
-                                    "always"
-                                    "metadata"
-                                    "never"
-                                ];
-                                default = "auto";
-                            };
-                            direct_io = mkOption {
-                                description = "Honor the O_DIRECT flag passed down by guest applications";
-                                type = types.bool;
-                                default = false;
-                            };
-                            expose_acl = mkOption {
-                                description = "Enable support for POSIX ACLs (enabled ACL implies xattr) for this mount";
-                                type = types.bool;
-                                default = false;
-                            };
-                            expose_xattr = mkOption {
-                                description = "Enable support for extended attributes for this mount";
-                                type = types.bool;
-                                default = false;
-                            };
-                        }
+                        types.submodule (
+                            { config, ... }:
+                            {
+                                options = {
+                                    name = mkOption {
+                                        description = "Descriptive name for this share (defaults to `id`)";
+                                        type = types.singleLineStr;
+                                        default = config.id;
+                                    };
+                                    mount = mkOption {
+                                        description = ''
+                                            Whether to mount this share.
+
+                                            If enabled, mounts at /vols/share/<name> and will be owned by root
+                                        '';
+                                        type = types.bool;
+                                        default = true;
+                                    };
+                                    id = mkOption {
+                                        description = "Mapping identifier and mount tag";
+                                        type = types.singleLineStr;
+                                    };
+                                    cache = mkOption {
+                                        description = "Caching mode";
+                                        type = types.enum [
+                                            "auto"
+                                            "always"
+                                            "metadata"
+                                            "never"
+                                        ];
+                                        default = "auto";
+                                    };
+                                    direct_io = mkOption {
+                                        description = "Honor the O_DIRECT flag passed down by guest applications";
+                                        type = types.bool;
+                                        default = false;
+                                    };
+                                    expose_acl = mkOption {
+                                        description = "Enable support for POSIX ACLs (enabled ACL implies xattr) for this mount";
+                                        type = types.bool;
+                                        default = false;
+                                    };
+                                    expose_xattr = mkOption {
+                                        description = "Enable support for extended attributes for this mount";
+                                        type = types.bool;
+                                        default = false;
+                                    };
+                                };
+                            }
+                        )
                     );
                     default = [ ];
                 };
@@ -430,15 +449,47 @@ in
             "d /var/lib/misc 0755 root root -"
         ];
         networking.hostName = mkForce cfg.metadata.name;
-        /*fileSystems = mkMerge [
-            (listToAttrs (map (disk: {
-                name = "/vols/disk/${disk.name}";
-                value = {
-                    device = (if (strings.match "^sata.{1,2}$" disk.device) then "ata-QEMU_HARDDISK_${disk.serial}" else (
-                        if (strings.match "^scsi.{1,2}$" disk.device) then "")
-                    ))
-                };
-            })cfg.storage.extra_disks))
-        ];*/
+        fileSystems = mkMerge [
+            (listToAttrs (
+                map (disk: {
+                    name = "/vols/disk/${disk.name}";
+                    value = {
+                        device = (
+                            if (strings.match "^sata.{1,2}$" disk.device) then
+                                "ata-QEMU_HARDDISK_${disk.serial}"
+                            else
+                                (
+                                    if (strings.match "^scsi.{1,2}$" disk.device) then
+                                        "scsi-0QEMU_QEMU_HARDDISK_drive-${disk.serial}"
+                                    else
+                                        ("virtio-${disk.serial}")
+                                )
+                        );
+                        autoFormat = true;
+                        autoResize = true;
+                        fsType = "ext4";
+                        options = [
+                            "exec"
+                            "rw"
+                            "nofail"
+                            "suid"
+                        ];
+                    };
+                }) (filter (disk: disk.mount) cfg.storage.extra_disks)
+            ))
+            (listToAttrs (
+                map (share: {
+                    name = "/vols/share/${share.name}";
+                    value = {
+                        device = share.id;
+                        fsType = "virtiofs";
+                        options = [
+                            "rw"
+                            "nofail"
+                        ];
+                    };
+                }) (filter (share: share.mount) cfg.storage.virtiofs)
+            ))
+        ];
     };
 }
