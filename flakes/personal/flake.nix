@@ -2,6 +2,7 @@
     description = "Flake containing configs for my personal systems";
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+        nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
         sops-nix = {
             url = "github:Mic92/sops-nix";
             inputs.nixpkgs.follows = "nixpkgs";
@@ -20,18 +21,14 @@
             inputs.sops-nix.follows = "sops-nix";
             inputs.comin.follows = "comin";
         };
-        lesbos-common = {
-            url = "path:../common";
-            inputs.nixpkgs.follows = "nixpkgs";
-            inputs.sops-nix.follows = "sops-nix";
-            inputs.comin.follows = "comin";
-            inputs.nixos-utilities.follows = "nixos-utilities";
-        };
     };
 
     outputs =
-        { self, lesbos-common, ... }@inputs:
-        lesbos-common.lib.hydrateFlake
+        let
+            hydrateFlake = (import ../../common/lib).flake.hydrate;
+        in
+        { self, ... }@inputs:
+        hydrateFlake
             {
                 inherit self inputs;
                 system = "x86_64-linux";
