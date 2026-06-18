@@ -1,6 +1,6 @@
 { ... }:
 {
     imports = [
-        ./base
+        ./options.nix
     ];
 }

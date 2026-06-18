@@ -5,5 +5,6 @@
         ./shell.nix
         ./upgrade.nix
         ./networking
+        ./proxmox.nix
     ];
 }
