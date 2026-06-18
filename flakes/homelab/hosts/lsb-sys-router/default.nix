@@ -11,6 +11,9 @@
         ./routing.nix
     ];
 
+    system.stateVersion = "26.05";
+    networking.hostName = "lsb-sys-router";
+
     lesbos = {
         proxmox = {
             enable = true;
