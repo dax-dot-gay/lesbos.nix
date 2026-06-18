@@ -72,7 +72,6 @@ lib.filterAttrs checkToRemove (
                             // extraSpecialArgs;
                             modules = [
                                 "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
-                                ../modules
                                 inputs.sops-nix.nixosModules.sops
                                 inputs.comin.nixosModules.comin
                                 inputs.nixos-utilities.nixosModules.default

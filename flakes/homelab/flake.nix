@@ -20,13 +20,18 @@
             inputs.sops-nix.follows = "sops-nix";
             inputs.comin.follows = "comin";
         };
+        lesbos-common = {
+            url = "github:dax-dot-gay/lesbos.nix?dir=flakes/common"; # Can't reference locally because nixd >:(
+            inputs.nixpkgs.follows = "nixpkgs";
+            inputs.sops-nix.follows = "sops-nix";
+            inputs.comin.follows = "comin";
+            inputs.nixos-utilities.follows = "nixos-utilities";
+        };
     };
 
     outputs =
-        { self, ... }@inputs: let
-            hydrateFlake = (import ../../common/lib).flake.hydrate;
-        in
-        hydrateFlake
+        { self, lesbos-common, ... }@inputs:
+        lesbos-common.lib.hydrateFlake
             {
                 inherit self inputs;
                 system = "x86_64-linux";

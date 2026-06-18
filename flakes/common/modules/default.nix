@@ -1,0 +1,7 @@
+{ ... }:
+{
+    imports = [
+        ./proxmox.nix
+        ./base
+    ];
+}
