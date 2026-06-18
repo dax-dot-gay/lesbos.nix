@@ -7,7 +7,7 @@
             package = lib.mkForce inputs.comin.packages.${system}.default;
         };
         identification = {
-            hostname = config.lesbos.proxmox.metadata.name;
+            hostname = config.lesbos.info.canonicalName;
         };
         reboot = {
             enable = true;

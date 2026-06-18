@@ -265,6 +265,12 @@ EOF
 # @cmd                                      Perform flake operations on all flakes, or a single one if specified
 flakes() { :; }
 
+# @cmd update common input for all flakes
+flakes::recommon() {
+    nix flake update --flake ./flakes/homelab lesbos-common
+    nix flake update --flake ./flakes/personal lesbos-common
+}
+
 # @cmd                                      Update flakes
 # @arg      flake=all       <FLAKE>         Flake to update
 flakes::update() {
