@@ -73,6 +73,7 @@ lib.filterAttrs checkToRemove (
                             modules = [
                                 "${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-image.nix"
                                 ../modules
+                                ../../flakes/${flake}/modules
                                 inputs.sops-nix.nixosModules.sops
                                 inputs.comin.nixosModules.comin
                                 inputs.nixos-utilities.nixosModules.default

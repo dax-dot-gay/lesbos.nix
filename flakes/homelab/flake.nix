@@ -24,7 +24,7 @@
 
     outputs =
         { self, ... }@inputs: let
-            hydrateFlake = (import ../../common/lib).flake.hydrate;
+            hydrateFlake = (import ./common/lib).flake.hydrate;
         in
         hydrateFlake
             {
@@ -50,7 +50,6 @@
                                 # Add tags here
                             ];
                             modules = [
-                                ./modules
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {
