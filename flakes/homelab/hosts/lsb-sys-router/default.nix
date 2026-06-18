@@ -49,7 +49,7 @@
             storage.virtiofs = [
                 {
                     name = "shared";
-                    id = "DATA";
+                    id = "TEST";
                     expose_acl = true;
                     expose_xattr = true;
                 }
