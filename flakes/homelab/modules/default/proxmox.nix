@@ -456,13 +456,13 @@ in
                     value = {
                         device = (
                             if !(isNull (strings.match "^sata.{1,2}$" disk.device)) then
-                                "ata-QEMU_HARDDISK_${disk.serial}"
+                                "/dev/disk/by-id/ata-QEMU_HARDDISK_${disk.serial}"
                             else
                                 (
                                     if !(isNull (strings.match "^scsi.{1,2}$" disk.device)) then
-                                        "scsi-0QEMU_QEMU_HARDDISK_drive-${disk.serial}"
+                                        "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-${disk.serial}"
                                     else
-                                        "virtio-${disk.serial}"
+                                        "/dev/disk/by-id/virtio-${disk.serial}"
                                 )
                         );
                         autoFormat = true;
