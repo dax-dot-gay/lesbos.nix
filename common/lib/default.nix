@@ -1,5 +1,3 @@
 {
-    flake = {
-        hydrate = import ./hydrateFlake.nix;
-    };
+    # Don't import hydrateFlake, that gets pulled by each flake individually
 }

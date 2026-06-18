@@ -25,7 +25,7 @@
 
     outputs =
         let
-            hydrateFlake = (import ../../common/lib).flake.hydrate;
+            hydrateFlake = import ./hydrateFlake.nix;
         in
         { self, ... }@inputs:
         hydrateFlake
