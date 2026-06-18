@@ -37,7 +37,7 @@ let
         attrs:
         (
             if (lib.length attrs) == 0 then
-                [ ]
+                {}
             else if (lib.length attrs) == 0 then
                 lib.head attrs
             else

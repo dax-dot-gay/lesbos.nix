@@ -287,11 +287,20 @@ flakes::update() {
 # @arg      flake=all       <FLAKE>         Flake to check
 flakes::check() {
     if [ "$argc_flake" = "all" ]; then
-        nix flake check "path:./flakes/homelab"
-        nix flake check "path:./flakes/personal"
-        nix flake check "path:./flakes/common"
+        echo "Checking homelab..."
+        cd flakes/homelab
+        nix flake check
+
+        echo "Checking personal..."
+        cd ../../flakes/personal
+        nix flake check
+
+        echo "Checking common..."
+        cd ../../flakes/common
+        nix flake check
     else
-        nix flake check "path:./flakes/$argc_flake"
+        cd "flakes/$argc_flake"
+        nix flake check
     fi
 }
 
