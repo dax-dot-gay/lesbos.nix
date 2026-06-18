@@ -16,60 +16,68 @@ let
             };
             default = { };
         };
-    extraDisk = types.submodule {
-        options = {
-            device = mkOption {
-                description = ''
-                    Proxmox device name
+    extraDisk = types.submodule (
+        { config, ... }:
+        {
+            options = {
+                device = mkOption {
+                    description = ''
+                        Proxmox device name
 
-                    Can be one of:
-                     - `virtio<1-15>`, ie virtio1
-                     - `scsi<0-30>`, ie scsi0
-                     - `sata<0-5>`, ie sata0
-                '';
-                type = types.strMatching "^(virtio|sata|scsi)[0-9]{1,2}$";
-                example = "virtio1";
+                        Can be one of:
+                         - `virtio<1-15>`, ie virtio1
+                         - `scsi<0-30>`, ie scsi0
+                         - `sata<0-5>`, ie sata0
+                    '';
+                    type = types.strMatching "^(virtio|sata|scsi)[0-9]{1,2}$";
+                    example = "virtio1";
+                };
+                size = mkOption {
+                    description = "Size of this disk in GiB";
+                    type = types.ints.positive;
+                    default = 64;
+                };
+                volume = mkOption {
+                    description = "Proxmox storage volume (if `null`, defaults to `storage.volume`)";
+                    type = types.nullOr types.singleLineStr;
+                    default = null;
+                };
+                cache = mkOption {
+                    description = "Cache mode to use";
+                    type = types.enum [
+                        "none"
+                        "directsync"
+                        "unsafe"
+                        "writeback"
+                        "writethrough"
+                    ];
+                    default = "none";
+                };
+                format = mkOption {
+                    description = "Drive's backing file format";
+                    type = types.enum [
+                        "raw"
+                        "cloop"
+                        "qcow"
+                        "qcow2"
+                        "qed"
+                        "vmdk"
+                    ];
+                    default = "raw";
+                };
+                read_only = mkOption {
+                    description = "Whether disk is read-only";
+                    type = types.bool;
+                    default = false;
+                };
+                serial = mkOption {
+                    description = "Serial number of this device (defaults to the device name)";
+                    type = types.singleLineStr;
+                    default = config.device;
+                };
             };
-            size = mkOption {
-                description = "Size of this disk in GiB";
-                type = types.ints.positive;
-                default = 64;
-            };
-            volume = mkOption {
-                description = "Proxmox storage volume (if `null`, defaults to `storage.volume`)";
-                type = types.nullOr types.singleLineStr;
-                default = null;
-            };
-            cache = mkOption {
-                description = "Cache mode to use";
-                type = types.enum [
-                    "none"
-                    "directsync"
-                    "unsafe"
-                    "writeback"
-                    "writethrough"
-                ];
-                default = "none";
-            };
-            format = mkOption {
-                description = "Drive's backing file format";
-                type = types.enum [
-                    "raw"
-                    "cloop"
-                    "qcow"
-                    "qcow2"
-                    "qed"
-                    "vmdk"
-                ];
-                default = "raw";
-            };
-            read_only = mkOption {
-                description = "Whether disk is read-only";
-                type = types.bool;
-                default = false;
-            };
-        };
-    };
+        }
+    );
     networkInterface = types.submodule {
         options = {
             bridge = mkOption {
@@ -100,7 +108,7 @@ let
                     imap1 (index: disk: ''
                         qm set ${toString cfg.metadata.id} --${disk.device} ${
                             if (isNull disk.volume) then cfg.storage.volume else disk.volume
-                        }:${toString disk.size},cache=${disk.cache},format=${disk.format}${
+                        }:${toString disk.size},serial=${disk.serial},cache=${disk.cache},format=${disk.format}${
                             if (disk.read_only && (isNull (match "sata" disk.device))) then ",ro=1" else ""
                         }
                     '') cfg.storage.extra_disks
