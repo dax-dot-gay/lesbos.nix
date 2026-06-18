@@ -17,6 +17,7 @@
         mo
         pwgen
         inetutils
+        nil
     ];
     languages.python = {
         enable = true;
