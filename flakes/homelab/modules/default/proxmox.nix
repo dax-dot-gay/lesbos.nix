@@ -399,12 +399,12 @@ in
                 }
                 (listToAttrs (
                     imap0 (index: share: {
-                        name = "virtiofs${index}";
+                        name = "virtiofs${toString index}";
                         value = concatStringsSep "," [
                             "cache=${share.cache}"
                             "dirid=${share.id}"
                             "direct-io=${if share.direct_io then "1" else "0"}"
-                            "expose-xattr=${if share.expose_xattr_io then "1" else "0"}"
+                            "expose-xattr=${if share.expose_xattr then "1" else "0"}"
                             "expose-acl=${if share.expose_acl then "1" else "0"}"
                         ];
                     }) cfg.storage.virtiofs
@@ -455,14 +455,14 @@ in
                     name = "/vols/disk/${disk.name}";
                     value = {
                         device = (
-                            if (strings.match "^sata.{1,2}$" disk.device) then
+                            if !(isNull (strings.match "^sata.{1,2}$" disk.device)) then
                                 "ata-QEMU_HARDDISK_${disk.serial}"
                             else
                                 (
-                                    if (strings.match "^scsi.{1,2}$" disk.device) then
+                                    if !(isNull (strings.match "^scsi.{1,2}$" disk.device)) then
                                         "scsi-0QEMU_QEMU_HARDDISK_drive-${disk.serial}"
                                     else
-                                        ("virtio-${disk.serial}")
+                                        "virtio-${disk.serial}"
                                 )
                         );
                         autoFormat = true;
