@@ -47,21 +47,6 @@
                         ];
                     };
             };
-            nixosConfigurations = {
-                dummy = inputs.nixpkgs.lib.nixosSystem {
-                    inherit system;
-                    specialArgs = { inherit inputs system; };
-                    modules = [
-                        ./dummy-system/configuration.nix
-                        self.nixosModules.default
-                    ];
-                };
-            };
-            packages.${system} = {
-                host-dummy = self.nixosConfigurations.dummy.config.system.build.VMA;
-                host-dummy-deploy = self.nixosConfigurations.dummy.config.lesbos.proxmox.__deploy_script;
-                host-dummy-setup = self.nixosConfigurations.dummy.config.lesbos.proxmox.__setup_script;
-            };
             lib = {
                 hydrateFlake = import ./lib/hydrateFlake.nix;
             };
