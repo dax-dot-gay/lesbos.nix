@@ -12,13 +12,6 @@
     ];
 
     lesbos = {
-        info = {
-            canonicalName = "lsb-sys-router";
-            flake = "homelab";
-            tags = [];
-            stateVersion = "26.05";
-            runningVersion = "26.05";
-        };
         proxmox = {
             enable = true;
             network = {

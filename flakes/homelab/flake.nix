@@ -24,7 +24,7 @@
 
     outputs =
         { self, ... }@inputs: let
-            hydrateFlake = import ./hydrateFlake;
+            hydrateFlake = (import ./common/lib).flake.hydrate;
         in
         hydrateFlake
             {
