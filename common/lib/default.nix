@@ -1,5 +1,5 @@
 {
     flake = {
-        hydrate = import ./hydrateFlake.nix;
+        hydrateFlake = import ./hydrateFlake.nix;
     };
 }

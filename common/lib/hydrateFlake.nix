@@ -76,6 +76,7 @@ lib.filterAttrs checkToRemove (
                                 inputs.sops-nix.nixosModules.sops
                                 inputs.comin.nixosModules.comin
                                 inputs.nixos-utilities.nixosModules.default
+                                inputs.lesbos-common.nixosModules.default
                                 path
                                 {
                                     lesbos.proxmox = {
