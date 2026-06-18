@@ -120,11 +120,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781471520,
-        "narHash": "sha256-o9K2MiLkp8W++ySqaO7MpyqWcAy5x+KAggjUrjroCxc=",
+        "lastModified": 1781716015,
+        "narHash": "sha256-MayrJQ3RQmp3IuGjLEYaiG2jImRPtUtwPdoXn+KJGqg=",
         "owner": "dax-dot-gay",
         "repo": "nixos-utilities",
-        "rev": "bac12f71de7236290dc3469999dab248b5a52655",
+        "rev": "de14c6a34d015e99f5ac38fde454acbf227a8fb5",
         "type": "github"
       },
       "original": {

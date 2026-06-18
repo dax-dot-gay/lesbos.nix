@@ -28,11 +28,6 @@ in
                 description = "Which flake this machine is part of";
                 type = types.singleLineStr;
             };
-            tags = mkOption {
-                description = "Semantic tags for this machine";
-                type = types.listOf types.singleLineStr;
-                default = [ ];
-            };
             stateVersion = mkOption {
                 description = "Value of `system.stateVersion` (sets `system.stateVersion` automatically)";
                 type = types.singleLineStr;

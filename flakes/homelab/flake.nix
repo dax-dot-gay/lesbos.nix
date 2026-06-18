@@ -47,15 +47,14 @@
                 {
                     proxmoxConfigurations = {
                         lsb-sys-router = {
+                            inherit self;
                             id = 500;
                             path = ./hosts/lsb-sys-router;
-                            flake = "homelab";
                             name = "lsb-sys-router";
                             tags = [
                                 # Add tags here
                             ];
                             modules = [
-                                ./modules
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {

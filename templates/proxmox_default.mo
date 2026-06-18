@@ -10,10 +10,13 @@
         ./provision-secrets.nix
     ];
 
-    system.stateVersion = "26.05";
-    networking.hostName = "{{a_hostname}}";
-
     lesbos = {
+        info = {
+            canonicalName = "{{a_hostname}}";
+            flake = "{{a_flake}}";
+            stateVersion = "{{a_state_version}}";
+            runningVersion = "{{a_state_version}}";
+        };
         proxmox = {
             enable = true;
         };

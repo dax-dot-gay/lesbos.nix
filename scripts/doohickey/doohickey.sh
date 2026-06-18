@@ -262,6 +262,33 @@ EOF
     
 }
 
+# @cmd                                      Perform flake operations on all flakes, or a single one if specified
+flakes() { :; }
+
+# @cmd                                      Update flakes
+# @arg      flake=all       <FLAKE>         Flake to update
+flakes::update() {
+    if [ "$argc_flake" = "all" ]; then
+        nix flake update --flake ./flakes/homelab
+        nix flake update --flake ./flakes/personal
+        nix flake update --flake ./flakes/common
+    else
+        nix flake update --flake "./flakes/$argc_flake"
+    fi
+}
+
+# @cmd                                      Check flakes
+# @arg      flake=all       <FLAKE>         Flake to check
+flakes::check() {
+    if [ "$argc_flake" = "all" ]; then
+        nix flake check "path:./flakes/homelab"
+        nix flake check "path:./flakes/personal"
+        nix flake check "path:./flakes/common"
+    else
+        nix flake check "path:./flakes/$argc_flake"
+    fi
+}
+
 
 
 eval "$(argc --argc-eval "$0" "$@")"

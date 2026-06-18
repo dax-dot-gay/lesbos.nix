@@ -56,7 +56,7 @@ lib.filterAttrs checkToRemove (
                 {
                     id,
                     path,
-                    flake ? "homelab",
+                    self,
                     name ? key,
                     tags ? [ ],
                     modules ? [ ],
@@ -76,6 +76,7 @@ lib.filterAttrs checkToRemove (
                                 inputs.comin.nixosModules.comin
                                 inputs.nixos-utilities.nixosModules.default
                                 inputs.lesbos-common.nixosModules.default
+                                "${self.outPath}/modules/default"
                                 path
                                 {
                                     lesbos.proxmox = {

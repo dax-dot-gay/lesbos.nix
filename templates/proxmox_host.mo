@@ -1,7 +1,7 @@
 {{a_hostname}} = {
+    inherit self;
     id = {{a_vmid}};
     path = ./hosts/{{a_hostname}};
-    flake = "{{a_flake}}";
     name = "{{a_hostname}}";
     tags = [
         # Add tags here
