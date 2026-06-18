@@ -11,14 +11,13 @@
         ./routing.nix
     ];
 
-    lesbos.info = {
-        canonicalName = "lsb-sys-router";
-        flake = "homelab";
-        stateVersion = "26.05";
-        runningVersion = "26.05";
-    };
-
     lesbos = {
+        info = {
+            canonicalName = "lsb-sys-router";
+            flake = "homelab";
+            stateVersion = "26.05";
+            runningVersion = "26.05";
+        };
         proxmox = {
             enable = true;
             network = {
