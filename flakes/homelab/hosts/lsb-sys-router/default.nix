@@ -49,7 +49,15 @@
                     size = 16;
                 }
                 {
+                    device = "sata1";
+                    size = 16;
+                }
+                {
                     device = "scsi0";
+                    size = 16;
+                }
+                {
+                    device = "scsi1";
                     size = 16;
                 }
             ];

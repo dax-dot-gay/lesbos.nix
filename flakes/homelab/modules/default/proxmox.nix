@@ -20,6 +20,20 @@ let
         { config, ... }:
         {
             options = {
+                name = mkOption {
+                    description = "Descriptive name for this drive (defaults to the device name)";
+                    type = types.singleLineStr;
+                    default = config.device;
+                };
+                mount = mkOption {
+                    description = ''
+                        Whether to mount this drive.
+
+                        If enabled, mounts at /vols/disk/<name> and will be owned by root
+                    '';
+                    type = types.bool;
+                    default = true;
+                };
                 device = mkOption {
                     description = ''
                         Proxmox device name
@@ -416,5 +430,15 @@ in
             "d /var/lib/misc 0755 root root -"
         ];
         networking.hostName = mkForce cfg.metadata.name;
+        /*fileSystems = mkMerge [
+            (listToAttrs (map (disk: {
+                name = "/vols/disk/${disk.name}";
+                value = {
+                    device = (if (strings.match "^sata.{1,2}$" disk.device) then "ata-QEMU_HARDDISK_${disk.serial}" else (
+                        if (strings.match "^scsi.{1,2}$" disk.device) then "")
+                    ))
+                };
+            })cfg.storage.extra_disks))
+        ];*/
     };
 }
