@@ -39,6 +39,20 @@
             resources.cores = 4;
             resources.memory = 4096;
             storage.disk_size = "128G";
+            storage.extra_disks = [
+                {
+                    device = "virtio1";
+                    size = 16;
+                }
+                {
+                    device = "sata0";
+                    size = 16;
+                }
+                {
+                    device = "scsi0";
+                    size = 16;
+                }
+            ];
         };
         base.users = {
             root = {
