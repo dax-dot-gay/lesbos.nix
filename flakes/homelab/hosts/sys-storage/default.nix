@@ -29,24 +29,34 @@
                 disk_size = "64G";
                 virtiofs = [
                     {
-                        name = "data";
+                        name = "test";
                         mount = true;
-                        id = "DATA";
+                        id = "TEST";
                         expose_acl = true;
                         expose_xattr = true;
                     }
                 ];
             };
         };
-        volumes.data = {
+        volumes.synced = {
             enable = true;
             source = {
                 type = "share";
-                name = "data";
-                path = "/";
+                name = "test";
+                path = "/sync-test";
+                ensureSource.enable = true;
             };
-            destination = "/data";
-            strategy.bind.enable = true;
+            destination = "/home/nas/sync-test";
+            strategy.sync = {
+                enable = true;
+                user = "nas";
+                group = "users";
+                mode = "0770";
+                restoration = true;
+                timerConfig = {
+                    onActiveSec = "1min";
+                };
+            };
         };
         base.users = {
             root = {

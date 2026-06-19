@@ -28,5 +28,6 @@ in
     imports = [
         ./bind.nix
         ./bindMapped.nix
+        ./sync.nix
     ];
 }

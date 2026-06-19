@@ -52,6 +52,7 @@ in
                     options = concatLists [
                         [
                             "x-systemd.requires=systemd-tmpfiles-setup.service"
+                            "x-systemd.after=systemd-tmpfiles-setup.service"
                             "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group}"
                             "perms=${volume.strategy.permissions}"
                             "nofail"

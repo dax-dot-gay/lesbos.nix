@@ -45,6 +45,7 @@ in
                     [
                         "bind"
                         "x-systemd.requires=systemd-tmpfiles-setup.service"
+                        "x-systemd.after=systemd-tmpfiles-setup.service"
                         "nofail"
                     ]
                     (optional volume.strategy.read_only "ro")
