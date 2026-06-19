@@ -27,6 +27,7 @@ in
                     prefixLength = cfg.lan.prefix_length;
                 }];
             };
+            nameservers = [cfg.lan.gateway "1.1.1.1"];
             defaultGateway = {
                 address = cfg.lan.gateway;
                 interface = iface;
