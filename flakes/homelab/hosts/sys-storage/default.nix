@@ -27,58 +27,26 @@
             resources.memory = 2048;
             storage = {
                 disk_size = "64G";
-                extra_disks = [
-                    {
-                        name = "supplemental";
-                        mount = true;
-                        device = "virtio1";
-                        size = 32;
-                    }
-                ];
                 virtiofs = [
                     {
-                        name = "test";
+                        name = "data";
                         mount = true;
-                        id = "TEST";
+                        id = "DATA";
                         expose_acl = true;
                         expose_xattr = true;
                     }
                 ];
             };
         };
-        volumes = {
-            supplemental = {
-                enable = true;
-                source = {
-                    type = "disk";
-                    name = "supplemental";
-                    path = "/test/mount";
-                    ensureSource = {
-                        enable = true;
-                        user = "nas";
-                        group = "users";
-                    };
-                };
-                destination = "/home/nas/vol-supplemental";
-                strategy.bind.enable = true;
+        volumes.data = {
+            enable = true;
+            source = {
+                type = "share";
+                name = "data";
+                path = "/";
             };
-            testing = {
-                enable = true;
-                source = {
-                    type = "share";
-                    name = "test";
-                    path = "/test/mount2";
-                    ensureSource = {
-                        enable = true;
-                    };
-                };
-                destination = "/home/nas/vol-test";
-                strategy.bindMapped = {
-                    enable = true;
-                    user = "nas";
-                    group = "users";
-                };
-            };
+            destination = "/data";
+            strategy.bind.enable = true;
         };
         base.users = {
             root = {
