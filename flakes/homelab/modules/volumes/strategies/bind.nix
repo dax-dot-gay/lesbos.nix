@@ -45,6 +45,7 @@ in
                     [
                         "bind"
                         "x-systemd.requires=systemd-tmpfiles-setup.service"
+                        "nofail"
                     ]
                     (optional volume.strategy.read_only "ro")
                     (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_by)

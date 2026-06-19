@@ -54,6 +54,7 @@ in
                             "x-systemd.requires=systemd-tmpfiles-setup.service"
                             "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group}"
                             "perms=${volume.strategy.permissions}"
+                            "nofail"
                         ]
                         (optional volume.strategy.read_only "ro")
                         (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_by)
