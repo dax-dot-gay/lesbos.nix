@@ -61,6 +61,22 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        sys-storage = {
+                            inherit self;
+                            id = 501;
+                            path = ./hosts/sys-storage;
+                            name = "sys-storage";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

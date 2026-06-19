@@ -20,7 +20,7 @@
         };
         clients = {
             sys-storage = {
-                description = "Internal NAS and shared data provider";
+                description = "Internal NAS and storage access provider";
                 address = "192.168.64.10";
                 dns = "storage.sys.lesbos.nix";
             };

@@ -9,7 +9,7 @@
           "expr": "(import /mnt/data/Programming/devops/lesbos.nix/.devenv/bootstrap/default.nix {\n  version = \"2.1.2\";\n  is_development_version = false;\n  require_version_match = false;\n  system = \"x86_64-linux\";\n  devenv_root = \"/mnt/data/Programming/devops/lesbos.nix\";\n  skip_local_src = false;\n  devenv_dotfile = \"/mnt/data/Programming/devops/lesbos.nix/.devenv\";\n  devenv_dotfile_path = ./.devenv;\n  devenv_tmpdir = \"/tmp\";\n  devenv_runtime = \"/run/user/1000/devenv-d8a7b81\";\n  devenv_istesting = false;\n  devenv_direnvrc_latest_version = 2;\n  active_profiles = [\n  ];\n  cli_options = {\n  };\n  hostname = \"stryker\";\n  username = \"dax\";\n  git_root = \"/mnt/data/Programming/devops/lesbos.nix\";\n  secretspec = null;\n  devenv_inputs = {\n    nixpkgs = {\n      url = \"github:cachix/devenv-nixpkgs/rolling\";\n    };\n  };\n  devenv_imports = [\n  ];\n  impure = false;\n  nixpkgs_config = {  };\n  lock_fingerprint = \"ada2d132b83e1fe2e512772aab2689cc5f0ad325a2a712e63391cbae0aed29c5\";\n  devenv_state = null;\n}).project.options"
         },
         "flake-homelab": {
-          "expr": "(builtins.getFlake (builtins.toString ./flakes/homelab)).nixosConfigurations.lsb-sys-router.options"
+          "expr": "(builtins.getFlake (builtins.toString ./flakes/homelab)).nixosConfigurations.sys-storage.options"
         }
       }
     }
