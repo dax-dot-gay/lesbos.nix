@@ -82,13 +82,13 @@ let
                         enable = mkEnableOption "Ensure the source path exists & has the required owner/group/mode";
                         user = mkOption {
                             description = "Ensures that the source has the specified owner (name or UID)";
-                            type = types.either types.str types.ints.unsigned;
-                            default = 0;
+                            type = types.str;
+                            default = "root";
                         };
                         group = mkOption {
                             description = "Ensures that the source has the specified group (name or GID)";
-                            type = types.either types.str types.ints.unsigned;
-                            default = 0;
+                            type = types.str;
+                            default = "root";
                         };
                         mode = mkOption {
                             description = "Ensures that the source has the specified ownership mode (0xxx)";
