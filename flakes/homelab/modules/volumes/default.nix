@@ -24,17 +24,9 @@ in
     ];
 
     config = {
-        systemd.tmpfiles.settings = mapAttrs' (_: {name, volume, ...}: {
-            name = "10-lsb-volumes-${name}";
-            value = {
-                "${volume.sourcePath}" = {
-                    d = {
-                        user = volume.source.ensureSource.user;
-                        group = volume.source.ensureSource.group;
-                        mode = volume.source.ensureSource.mode;
-                    };
-                };
-            };
-        }) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
+        systemd.tmpfiles.rules = mapAttrsToList (
+            _: volume:
+            "d ${vol.volume.sourcePath} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
+        ) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
     };
 }
