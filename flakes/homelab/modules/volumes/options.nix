@@ -43,7 +43,7 @@ let
             permissions = mkOption {
                 description = "BindFS permission specification (see `bindfs(1)`)";
                 type = types.str;
-                default = "0770";
+                default = "0644,a+D";
             };
         };
     };
@@ -93,7 +93,7 @@ let
                         mode = mkOption {
                             description = "Ensures that the source has the specified ownership mode (0xxx)";
                             type = types.strMatching "^0[0-7]{3}$";
-                            default = "0660";
+                            default = "0770";
                         };
                     };
                 };
