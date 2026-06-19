@@ -97,7 +97,7 @@ in
                         path = [ pkgs.rclone ];
                         script = ''
                             if [ -d "${volume.destination}" ] && [ -d "${volume.sourcePath}" ]; then
-                                echo "Syncing VOL[${name}] to ${volume.sourcePath}
+                                echo "Syncing VOL[${name}] to ${volume.sourcePath}"
                                 rclone sync ${volume.destination} ${volume.sourcePath}
                             else
                                 echo "Unable to sync VOL[${name}], source or destination do not exist"
