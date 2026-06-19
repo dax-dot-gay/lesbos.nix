@@ -57,6 +57,7 @@
                         enable = true;
                         user = "nas";
                         group = "users";
+                        mode = "0770";
                     };
                 };
                 destination = "/home/nas/vol-supplemental";
@@ -77,7 +78,7 @@
                     enable = true;
                     user = "nas";
                     group = "users";
-                    permissions = "0664";
+                    permissions = "0774";
                 };
             };
         };
