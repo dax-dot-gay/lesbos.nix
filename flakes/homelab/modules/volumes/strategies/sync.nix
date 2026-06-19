@@ -123,7 +123,7 @@ in
                     before = volume.required_by;
                     requiredBy = volume.required_by;
                     timerConfig = strategy.timerConfig // {
-                        Unit = "volume-periodic-sync-${name}";
+                        Unit = "volume-periodic-sync-${name}.service";
                     };
                 };
             }
