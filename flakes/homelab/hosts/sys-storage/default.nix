@@ -16,6 +16,70 @@
         };
         proxmox = {
             enable = true;
+            network.primary.bridge = "vmbr3";
+            watchdog.enable = true;
+            start = {
+                on_boot = true;
+                on_deploy = true;
+                order = 2;
+            };
+            resources.cores = 4;
+            resources.memory = 2048;
+            storage = {
+                disk_size = "64G";
+                extra_disks = [
+                    {
+                        name = "supplemental";
+                        mount = true;
+                        device = "virtio1";
+                        size = 32;
+                    }
+                ];
+                virtiofs = [
+                    {
+                        name = "test";
+                        mount = true;
+                        id = "TEST";
+                        expose_acl = true;
+                        expose_xattr = true;
+                    }
+                ];
+            };
+        };
+        volumes = {
+            supplemental = {
+                enable = true;
+                source = {
+                    type = "disk";
+                    name = "supplemental";
+                    path = "/test/mount";
+                    ensureSource = {
+                        enable = true;
+                        user = "nas";
+                        group = "users";
+                    };
+                };
+                destination = "/home/nas/vol-supplemental";
+                strategy.bind.enable = true;
+            };
+            testing = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "test";
+                    path = "/test/mount2";
+                    ensureSource = {
+                        enable = true;
+                    };
+                };
+                destination = "/home/nas/vol-test";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "nas";
+                    group = "users";
+                    permissions = "0664";
+                };
+            };
         };
         base.users = {
             root = {

@@ -111,14 +111,6 @@ let
                     description = "Which strategy to use. Exactly one must be enabled";
                     type = types.submodule {
                         options = strategies;
-                        config = {
-                            assertions = [
-                                {
-                                    assertion = (length (attrsToList (filterAttrs (_: x: x.enable) config.strategies))) == 1;
-                                    message = "Exactly one strategy must be active per volume entry";
-                                }
-                            ];
-                        };
                     };
                 };
                 required_by = mkOption {

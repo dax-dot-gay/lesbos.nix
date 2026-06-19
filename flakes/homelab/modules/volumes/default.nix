@@ -35,6 +35,6 @@ in
                     };
                 };
             };
-        }) (filterAttrs (_: vol: vol.volume.source.ensureSource) volumes);
+        }) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
     };
 }
