@@ -54,7 +54,7 @@
                 mode = "0770";
                 restoration = true;
                 timerConfig = {
-                    onActiveSec = "1min";
+                    OnActiveSec = "1min";
                 };
             };
         };
