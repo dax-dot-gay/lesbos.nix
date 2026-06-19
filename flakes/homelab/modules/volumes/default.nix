@@ -25,7 +25,7 @@ in
 
     config = {
         systemd.tmpfiles.rules = mapAttrsToList (
-            _: volume:
+            _: vol:
             "d ${vol.volume.sourcePath} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
         ) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
     };
