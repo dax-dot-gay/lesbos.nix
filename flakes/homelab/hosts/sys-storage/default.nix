@@ -51,4 +51,10 @@
             };
         };
     };
+
+    environment.systemPackages = with pkgs; [
+        borgbackup
+        rclone
+        yazi
+    ];
 }

@@ -22,7 +22,10 @@
             sys-storage = {
                 description = "Internal NAS and storage access provider";
                 address = "192.168.64.10";
-                dns = "storage.sys.lesbos.nix";
+                dns = [
+                    "sys-storage.lesbos.nix"
+                    "storage.sys"
+                ];
             };
             sys-ingress = {
                 description = ''
@@ -30,7 +33,10 @@
                     - Caddy, tailscale
                 '';
                 address = "192.168.64.11";
-                dns = "ingress.sys.lesbos.nix";
+                dns = [
+                    "sys-ingress.lesbos.nix"
+                    "ingress.sys"
+                ];
                 forward_ports = [
                     {
                         protocol = "tcp";

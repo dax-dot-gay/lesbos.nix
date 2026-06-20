@@ -56,10 +56,10 @@ let
                     type = types.singleLineStr;
                 };
                 dns = mkOption {
-                    description = "Explicit DNS name to set internally";
-                    type = types.nullOr types.str;
-                    default = null;
-                    example = "host.example.com";
+                    description = "DNS names to set internally";
+                    type = types.listOf types.str;
+                    default = [];
+                    example = ["host.lan"];
                 };
                 forward_ports = mkOption {
                     description = "List of ports to forward from this host";

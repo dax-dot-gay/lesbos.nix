@@ -27,6 +27,7 @@ let
     );
     tcpForwards = flatten (map (forward: forward.ports) (filter (forward: forward.tcp) allForwards));
     udpForwards = flatten (map (forward: forward.ports) (filter (forward: forward.udp) allForwards));
+    dnsmap = listToAttrs (flatten (mapAttrsToList (key: value: nameValuePair key value.dns) net.clients));
 in
 {
     networking.hostName = mkForce net.wan.hostname;
