@@ -23,7 +23,7 @@
             type = "share";
             name = "data";
             path = "/systems/sys-monitoring/grafana/";
-            ensureSource = true;
+            ensureSource.enable = true;
         };
         destination = "/var/lib/grafana";
         strategy.bindMapped = {
