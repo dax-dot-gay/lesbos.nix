@@ -61,6 +61,17 @@ in
             "matrix-authentication-service"
             "matrix-synapse"
         ];
+        ensureUsers = [
+            {
+                name = "root";
+                ensureClauses = {
+                    login = true;
+                    superuser = true;
+                    createrole = true;
+                    createdb = true;
+                };
+            }
+        ];
         initialScript = pkgs.writeText "init-sql-script" ''
             alter user "matrix-authentication-service" with password 'matrix-authentication-service';
         '';
