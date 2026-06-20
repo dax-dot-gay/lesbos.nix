@@ -117,6 +117,7 @@
                                 # Add tags here
                             ];
                             modules = [
+                                ./modules/volumes
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {

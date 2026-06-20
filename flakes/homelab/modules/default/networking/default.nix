@@ -19,6 +19,10 @@
             subnet = "192.168.64.0/24";
         };
         clients = {
+            lsb-sys-router = {
+                description = "Router, reference for other modules";
+                address = "192.168.64.1";
+            };
             sys-storage = {
                 description = "Internal NAS and storage access provider";
                 address = "192.168.64.10";
