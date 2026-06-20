@@ -41,7 +41,7 @@
                     };
                 };
             };
-            sys-gameservers = { };
+            srv-gameservers = { };
         };
     };
 }
