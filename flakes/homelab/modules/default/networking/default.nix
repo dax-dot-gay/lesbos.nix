@@ -95,6 +95,38 @@
                     "monitoring.sys"
                 ];
             };
+            srv-gameservers = {
+                description = "Hosting for gameservers";
+                address = "192.168.64.21";
+                dns = [
+                    "srv-gameservers.lesbos.nix"
+                    "gameservers.srv"
+                ];
+                forward_ports = [
+                    { # Minecraft ports
+                        protocol = "both";
+                        externalPort = {
+                            from = 25500;
+                            to = 25600;
+                        };
+                        internalPort = {
+                            from = 25500;
+                            to = 25600;
+                        };
+                    }
+                    { # Ports for extra services
+                        protocol = "both";
+                        externalPort = {
+                            from = 24400;
+                            to = 24500;
+                        };
+                        internalPort = {
+                            from = 24400;
+                            to = 24500;
+                        };
+                    }
+                ];
+            };
         };
     };
 }

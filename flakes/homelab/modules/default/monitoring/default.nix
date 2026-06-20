@@ -41,6 +41,7 @@
                     };
                 };
             };
+            sys-gameservers = { };
         };
     };
 }
