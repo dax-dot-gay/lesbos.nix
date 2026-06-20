@@ -2,6 +2,7 @@
 with lib;
 let
     cfg = config.lesbos.secrets;
+    sopsCfg = config.sops;
     secretType = types.submodule (
         { config, ... }:
         {
@@ -34,7 +35,7 @@ let
                         "dotenv"
                         "ini"
                     ];
-                    default = config.sops.defaultSopsFormat;
+                    default = sopsCfg.defaultSopsFormat;
                     description = ''
                         File format used to decrypt the sops secret.
                         Binary files are written to the target file as is.
