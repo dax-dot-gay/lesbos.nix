@@ -24,9 +24,17 @@ in
     ];
 
     config = {
-        systemd.tmpfiles.rules = mapAttrsToList (
-            _: vol:
-            "d ${vol.volume.sourcePath} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
-        ) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
+        systemd.tmpfiles.rules = flatten (
+            mapAttrsToList (
+                _: vol:
+                [
+                    "d ${vol.volume.sourcePath} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
+                ]
+                ++ (map (
+                    dir:
+                    "d ${vol.volume.sourcePath}/${dir} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
+                ) vol.volume.source.subdirectories)
+            ) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes)
+        );
     };
 }

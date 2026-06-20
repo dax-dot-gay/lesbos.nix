@@ -266,6 +266,11 @@ let
                             default = "0770";
                         };
                     };
+                    subdirectories = mkOption {
+                        description = "A list of subdirectories (as relative paths from the source path) to create in the source directory";
+                        type = types.listOf types.str;
+                        default = [];
+                    };
                 };
                 sourcePath = mkOption {
                     description = "Utility option for retrieving the full source path. Automatically generated";

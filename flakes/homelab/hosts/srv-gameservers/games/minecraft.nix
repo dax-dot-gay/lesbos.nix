@@ -14,6 +14,12 @@
                         group = "crafty";
                         mode = "0770";
                     };
+                    subdirectories = [
+                        "backups"
+                        "logs"
+                        "servers"
+                        "import"
+                    ];
                 };
                 destination = "/var/lib/gameservers/crafty-controller/minecraft";
                 required_by = [ "podman-crafty-controller.service" ];
