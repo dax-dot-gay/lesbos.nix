@@ -92,6 +92,22 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-matrix = {
+                            inherit self;
+                            id = 510;
+                            path = ./hosts/srv-matrix;
+                            name = "srv-matrix";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

@@ -30,5 +30,6 @@ in
         ./bindMapped.nix
         ./sync.nix
         ./backup.nix
+        ./custom.nix
     ];
 }

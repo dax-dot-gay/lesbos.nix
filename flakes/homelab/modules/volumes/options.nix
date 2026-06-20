@@ -52,7 +52,7 @@ let
             description = "Configuration for the associated systemd timer (see `systemd.timer(5)` and `systemd.time(7)`)";
             type = types.attrsOf unitOption;
             default = {
-                onActiveSec = "2h";
+                OnActiveSec = "2h";
             };
         };
         restoration = mkOption {
@@ -162,6 +162,51 @@ let
                     }
                     // ownershipOptions
                 );
+        custom = mkStrategy ''
+            Delegate to a custom script for backup and restore. This script will run as root.
+
+            All scripts are passed the following environment variables:
+            - VOL_SOURCE: Volume source path
+            - VOL_DEST: Volume destination path
+        '' ({
+            customClass = mkOption {
+                description = "Custom class for this custom operation (ie a descriptive name)";
+                type = types.str;
+                default = "generic";
+            };
+            mode = mkOption {
+                description = "Mode of the created directory";
+                type = types.str;
+                default = "0770";
+            };
+            timerConfig = mkOption {
+                description = "Configuration for the associated systemd timer (see `systemd.timer(5)` and `systemd.time(7)`)";
+                type = types.attrsOf unitOption;
+                default = {
+                    OnActiveSec = "2h";
+                };
+            };
+            setupScript = mkOption {
+                description = "Script that runs on boot if both the source and destination paths are empty.";
+                type = types.nullOr types.package;
+                default = null;
+            };
+            backupScript = mkOption {
+                description = "Script that runs periodically to back up data";
+                type = types.nullOr types.package;
+                default = null;
+            };
+            restoreScript = mkOption {
+                description = "Script that runs if the destination path is empty";
+                type = types.nullOr types.package;
+                default = null;
+            };
+            packages = mkOption {
+                description = "Packages to share between scripts";
+                type = types.listOf types.package;
+                default = [];
+            };
+        } // ownershipOptions);
     };
 
     volumeType = types.submodule (

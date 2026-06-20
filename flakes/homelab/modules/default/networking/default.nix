@@ -50,6 +50,39 @@
                     }
                 ];
             };
+            srv-matrix = {
+                description = ''
+                    Matrix stack
+                '';
+                address = "192.168.64.20";
+                dns = [
+                    "srv-matrix.lesbos.nix"
+                    "matrix.srv"
+                ];
+                forward_ports = [
+                    {
+                        protocol = "both";
+                        externalPort = 8448;
+                        internalPort = 8448;
+                    }
+                    {
+                        protocol = "both";
+                        externalPort = 7881;
+                        internalPort = 7881;
+                    }
+                    {
+                        protocol = "both";
+                        externalPort = {
+                            from = 48000;
+                            to = 48999;
+                        };
+                        internalPort = {
+                            from = 48000;
+                            to = 48999;
+                        };
+                    }
+                ];
+            };
         };
     };
 }
