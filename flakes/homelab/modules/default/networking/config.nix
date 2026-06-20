@@ -9,7 +9,7 @@ let
     in {
         has_tcp = (protocol == "tcp") || (protocol == "both");
         has_udp = (protocol == "udp") || (protocol == "both");
-        single_port = if (typeOf port_spec) == "int" then (toInt port_spec) else 0;
+        single_port = if (typeOf port_spec) == "int" then port_spec else 0;
         range_port = if (typeOf port_spec) == "set" then port_spec else {from = 0; to = 0;};
         is_single_port = (typeOf port_spec) == "int";
         is_port_range = (typeOf port_spec) == "set";
