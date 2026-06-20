@@ -48,15 +48,6 @@
                 };
             };
             users = {
-                "nas" = {
-                    enable = true;
-                    ssh.enable = true;
-                    password = {
-                        enable = true;
-                        hash = "$y$j9T$qj3cTXorHG10xYno5IgbV/$XP4/BLaoI0.Jq0jRD7KsDkLehCOpL3anTrbmJ9fseC/";
-                    };
-                    sudo = false;
-                };
             };
         };
     };

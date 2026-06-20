@@ -77,6 +77,21 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        sys-ingress = {
+                            inherit self;
+                            id = 502;
+                            path = ./hosts/sys-ingress;
+                            name = "sys-ingress";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }
