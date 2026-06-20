@@ -16,13 +16,18 @@
             group = "grafana";
             mode = "0400";
         };
+        "grafana/secret" = {
+            owner = "grafana";
+            group = "grafana";
+            mode = "0400";
+        };
     };
     lesbos.volumes.grafana = {
         enable = true;
         source = {
             type = "share";
             name = "data";
-            path = "/systems/sys-monitoring/grafana/";
+            path = "/systems/sys-monitoring/grafana";
             ensureSource.enable = true;
         };
         destination = "/var/lib/grafana";
@@ -53,6 +58,7 @@
                 admin_email = "$__file{${config.sops.secrets."grafana/email".path}}";
                 admin_user = "$__file{${config.sops.secrets."grafana/username".path}}";
                 admin_password = "$__file{${config.sops.secrets."grafana/password".path}}";
+                secret_key = "$__file{${config.sops.secrets."grafana/secret".path}}";
             };
             analytics.reporting_enabled = false;
         };
