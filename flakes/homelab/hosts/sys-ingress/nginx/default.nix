@@ -101,6 +101,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "crafty.lesbos.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.srv-gameservers.address}:8443";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }
