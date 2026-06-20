@@ -11,6 +11,7 @@ in
         acceptTerms = true;
         defaults.email = "me@dax.gay";
         defaults.group = "nginx";
+        defaults.webroot = "/var/lib/acme/acme-challenge";
     };
     services.nginx = {
         enable = true;
