@@ -131,7 +131,7 @@ in
     config.sops = {
         defaultSopsFormat = "yaml";
         defaultSopsFile = ../../../../secrets/global.yaml;
-        secrets = mkMerge [
+        secrets =
             (mapAttrs (
                 name: secret:
                 {
@@ -139,20 +139,19 @@ in
                 }
                 // secret
             ) cfg.global)
-            (mapAttrs (
+            // (mapAttrs (
                 name: secret:
                 {
                     sopsFile = ../../../../secrets/${config.lesbos.info.flake}/global.yaml;
                 }
                 // secret
             ) cfg.flake)
-            (mapAttrs (
+            // (mapAttrs (
                 name: secret:
                 {
                     sopsFile = ../../../../secrets/${config.lesbos.info.flake}/per-system/${config.lesbos.info.canonicalName}/system.yaml;
                 }
                 // secret
-            ) cfg.global)
-        ];
+            ) cfg.global);
     };
 }
