@@ -6,6 +6,10 @@ in
     imports = [
         ./services
     ];
+    security.acme = {
+        acceptTerms = true;
+        defaults.email = "me@dax.gay";
+    };
     services.nginx = {
         enable = true;
         recommendedGzipSettings = true;
