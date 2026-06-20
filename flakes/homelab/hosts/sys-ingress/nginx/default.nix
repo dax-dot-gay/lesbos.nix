@@ -1,6 +1,7 @@
-{ ... }:
+{ config, ... }:
 let
     preflight = import ./preflight.nix;
+    clients = config.lesbos.homelab.net.clients;
 in
 {
     imports = [
@@ -44,5 +45,55 @@ in
             proxy_busy_buffers_size 512k;
             large_client_header_buffers 8 256k;
         '';
+
+        virtualHosts = {
+            "dax.gay" = {
+                useACMEHost = "dax.gay";
+                forceSSL = true;
+                locations = {
+                    "/.well-known/openid-configuration" = {
+                        proxyPass = "http://${clients.srv-matrix.address}:8085/.well-known/openid-configuration";
+                        proxyWebsockets = true;
+                        extraConfig = preflight;
+                    };
+                    "/.well-known/matrix/client" = {
+                        return = ''
+                            200 '{
+                                "m.homeserver": {
+                                    "base_url": "https://matrix.dax.gay"
+                                },
+                                "m.identity_server": {
+                                    "base_url": "https://vector.im"
+                                },
+                                "org.matrix.msc3575.proxy": {
+                                    "url": "https://matrix.dax.gay"
+                                },
+                                "org.matrix.msc4143.rtc_foci": [
+                                    {
+                                    "type": "livekit",    "livekit_service_url": "https://livekit.matrix.dax.gay"
+                                    }
+                                ]
+                            }'
+                        '';
+                        extraConfig = ''
+                            default_type application/json;
+                        ''
+                        + preflight;
+                    };
+                    "/.well-known/matrix/server" = {
+                        return = ''
+                            200 '{"m.server":"matrix.dax.gay:443"}'
+                        '';
+                        extraConfig = ''
+                            default_type application/json;
+                        ''
+                        + preflight;
+                    };
+                    "/" = {
+                        return = "301 https://github.com/dax-dot-gay";
+                    };
+                };
+            };
+        };
     };
 }
