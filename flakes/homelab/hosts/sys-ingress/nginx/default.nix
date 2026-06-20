@@ -51,7 +51,6 @@ in
 
         virtualHosts = {
             "dax.gay" = {
-                useACMEHost = "dax.gay";
                 forceSSL = true;
                 locations = {
                     "/.well-known/openid-configuration" = {
@@ -90,6 +89,15 @@ in
                     "/" = {
                         return = "301 https://github.com/dax-dot-gay";
                     };
+                };
+            };
+            "grafana.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.sys-monitoring.address}:8999";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
                 };
             };
         };
