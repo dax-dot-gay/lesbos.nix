@@ -108,6 +108,21 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        sys-monitoring = {
+                            inherit self;
+                            id = 503;
+                            path = ./hosts/sys-monitoring;
+                            name = "sys-monitoring";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

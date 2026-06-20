@@ -4,6 +4,7 @@ keys:
     - &homelab-host-sys-storage age1w6jhtqec8h005yrdxr9jcfky33axxlv9pfz24nqekmlp8skvcues8qv0y7
     - &homelab-host-sys-ingress age1vakl8mc4htm8esf3fuex6r6pzqeaul6qm6f4uveffxcaz9de0acq5plkh6
     - &homelab-host-srv-matrix age1klauj2rdmamdtptkhvzwla0rx8ecsja79f645fx3vfggvylgv5gs7tss7h
+    - &homelab-host-sys-monitoring age1z5a9cj2rdgx9r7kslw3sxh6kqehckqv8hrcdnqgqlx2a22dpl9kqzh42jy
     # @add:key-def
 
 creation_rules:
@@ -15,6 +16,7 @@ creation_rules:
           - *homelab-host-sys-storage
           - *homelab-host-sys-ingress
           - *homelab-host-srv-matrix
+          - *homelab-host-sys-monitoring
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -24,6 +26,7 @@ creation_rules:
           - *homelab-host-sys-storage
           - *homelab-host-sys-ingress
           - *homelab-host-srv-matrix
+          - *homelab-host-sys-monitoring
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -50,4 +53,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-srv-matrix
+  - path_regex: secrets/homelab/per-system/sys-monitoring/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-sys-monitoring
   # @add:new-path

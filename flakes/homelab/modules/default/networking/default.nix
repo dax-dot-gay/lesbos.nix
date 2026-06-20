@@ -83,6 +83,14 @@
                     }
                 ];
             };
+            sys-monitoring = {
+                description = "Prometheus/Grafana monitoring";
+                address = "192.168.64.12";
+                dns = [
+                    "sys-monitoring.lesbos.nix"
+                    "monitoring.sys"
+                ];
+            };
         };
     };
 }
