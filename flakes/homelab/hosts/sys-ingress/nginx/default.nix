@@ -51,6 +51,7 @@ in
 
         virtualHosts = {
             "dax.gay" = {
+                enableAcme = true;
                 forceSSL = true;
                 locations = {
                     "/.well-known/openid-configuration" = {
