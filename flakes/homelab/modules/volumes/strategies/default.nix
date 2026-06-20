@@ -29,5 +29,6 @@ in
         ./bind.nix
         ./bindMapped.nix
         ./sync.nix
+        ./backup.nix
     ];
 }

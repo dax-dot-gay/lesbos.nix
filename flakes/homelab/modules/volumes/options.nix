@@ -82,17 +82,81 @@ let
             }
             // ownershipOptions
         );
-        sync = mkStrategy ''
-            Performs periodic `rclone sync`s from the destination to the source, optionally restoring data if the destination does not yet exist.
+        sync =
+            mkStrategy
+                ''
+                    Performs periodic `rclone sync`s from the destination to the source, optionally restoring data if the destination does not yet exist.
 
-            This does not provide any direct mount for the endpoint, and may overwrite/delete stored data on the source if changes occur on the destination.
-        '' ({
-            mode = mkOption {
-                description = "Mode of the created directory";
-                type = types.str;
-                default = "0770";
-            };
-        } // ownershipOptions // replicationOptions);
+                    This does not provide any direct mount for the endpoint, and may overwrite/delete stored data on the source if changes occur on the destination.
+                    This strategy should not be used for data shared between machines/volumes
+                ''
+                (
+                    {
+                        mode = mkOption {
+                            description = "Mode of the created directory";
+                            type = types.str;
+                            default = "0770";
+                        };
+                    }
+                    // ownershipOptions
+                    // replicationOptions
+                );
+        backup =
+            mkStrategy
+                ''
+                    Periodically backs up the destination to the source with `borgbackup`, optionally with encryption and automatic restoration
+
+                    This does not provide any direct mount for the endpoint, and the files are only accessible by *this host*
+                    This strategy should not be used for data shared between machines/volumes
+                ''
+                (
+                    {
+                        encryption = mkOption {
+                            description = "Backup encryption config";
+                            type = types.submodule {
+                                options = {
+                                    enable = mkEnableOption "borg encryption";
+                                    passwordFile = mkOption {
+                                        description = "File containing encryption key";
+                                        type = types.str;
+                                    };
+                                };
+                            };
+                            default = {
+                                enable = false;
+                            };
+                        };
+                        compression = mkOption {
+                            description = "Borg encryption method";
+                            type = types.strMatching "none|(auto,)?(lz4|zstd|zlib|lzma)(,[[:digit:]]{1,2})?";
+                            default = "lz4";
+                        };
+                        restoration = mkOption {
+                            description = ''
+                                Enable restoration of data to the destination from the source.
+
+                                If enabled, on each boot the setup service will check if the destination directory exists, copying all data from the source to it if it does not.
+                                Services that rely on this volume will not be started until restoration is complete.
+                            '';
+                            type = types.bool;
+                            default = true;
+                        };
+                        startAt = lib.mkOption {
+                            type = types.either types.str (types.listOf types.str);
+                            default = "daily";
+                            description = ''
+                                When or how often the backup should run.
+                                Must be in the format described in
+                                {manpage}`systemd.time(7)`.
+                                If you do not want the backup to start
+                                automatically, use `[ ]`.
+                                It will generate a systemd service borgbackup-job-NAME.
+                                You may trigger it manually via systemctl restart borgbackup-job-NAME.
+                            '';
+                        };
+                    }
+                    // ownershipOptions
+                );
     };
 
     volumeType = types.submodule (

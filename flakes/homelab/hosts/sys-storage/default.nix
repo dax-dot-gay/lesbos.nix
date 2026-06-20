@@ -38,23 +38,45 @@
                 ];
             };
         };
-        volumes.synced = {
-            enable = true;
-            source = {
-                type = "share";
-                name = "test";
-                path = "/sync-test";
-                ensureSource.enable = true;
-            };
-            destination = "/home/nas/sync-test";
-            strategy.sync = {
+        volumes = {
+            synced = {
                 enable = true;
-                user = "nas";
-                group = "users";
-                mode = "0770";
-                restoration = true;
-                timerConfig = {
-                    OnActiveSec = "1min";
+                source = {
+                    type = "share";
+                    name = "test";
+                    path = "/sync-test";
+                    ensureSource.enable = true;
+                };
+                destination = "/home/nas/sync-test";
+                strategy.sync = {
+                    enable = true;
+                    user = "nas";
+                    group = "users";
+                    mode = "0770";
+                    restoration = true;
+                    timerConfig = {
+                        OnActiveSec = "1min";
+                    };
+                };
+            };
+            borged = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "test";
+                    path = "/borg-test";
+                    ensureSource.enable = true;
+                };
+                destination = "/home/nas/sync-test";
+                strategy.backup = {
+                    enable = true;
+                    user = "nas";
+                    group = "users";
+                    mode = "0770";
+                    restoration = true;
+                    encryption.enable = false;
+                    startAt = "minutely";
+                    compression = "auto,lz4";
                 };
             };
         };

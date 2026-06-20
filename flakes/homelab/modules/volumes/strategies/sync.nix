@@ -68,7 +68,7 @@ in
                                 ${
                                     if strategy.restoration then
                                         ''
-                                            echo "Restoration is disabled, restoring from ${volume.sourcePath}..."
+                                            echo "Restoration is enabled, restoring from ${volume.sourcePath}..."
                                             rclone copy ${volume.sourcePath} ${volume.destination}
                                         ''
                                     else
