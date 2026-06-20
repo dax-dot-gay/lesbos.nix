@@ -92,7 +92,7 @@ in
                     };
                 };
             };
-            "grafana.dax.gay" = {
+            "grafana.lesbos.dax.gay" = {
                 enableACME = true;
                 forceSSL = true;
                 locations."/" = {

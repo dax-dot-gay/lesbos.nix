@@ -52,7 +52,7 @@
                 http_port = 8999;
                 enforce_domain = true;
                 enable_gzip = true;
-                domain = "grafana.dax.gay";
+                domain = "grafana.lesbos.dax.gay";
             };
             security = {
                 admin_email = "$__file{${config.sops.secrets."grafana/email".path}}";

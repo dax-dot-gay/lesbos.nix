@@ -124,6 +124,22 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-gameservers = {
+                            inherit self;
+                            id = 511;
+                            path = ./hosts/srv-gameservers;
+                            name = "srv-gameservers";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }
