@@ -1,8 +1,11 @@
-{ ... }:
+{ lib, ... }:
 {
     imports = [
         ./postgres.nix
+        ./matrix-auth.nix
+        ./synapse.nix
     ];
+    networking.firewall.enable = lib.mkForce false;
     users.users = {
         matrix-synapse = {
             isSystemUser = true;

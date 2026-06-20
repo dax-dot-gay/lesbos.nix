@@ -9,6 +9,7 @@
     imports = [
         ./provision-secrets.nix
         ./tailscale.nix
+        ./nginx
     ];
     lesbos = {
         info = {
