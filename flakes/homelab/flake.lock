@@ -99,11 +99,11 @@
       },
       "locked": {
         "dir": "flakes/common",
-        "lastModified": 1781983080,
-        "narHash": "sha256-zbu9nzp7WbuWvdaF8dM19rMY5NuCqhtu5yMxVaDLSRk=",
+        "lastModified": 1781986969,
+        "narHash": "sha256-qJ0b7xa7lg6RExMcxN3zDdJ84H0EEID+dVy9VD7Umt4=",
         "owner": "dax-dot-gay",
         "repo": "lesbos.nix",
-        "rev": "0de1d0554892721815b166682c276874ad6b29b0",
+        "rev": "3e20373e5bc8937244a47bf0216ac58916a8d993",
         "type": "github"
       },
       "original": {
