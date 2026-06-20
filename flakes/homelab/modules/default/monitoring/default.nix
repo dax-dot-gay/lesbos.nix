@@ -28,11 +28,6 @@
                         port = 9001;
                     };
                 };
-                custom-exporters = {
-                    tailscale = {
-                        port = 9002;
-                    };
-                };
             };
             sys-monitoring = { };
             srv-matrix = {

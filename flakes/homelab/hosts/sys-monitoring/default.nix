@@ -6,7 +6,10 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ];
+    imports = [
+        ./provision-secrets.nix
+        ./prometheus.nix
+    ];
     lesbos = {
         info = {
             canonicalName = "sys-monitoring";
@@ -16,6 +19,21 @@
         };
         proxmox = {
             enable = true;
+            resources.memory = 4096;
+            resources.cores = 2;
+            storage = {
+                disk_size = "64G";
+                virtiofs = [
+                    {
+                        name = "data";
+                        mount = true;
+                        id = "DATA";
+                        expose_acl = true;
+                        expose_xattr = true;
+                    }
+                ];
+            };
+            network.primary.bridge = "vmbr3";
         };
         base.users = {
             root = {
