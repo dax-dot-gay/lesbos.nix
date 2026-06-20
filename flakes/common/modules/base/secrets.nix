@@ -152,6 +152,6 @@ in
                     sopsFile = ../../../../secrets/${config.lesbos.info.flake}/per-system/${config.lesbos.info.canonicalName}/system.yaml;
                 }
                 // secret
-            ) cfg.global);
+            ) cfg.system);
     };
 }
