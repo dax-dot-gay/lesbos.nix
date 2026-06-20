@@ -34,7 +34,7 @@ let
                         "dotenv"
                         "ini"
                     ];
-                    default = cfg.defaultSopsFormat;
+                    default = config.sops.defaultSopsFormat;
                     description = ''
                         File format used to decrypt the sops secret.
                         Binary files are written to the target file as is.
