@@ -66,7 +66,9 @@ in
                             ${
                                 if !(isNull strategy.setupScript) then
                                     ''
-                                        [ "$(ls -A ${volume.sourcePath})" ] ${strategy.setupScript}
+                                        if [ "$(ls -A ${volume.sourcePath})" ]; then
+                                            ${strategy.setupScript}
+                                        fi
                                     ''
                                 else
                                     ""
