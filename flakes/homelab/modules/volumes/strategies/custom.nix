@@ -62,7 +62,6 @@ in
                             Group = "root";
                         };
                         script = ''
-                            if 
                             ${
                                 if !(isNull strategy.setupScript) then
                                     ''
