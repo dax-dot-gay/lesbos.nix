@@ -9,6 +9,7 @@
     imports = [
         ./provision-secrets.nix
         ./prometheus.nix
+        ./grafana.nix
     ];
     lesbos = {
         info = {
