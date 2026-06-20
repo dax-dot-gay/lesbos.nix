@@ -12,7 +12,7 @@
                         enable = true;
                         user = "crafty";
                         group = "crafty";
-                        mode = "0770";
+                        mode = "0777";
                     };
                     subdirectories = [
                         "backups"
@@ -35,7 +35,7 @@
                         enable = true;
                         user = "crafty";
                         group = "crafty";
-                        mode = "0770";
+                        mode = "0777";
                     };
                 };
                 destination = "/var/lib/gameservers/crafty-controller/app";
@@ -44,7 +44,7 @@
                     enable = true;
                     user = "crafty";
                     group = "crafty";
-                    mode = "0700";
+                    mode = "0777";
                     restoration = true;
                     timerConfig = {
                         OnActiveSec = "2h";
