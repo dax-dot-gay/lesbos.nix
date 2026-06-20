@@ -16,6 +16,8 @@
         };
     };
     users.groups.matrix-services = { };
+    users.groups.matrix-authentication-service = {};
+    users.groups.matrix-synapse = {};
     lesbos.secrets.system = {
         "matrix/synapse.yaml" = {
             owner = "matrix-synapse";

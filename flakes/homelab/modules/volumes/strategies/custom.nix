@@ -33,7 +33,7 @@ let
     relevantVolumes = filterAttrs (_: vol: vol.strategy_name == strategy) volumes;
 in
 {
-    config = {
+    config = mkIf strategyEnabled {
         systemd.services =
             (mapAttrs' (
                 _:
@@ -94,7 +94,7 @@ in
             ) relevantVolumes)
             // (mapAttrs' (
                 _:
-                { name, volume, ... }:
+                { name, volume, strategy, ... }:
                 {
                     name = "volume-periodic-custom-${strategy.customClass}-${name}";
                     value = {
