@@ -67,12 +67,7 @@ in
                                 },
                                 "org.matrix.msc3575.proxy": {
                                     "url": "https://matrix.dax.gay"
-                                },
-                                "org.matrix.msc4143.rtc_foci": [
-                                    {
-                                    "type": "livekit",    "livekit_service_url": "https://livekit.matrix.dax.gay"
-                                    }
-                                ]
+                                }
                             }'
                         '';
                         extraConfig = ''
