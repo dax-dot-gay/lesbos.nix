@@ -56,7 +56,7 @@ in
                         ]
                         ++ volume.required_by;
                         before = volume.required_by ++ [ "borgbackup-job-${name}.timer" ];
-                        path = [ pkgs.rclone ];
+                        path = [ pkgs.borgbackup ];
                         serviceConfig = {
                             Type = "oneshot";
                             User = "root";
