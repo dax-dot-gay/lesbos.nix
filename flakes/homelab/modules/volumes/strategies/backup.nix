@@ -79,7 +79,7 @@ in
                                             echo "Restoration is enabled, restoring from ${volume.sourcePath}..."
                                             cd ${volume.destination}
                                             ${if strategy.encryption.enable then ''export BORG_PASSPHRASE="$(cat ${strategy.encryption.passwordFile})"'' else ""}
-                                            borg extract "${volume.sourcePath}::$(borg list --last 1 --format "{archive}" ${volume.sourcePath})"
+                                            borg extract "${volume.sourcePath}::$(borg list --last 1 --format "{archive}" ${volume.sourcePath}) ${volume.destination}"
                                         ''
                                     else
                                         ''
