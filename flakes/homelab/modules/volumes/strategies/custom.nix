@@ -65,9 +65,7 @@ in
                             ${
                                 if !(isNull strategy.setupScript) then
                                     ''
-                                        if [ "$(ls -A ${volume.sourcePath})" ]; then
-                                            # Already setup
-                                        else
+                                        if [ ! -e "${volume.sourcePath}/config" ]; then
                                             ${strategy.setupScript}
                                         fi
                                     ''
