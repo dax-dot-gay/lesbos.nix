@@ -11,6 +11,7 @@ in
         acceptTerms = true;
         defaults.email = "me@dax.gay";
         defaults.group = "nginx";
+        defaults.listenHTTP = ":80";
     };
     services.nginx = {
         enable = true;
