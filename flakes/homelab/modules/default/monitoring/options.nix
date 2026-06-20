@@ -41,7 +41,7 @@ let
                 node = {
                     collectors = mkOption {
                         description = "Node collectors (prefixed with + or - to enable or disable).";
-                        type = nodeCollectorType;
+                        type = types.listOf types.str;
                         default = cfg.defaultNodeCollectors;
                     };
                     port = mkOption {
@@ -86,37 +86,15 @@ let
                     default = { };
                 };
             };
-            config = {
-                assertions = [
-                    {
-                        assertion = allUnique (
-                            [ config.node.port ]
-                            ++ (mapAttrsToList (_: exp: exp.port) config.exporters)
-                            ++ (mapAttrsToList (_: exp: exp.port) config.custom-exporters)
-                        );
-                        message = "Some prometheus exporters are sharing ports!";
-                    }
-                    {
-                        assertion = allUnique (
-                            [ "node" ]
-                            ++ (attrNames config.exporters)
-                            ++ (mapAttrsToList (_: v: v.name) config.custom-exporters)
-                        );
-                        message = "All exporters must have unique names";
-                    }
-                ];
-            };
         }
     );
-
-    nodeCollectorType = types.listOf (types.strMatching "^(+|-)[a-z]*$");
 in
 {
     options = {
         lesbos.monitoring = {
             defaultNodeCollectors = mkOption {
                 description = "Default node collectors (prefixed with + or - to enable or disable)";
-                type = nodeCollectorType;
+                type = types.listOf types.str;
                 default = [ ];
             };
             scrapeInterval = mkOption {

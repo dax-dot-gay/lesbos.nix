@@ -9,10 +9,10 @@ let
             null;
     resolveCollectors = collectors: {
         enabledCollectors = map (collector: replaceString "+" "" collector) (
-            filter (collector: hasPrefix "+") collectors
+            filter (collector: hasPrefix "+" collector) collectors
         );
         disabledCollectors = map (collector: replaceString "-" "" collector) (
-            filter (collector: hasPrefix "-") collectors
+            filter (collector: hasPrefix "-" collector) collectors
         );
     };
 in
