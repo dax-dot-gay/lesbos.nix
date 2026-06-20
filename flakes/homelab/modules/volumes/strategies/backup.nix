@@ -97,6 +97,7 @@ in
                                 { mode = "none"; };
                         compression = strategy.compression;
                         startAt = strategy.startAt;
+                        repo = volume.sourcePath;
                     };
                 }
             ) relevantVolumes

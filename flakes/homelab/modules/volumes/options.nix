@@ -111,6 +111,11 @@ let
                 ''
                 (
                     {
+                        mode = mkOption {
+                            description = "Mode of the created directory";
+                            type = types.str;
+                            default = "0770";
+                        };
                         encryption = mkOption {
                             description = "Backup encryption config";
                             type = types.submodule {
