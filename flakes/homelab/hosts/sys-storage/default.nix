@@ -67,7 +67,7 @@
                     path = "/borg-test";
                     ensureSource.enable = true;
                 };
-                destination = "/home/nas/sync-test";
+                destination = "/home/nas/borg-test";
                 strategy.backup = {
                     enable = true;
                     user = "nas";
