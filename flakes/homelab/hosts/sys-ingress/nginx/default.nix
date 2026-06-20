@@ -10,6 +10,7 @@ in
     security.acme = {
         acceptTerms = true;
         defaults.email = "me@dax.gay";
+        defaults.group = "nginx";
     };
     services.nginx = {
         enable = true;
