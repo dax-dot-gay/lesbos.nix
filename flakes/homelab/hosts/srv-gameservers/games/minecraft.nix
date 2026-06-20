@@ -11,7 +11,7 @@
                     ensureSource = {
                         enable = true;
                         user = "crafty";
-                        group = "crafty";
+                        group = "root";
                         mode = "0777";
                     };
                     subdirectories = [
@@ -34,7 +34,7 @@
                     ensureSource = {
                         enable = true;
                         user = "crafty";
-                        group = "crafty";
+                        group = "root";
                         mode = "0777";
                     };
                 };
@@ -43,7 +43,7 @@
                 strategy.sync = {
                     enable = true;
                     user = "crafty";
-                    group = "crafty";
+                    group = "root";
                     mode = "0777";
                     restoration = true;
                     timerConfig = {
