@@ -62,10 +62,11 @@ in
                             Group = "root";
                         };
                         script = ''
+                            if 
                             ${
                                 if !(isNull strategy.setupScript) then
                                     ''
-                                        ${strategy.setupScript}
+                                        [ "$(ls -A ${volume.sourcePath})" ] ${strategy.setupScript}
                                     ''
                                 else
                                     ""
