@@ -171,6 +171,21 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-media-support = {
+                            inherit self;
+                            id = 513;
+                            path = ./hosts/srv-media-support;
+                            name = "srv-media-support";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

@@ -7,6 +7,7 @@ keys:
     - &homelab-host-sys-monitoring age1z5a9cj2rdgx9r7kslw3sxh6kqehckqv8hrcdnqgqlx2a22dpl9kqzh42jy
     - &homelab-host-srv-gameservers age1pdrc007rwuxcda6ml0ty4n9v9ddwmy3mvzeh0dymz4d6pycnsu7s84taah
     - &homelab-host-srv-jellyfin age10hdmjt5mhg23gm86t2g7as3tjes6hvvvzk3qaskxmz693dz0rc5sc7u6cv
+    - &homelab-host-srv-media-support age159mm8phgty5vrg4z5tpnnxqdd443ses25058x3xplua3jnfz459s0vgs4p
     # @add:key-def
 
 creation_rules:
@@ -21,6 +22,7 @@ creation_rules:
           - *homelab-host-sys-monitoring
           - *homelab-host-srv-gameservers
           - *homelab-host-srv-jellyfin
+          - *homelab-host-srv-media-support
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -33,6 +35,7 @@ creation_rules:
           - *homelab-host-sys-monitoring
           - *homelab-host-srv-gameservers
           - *homelab-host-srv-jellyfin
+          - *homelab-host-srv-media-support
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -74,4 +77,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-srv-jellyfin
+  - path_regex: secrets/homelab/per-system/srv-media-support/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-srv-media-support
   # @add:new-path

@@ -7,5 +7,6 @@
         ./networking
         ./proxmox.nix
         ./monitoring
+        ./secrets.nix
     ];
 }
