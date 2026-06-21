@@ -57,4 +57,23 @@
             }
         ];
     };
+    lesbos.volumes = {
+        matrix-media = {
+            enable = true;
+            source = {
+                type = "share";
+                name = "data";
+                path = "/systems/srv-matrix/media";
+                ensureSource.enable = true;         
+            };
+            destination = "/var/lib/matrix-synapse";
+            strategy.bindMapped = {
+                enable = true;
+                permissions = "0700";
+                user = "matrix-synapse";
+                group = "matrix-synapse";
+            };
+            required_by = ["matrix-synapse.service"];
+        };
+    };
 }
