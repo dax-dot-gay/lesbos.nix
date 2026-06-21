@@ -127,7 +127,7 @@
                     }
                 ];
             };
-            sys-jellyfin = {
+            srv-jellyfin = {
                 description = "Separate VM for running Jellyfin specifically";
                 address = "192.168.64.22";
                 dns = [
