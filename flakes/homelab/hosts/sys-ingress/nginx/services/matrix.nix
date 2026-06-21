@@ -36,5 +36,16 @@ in
                 };
             };
         };
+        "admin.matrix.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations = {
+                "/" = {
+                    proxyPass = "http://${clients.srv-matrix.address}:9080";
+                    proxyWebsockets = true;
+                    extraConfig = preflight;
+                };
+            };
+        };
     };
 }

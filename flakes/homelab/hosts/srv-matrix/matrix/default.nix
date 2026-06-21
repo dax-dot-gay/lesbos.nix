@@ -4,6 +4,7 @@
         ./postgres.nix
         ./matrix-auth.nix
         ./synapse.nix
+        ./admin.nix
     ];
     networking.firewall.enable = lib.mkForce false;
     users.users = {
