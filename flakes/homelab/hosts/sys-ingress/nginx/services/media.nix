@@ -14,5 +14,14 @@ in
                 extraConfig = preflight;
             };
         };
+        "deluge.media.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:8112";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
     };
 }

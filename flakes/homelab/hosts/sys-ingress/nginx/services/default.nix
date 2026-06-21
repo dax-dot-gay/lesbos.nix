@@ -2,6 +2,6 @@
 {
     imports = [
         ./matrix.nix
-        ./jellyfin.nix
+        ./media.nix
     ];
 }
