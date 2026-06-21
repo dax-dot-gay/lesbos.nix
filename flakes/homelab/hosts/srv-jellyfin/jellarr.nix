@@ -76,6 +76,7 @@
         user = "jellyfin";
         group = "jellyfin";
         config = {
+            version = 1;
             base_url = "http://0.0.0.0:8096";
             system = {
                 enableMetrics = true;
@@ -170,7 +171,7 @@
         };
         bootstrap = {
             enable = true;
-            apiKeyFile = config.sops.secrets."jellyfin/jellarr-key";
+            apiKeyFile = config.sops.secrets."jellyfin/jellarr-key".path;
             apiKeyName = "jellarr";
             jellyfinDataDir = "/jellyfin/data";
             jellyfinService = "jellyfin.service";
