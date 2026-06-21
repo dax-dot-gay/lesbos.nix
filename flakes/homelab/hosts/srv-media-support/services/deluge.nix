@@ -7,7 +7,7 @@
 with lib;
 {
     lesbos.secrets.system = {
-        "wg.conf" = {
+        "wg0.conf" = {
             mode = "0400";
         };
         "deluge/authfile" = {
@@ -82,7 +82,7 @@ with lib;
                     ${iproute2}/bin/ip -n wg address add ${config.lesbos.homelab.net.clients.srv-media-support.address}/${toString config.lesbos.homelab.net.lan.prefix_length} dev wg0
                     # ${iproute2}/bin/ip -n wg -6 address add <ipv6 VPN addr/cidr> dev wg0
                     ${iproute2}/bin/ip netns exec wg \
-                      ${wireguard-tools}/bin/wg setconf wg0 ${config.sops.secrets."wg.conf".path}
+                      ${wireguard-tools}/bin/wg-quick up ${config.sops.secrets."wg0.conf".path}
                     ${iproute2}/bin/ip -n wg link set wg0 up
                     # need to set lo up as network namespace is started with lo down
                     ${iproute2}/bin/ip -n wg link set lo up
