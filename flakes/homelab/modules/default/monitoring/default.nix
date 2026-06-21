@@ -43,6 +43,7 @@
             };
             srv-gameservers = { };
             srv-jellyfin = { };
+            srv-media-support = { };
         };
     };
 }

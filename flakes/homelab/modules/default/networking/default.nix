@@ -135,6 +135,14 @@
                     "jellyfin.srv"
                 ];
             };
+            srv-media-support = {
+                description = "Services to support Jellyfin & other media servers";
+                address = "192.168.64.23";
+                dns = [
+                    "srv-media-support.lesbos.nix"
+                    "media-support.srv"
+                ];
+            };
         };
     };
 }
