@@ -6,6 +6,7 @@ keys:
     - &homelab-host-srv-matrix age1klauj2rdmamdtptkhvzwla0rx8ecsja79f645fx3vfggvylgv5gs7tss7h
     - &homelab-host-sys-monitoring age1z5a9cj2rdgx9r7kslw3sxh6kqehckqv8hrcdnqgqlx2a22dpl9kqzh42jy
     - &homelab-host-srv-gameservers age1pdrc007rwuxcda6ml0ty4n9v9ddwmy3mvzeh0dymz4d6pycnsu7s84taah
+    - &homelab-host-srv-jellyfin age10hdmjt5mhg23gm86t2g7as3tjes6hvvvzk3qaskxmz693dz0rc5sc7u6cv
     # @add:key-def
 
 creation_rules:
@@ -19,6 +20,7 @@ creation_rules:
           - *homelab-host-srv-matrix
           - *homelab-host-sys-monitoring
           - *homelab-host-srv-gameservers
+          - *homelab-host-srv-jellyfin
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -30,6 +32,7 @@ creation_rules:
           - *homelab-host-srv-matrix
           - *homelab-host-sys-monitoring
           - *homelab-host-srv-gameservers
+          - *homelab-host-srv-jellyfin
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -66,4 +69,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-srv-gameservers
+  - path_regex: secrets/homelab/per-system/srv-jellyfin/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-srv-jellyfin
   # @add:new-path

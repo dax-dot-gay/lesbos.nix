@@ -27,6 +27,10 @@
             inputs.comin.follows = "comin";
             inputs.nixos-utilities.follows = "nixos-utilities";
         };
+        jellarr = {
+            url = "github:venkyr77/jellarr";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
     };
 
     outputs =
@@ -52,7 +56,9 @@
                             path = ./hosts/lsb-sys-router;
                             name = "lsb-sys-router";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "infrastructure"
+                                "critical"
                             ];
                             modules = [
                                 # Add extra modules here
@@ -67,7 +73,8 @@
                             path = ./hosts/sys-storage;
                             name = "sys-storage";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "infrastructure"
                             ];
                             modules = [
                                 ./modules/volumes
@@ -83,7 +90,9 @@
                             path = ./hosts/sys-ingress;
                             name = "sys-ingress";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "infrastructure"
+                                "critical"
                             ];
                             modules = [
                                 # Add extra modules here
@@ -98,7 +107,8 @@
                             path = ./hosts/srv-matrix;
                             name = "srv-matrix";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "services"
                             ];
                             modules = [
                                 ./modules/volumes
@@ -114,7 +124,8 @@
                             path = ./hosts/sys-monitoring;
                             name = "sys-monitoring";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "infrastructure"
                             ];
                             modules = [
                                 ./modules/volumes
@@ -130,10 +141,30 @@
                             path = ./hosts/srv-gameservers;
                             name = "srv-gameservers";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "services"
                             ];
                             modules = [
                                 ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
+                        srv-jellyfin = {
+                            inherit self;
+                            id = 512;
+                            path = ./hosts/srv-jellyfin;
+                            name = "srv-jellyfin";
+                            tags = [
+                                "lesbos.nix"
+                                "services"
+                                "media"
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                inputs.jellarr.nixosModules.default
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {
