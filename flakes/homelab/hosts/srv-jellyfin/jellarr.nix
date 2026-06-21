@@ -39,6 +39,12 @@
                 name = "data";
                 path = "/systems/srv-jellyfin";
                 ensureSource.enable = true;
+                subdirectories = [
+                    "data"
+                    "cache"
+                    "config"
+                    "logs"
+                ];
             };
             destination = "/jellyfin/data";
             strategy.sync = {
@@ -66,7 +72,7 @@
         groups.jellyfin = { };
     };
     services.jellarr = {
-        enable = false;
+        enable = true;
         user = "jellyfin";
         group = "jellyfin";
         config = {
@@ -90,7 +96,77 @@
                         enabled = true;
                     }
                 ];
+                trickplayOptions = {
+                    enableHwAcceleration = true;
+                    enableHwEncoding = true;
+                };
             };
+            encoding = {
+                enableHardwareEncoding = true;
+                hardwareAccelerationType = "nvenc";
+                hardwareDecodingCodecs = [
+                    "h264"
+                    "hevc"
+                    "mpeg2video"
+                    "vp9"
+                    "vc1"
+                ];
+                enableDecodingColorDepth10Hevc = true;
+                enableDecodingColorDepth10Vp9 = true;
+                allowHevcEncoding = true;
+            };
+            library = {
+                virtualFolders = [
+                    {
+                        name = "Movies";
+                        collectionType = "movies";
+                        libraryOptions = {
+                            pathInfos = [
+                                {
+                                    path = "/jellyfin/data/Movies";
+                                }
+                            ];
+                        };
+                    }
+                    {
+                        name = "Shows";
+                        collectionType = "tvshows";
+                        libraryOptions = {
+                            pathInfos = [
+                                {
+                                    path = "/jellyfin/data/Shows";
+                                }
+                            ];
+                        };
+                    }
+                    {
+                        name = "Music";
+                        collectionType = "music";
+                        libraryOptions = {
+                            pathInfos = [
+                                {
+                                    path = "/jellyfin/data/Songs";
+                                }
+                            ];
+                        };
+                    }
+                ];
+            };
+            branding = {
+                loginDisclaimer = "Powered by: Lesbianism & NixOS";
+                customCss = ''@import url("https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@main/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css");'';
+            };
+            users = [
+                {
+                    name = "dax";
+                    passwordFile = config.sops.secrets."jellyfin/admin/password".path;
+                    policy = {
+                        isAdministrator = true;
+                        loginAttemptsBeforeLockout = 3;
+                    };
+                }
+            ];
+            startup.completeStartupWizard = true;
         };
         bootstrap = {
             enable = true;
@@ -98,6 +174,21 @@
             apiKeyName = "jellarr";
             jellyfinDataDir = "/jellyfin/data";
             jellyfinService = "jellyfin.service";
+        };
+    };
+    services.jellyfin = {
+        enable = true;
+        user = "jellyfin";
+        group = "jellyfin";
+        openFirewall = true;
+        dataDir = "/jellyfin/data/data";
+        cacheDir = "/jellyfin/data/cache";
+        logDir = "/jellyfin/data/logs";
+        configDir = "/jellyfin/data/config";
+        hardwareAcceleration = {
+            enable = true;
+            device = "/dev/dri/renderD128";
+            type = "nvenc";
         };
     };
 }
