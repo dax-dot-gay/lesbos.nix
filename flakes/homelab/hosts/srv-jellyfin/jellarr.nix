@@ -11,6 +11,14 @@
             mode = "0444";
         };
     };
+    sops.templates."jellarr.env" = {
+        owner = "jellyfin";
+        group = "jellyfin";
+        mode = "0440";
+        content = ''
+            JELLARR_API_KEY=${config.sops.placeholder."jellyfin/jellarr-key"}
+        '';
+    };
     lesbos.volumes = {
         media = {
             enable = true;
@@ -75,6 +83,7 @@
         enable = true;
         user = "jellyfin";
         group = "jellyfin";
+        environmentFile = config.sops.templates."jellarr.env".path;
         config = {
             version = 1;
             base_url = "http://0.0.0.0:8096";
