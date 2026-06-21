@@ -9,11 +9,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1781935081,
-        "narHash": "sha256-OfZOqsYAPUOtAl28r0N7UzveFmHVtgdvst8fhl+ZXMw=",
+        "lastModified": 1782030670,
+        "narHash": "sha256-wWjpbzANeTeVdGSNR8IWY6/Sx64sNxoIGSGojt0sv1o=",
         "owner": "nlewo",
         "repo": "comin",
-        "rev": "7dd124136e1ed1203f9d940a910429196d599a93",
+        "rev": "4132225bd0a9e699e11958fa514bcc6fbe6c99a3",
         "type": "github"
       },
       "original": {
@@ -140,11 +140,11 @@
       },
       "locked": {
         "dir": "flakes/common",
-        "lastModified": 1782005929,
-        "narHash": "sha256-GGZxqwVVgHVYsy34cqF59Im8Iwg3xfOHJgpd4IYEpZ4=",
+        "lastModified": 1782047052,
+        "narHash": "sha256-cdLc1eSX23wSkyFsuWTIyjw8av7nqgdRu/esoMDaYl4=",
         "owner": "dax-dot-gay",
         "repo": "lesbos.nix",
-        "rev": "2bcd9e3e0c22f556abf7a3b18350541938a6e06b",
+        "rev": "2d61fff31cbb1166c147f702d6849298b439ed7c",
         "type": "github"
       },
       "original": {
