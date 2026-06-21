@@ -5,7 +5,6 @@
         enable = true;
         authKeyFile = config.sops.secrets."tailscale-auth-key".path;
         extraSetFlags = [ "--advertise-exit-node" "--advertise-routes=192.168.64.0/24,192.168.0.0/24" ];
-        disableTaildrop = true;
         useRoutingFeatures = "server";
     };
     networking.nftables.enable = true;
