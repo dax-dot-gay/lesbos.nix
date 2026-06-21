@@ -177,9 +177,12 @@
                             path = ./hosts/srv-media-support;
                             name = "srv-media-support";
                             tags = [
-                                # Add tags here
+                                "lesbos.nix"
+                                "services"
+                                "media"
                             ];
                             modules = [
+                                ./modules/volumes
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {

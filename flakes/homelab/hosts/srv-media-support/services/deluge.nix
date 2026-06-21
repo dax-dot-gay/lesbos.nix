@@ -20,8 +20,6 @@ with lib;
     # Declarative deluge config
     services.deluge = {
         enable = true;
-        daemon_port = 58846;
-        allow_remote = true;
         declarative = true;
         authFile = config.sops.secrets."deluge/authfile".path;
         user = "deluge";
@@ -33,6 +31,8 @@ with lib;
         };
         dataDir = "/media-support/services/deluge";
         config = {
+            daemon_port = 58846;
+            allow_remote = true;
             download_location = "/media-support/downloads/in-progress";
             torrentfiles_location = "/media-support/downloads/torrents";
             max_upload_slots_global = 6;
