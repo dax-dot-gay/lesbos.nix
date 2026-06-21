@@ -1,4 +1,5 @@
-{ config, ... }:
+{ config, lib, ... }:
+with lib;
 let
     mkArr = name: port: {
         enable = true;
@@ -6,8 +7,6 @@ let
         environmentFiles = [
             config.sops.templates."${name}.env".path
         ];
-        user = name;
-        group = name;
         openFirewall = true;
         settings = {
             log.analyticsEnabled = false;
@@ -23,7 +22,10 @@ let
                 bindaddress = "0.0.0.0";
             };
         };
-    };
+    } // (optionalAttrs (name != "prowlarr") {
+        user = name;
+        group = name;
+    });
 in
 {
     lesbos.secrets.system = {
