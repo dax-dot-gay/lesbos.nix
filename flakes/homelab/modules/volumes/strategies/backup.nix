@@ -48,14 +48,15 @@ in
                     name = "volume-setup-backup-${name}";
                     value = {
                         enable = true;
-                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
-                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
+                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-init.service" ];
+                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-init.service" ];
                         wantedBy = [
                             "multi-user.target"
                             "borgbackup-job-volume-${name}.timer"
+                            "volumes-fill.service"
                         ]
                         ++ volume.required_by;
-                        before = volume.required_by ++ [ "borgbackup-job-${name}.timer" ];
+                        before = volume.required_by ++ [ "borgbackup-job-${name}.timer" "volumes-fill.service" ];
                         path = [ pkgs.borgbackup ];
                         serviceConfig = {
                             Type = "oneshot";
@@ -67,12 +68,9 @@ in
                             BORG_RELOCATED_REPO_ACCESS_IS_OK = "yes";
                         };
                         script = ''
-                            if [ ! -d "${volume.destination}" ]; then
-                                echo "Destination directory for VOL[${name}] does not exist! Creating it..."
-                                mkdir -p "${volume.destination}"
-                                chmod -R ${strategy.mode} ${volume.destination}
-                                chown -R ${strategy.user}:${strategy.group} ${volume.destination}
-
+                            if [ -e "${volume.destination}/.new-volume" ]; then
+                                echo "Destination directory for VOL[${name}] is uninitialized. Setting up..."
+                                rm -rf "${volume.destination}/.new-volume"
                                 ${
                                     if strategy.restoration then
                                         ''

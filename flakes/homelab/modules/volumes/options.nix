@@ -269,7 +269,7 @@ let
                     subdirectories = mkOption {
                         description = "A list of subdirectories (as relative paths from the source path) to create in the source directory";
                         type = types.listOf types.str;
-                        default = [];
+                        default = [ ];
                     };
                 };
                 sourcePath = mkOption {
@@ -292,6 +292,43 @@ let
                     description = "Systemd unit names that require this volume to be active and functional before starting";
                     type = types.listOf types.str;
                     default = [ ];
+                };
+                resolvedPermission = mkOption {
+                    description = "Resolved permissions of the destination (generated)";
+                    type = types.submodule {
+                        options = {
+                            user = mkOption { type = types.str; };
+                            group = mkOption { type = types.str; };
+                            mode = mkOption { type = types.str; };
+                        };
+                    };
+                    readOnly = true;
+                    default =
+                        let
+                            strategy = elemAt (attrValues (filterAttrs (_: s: s.enable) config.strategy)) 0;
+                        in
+                        {
+                            user =
+                                if (hasAttr "user" strategy) then
+                                    strategy.user
+                                else
+                                    (if config.source.ensureSource.enable then config.source.ensureSource.user else "root");
+                            group =
+                                if (hasAttr "group" strategy) then
+                                    strategy.group
+                                else
+                                    (if config.source.ensureSource.enable then config.source.ensureSource.group else "root");
+                            mode =
+                                if (hasAttr "mode" strategy) then
+                                    strategy.mode
+                                else
+                                    (
+                                        if (hasAttr "permissions" strategy) then
+                                            strategy.permissions
+                                        else
+                                            (if config.source.ensureSource.enable then config.source.ensureSource.mode else "0770")
+                                    );
+                        };
                 };
             };
         }

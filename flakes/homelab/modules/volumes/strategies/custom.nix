@@ -47,10 +47,10 @@ in
                     name = "volume-setup-custom-${strategy.customClass}-${name}";
                     value = {
                         enable = true;
-                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
-                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
-                        wantedBy = [ "multi-user.target" ];
-                        before = volume.required_by;
+                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-init.service" ];
+                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-init.service" ];
+                        wantedBy = [ "multi-user.target" "volumes-fill.service" ];
+                        before = volume.required_by ++ ["volumes-fill.service"];
                         path = strategy.packages;
                         environment = {
                             VOL_SOURCE = volume.sourcePath;
@@ -72,11 +72,9 @@ in
                                 else
                                     ""
                             }
-                            if [ ! -d "${volume.destination}" ]; then
+                            if [ -e "${volume.destination}/.new-volume" ]; then
                                 echo "Destination directory for VOL[${name}] does not exist! Creating it..."
-                                mkdir -p "${volume.destination}"
-                                chmod -R ${strategy.mode} ${volume.destination}
-                                chown -R ${strategy.user}:${strategy.group} ${volume.destination}
+                                rm -rf "${volume.destination}/.new-volume"
 
                                 ${
                                     if !(isNull strategy.restoreScript) then
