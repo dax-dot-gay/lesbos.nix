@@ -62,7 +62,17 @@ in
                             lsb-address = config.lesbos.homelab.net.clients."${sys-name}".address;
                         };
                     }
-                ];
+                ]
+                ++ (optional system.comin.enable {
+                    targets = [
+                        "${config.lesbos.homelab.net.clients."${sys-name}".address}:${toString system.comin.port}"
+                    ];
+                    labels = {
+                        lsb-exporter = "comin";
+                        lsb-system = sys-name;
+                        lsb-address = config.lesbos.homelab.net.clients."${sys-name}".address;
+                    };
+                });
         }) cfg.systems;
     };
 }

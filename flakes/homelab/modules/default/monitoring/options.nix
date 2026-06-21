@@ -50,6 +50,18 @@ let
                         default = 9000;
                     };
                 };
+                comin = {
+                    enable = mkOption {
+                        description = "Whether to enable the comin exporter for this node";
+                        type = types.bool;
+                        default = true;
+                    };
+                    port = mkOption {
+                        description = "Port to run the comin exporter on";
+                        type = types.port;
+                        default = 9100;
+                    };
+                };
                 exporters = mkOption {
                     description = "Submodule of exporters mapped to their exporter type.";
                     type = types.attrsOf exporterType;

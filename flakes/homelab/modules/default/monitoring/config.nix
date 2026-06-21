@@ -36,10 +36,15 @@ in
             }
             // exporter.extraConfig
         ) system.exporters);
+        services.comin.exporter = mkIf system.comin.enable {
+            listen_address = "0.0.0.0";
+            port = system.comin.port;
+        };
         networking.firewall.allowedTCPPorts = [
             system.node.port
         ]
         ++ (mapAttrsToList (_: v: v.port) system.exporters)
-        ++ (mapAttrsToList (_: v: v.port) system.custom-exporters);
+        ++ (mapAttrsToList (_: v: v.port) system.custom-exporters)
+        ++ (optional system.comin.enable system.comin.port);
     };
 }
