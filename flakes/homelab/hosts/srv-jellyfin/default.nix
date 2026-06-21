@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ];
+    imports = [ ./provision-secrets.nix ./jellarr.nix ];
     lesbos = {
         info = {
             canonicalName = "srv-jellyfin";
@@ -46,5 +46,19 @@
             users = { };
         };
     };
-    environment.systemPackages = [pkgs.sqlite];
+    
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_535;
+    hardware.nvidia.open = false;
+    hardware.nvidia.powerManagement.enable = false;
+    services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.graphics.enable = true;
+    environment.systemPackages = with pkgs; [
+        libva-utils
+        libva-vdpau-driver
+        jellyfin
+        jellyfin-ffmpeg
+        jellyfin-web
+        id3v2
+        sqlite
+    ];
 }
