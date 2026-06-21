@@ -143,6 +143,10 @@ in
                     user = "root";
                     group = "media-service";
                     mode = "0770";
+                    timerConfig = {
+                        OnActiveSec = "1h";
+                    };
+                    restoration = false;
                 };
                 required_by = ["deluged.service"];
             };
