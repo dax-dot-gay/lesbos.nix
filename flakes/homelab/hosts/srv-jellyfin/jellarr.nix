@@ -24,7 +24,7 @@
                 enable = true;
                 user = "jellyfin";
                 group = "jellyfin";
-                permissions = "0744";
+                permissions = "0740";
             };
             required_by = [
                 "jellyfin.service"
@@ -38,13 +38,18 @@
                 type = "share";
                 name = "data";
                 path = "/systems/srv-jellyfin";
+                ensureSource.enable = true;
             };
             destination = "/jellyfin/data";
-            strategy.bindMapped = {
+            strategy.sync = {
                 enable = true;
                 user = "jellyfin";
                 group = "jellyfin";
-                permissions = "0744,a+D";
+                mode = "0740";
+                restoration = true;
+                timerConfig = {
+                    OnActiveSec = "1h";
+                };
             };
             required_by = [
                 "jellyfin.service"
