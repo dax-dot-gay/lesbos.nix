@@ -133,7 +133,7 @@
                         libraryOptions = {
                             pathInfos = [
                                 {
-                                    path = "/jellyfin/data/Movies";
+                                    path = "/jellyfin/media/Movies";
                                 }
                             ];
                         };
@@ -144,7 +144,7 @@
                         libraryOptions = {
                             pathInfos = [
                                 {
-                                    path = "/jellyfin/data/Shows";
+                                    path = "/jellyfin/media/Shows";
                                 }
                             ];
                         };
@@ -155,7 +155,7 @@
                         libraryOptions = {
                             pathInfos = [
                                 {
-                                    path = "/jellyfin/data/Songs";
+                                    path = "/jellyfin/media/Songs";
                                 }
                             ];
                         };
