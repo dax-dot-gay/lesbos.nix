@@ -94,7 +94,9 @@ in
                     group = "media-service";
                     permissions = "0770";
                 };
-                required_by = [ ];
+                required_by = [
+                    "deluged.service"
+                ];
             };
             downloads = {
                 enable = true;
@@ -102,6 +104,12 @@ in
                     type = "share";
                     name = "data";
                     path = "/systems/srv-media-support/downloads";
+                    ensureSource.enable = true;
+                    subdirectories = [
+                        "torrents"
+                        "in-progress"
+                        "completed"
+                    ];
                 };
                 destination = "/media-support/downloads";
                 strategy.bindMapped = {
@@ -110,7 +118,7 @@ in
                     group = "acquisition";
                     permissions = "0770";
                 };
-                required_by = [ ];
+                required_by = ["deluged.service"];
             };
             service-data = {
                 enable = true;
@@ -122,11 +130,11 @@ in
                         enable = true;
                     };
                     subdirectories = [
-                        "/deluge"
-                        "/arrs/sonarr"
-                        "/arrs/radarr"
-                        "/arrs/prowlarr"
-                        "/seerr"
+                        "deluge"
+                        "arrs/sonarr"
+                        "arrs/radarr"
+                        "arrs/prowlarr"
+                        "seerr"
                     ];
                 };
                 destination = "/media-support/services";
@@ -136,7 +144,7 @@ in
                     group = "media-service";
                     mode = "0770";
                 };
-                required_by = [ ];
+                required_by = ["deluged.service"];
             };
         };
     };
