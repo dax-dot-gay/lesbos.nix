@@ -173,7 +173,7 @@
             enable = true;
             apiKeyFile = config.sops.secrets."jellyfin/jellarr-key".path;
             apiKeyName = "jellarr";
-            jellyfinDataDir = "/jellyfin/data";
+            jellyfinDataDir = "/jellyfin/data/data";
             jellyfinService = "jellyfin.service";
         };
     };
