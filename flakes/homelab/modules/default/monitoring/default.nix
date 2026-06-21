@@ -42,6 +42,7 @@
                 };
             };
             srv-gameservers = { };
+            srv-jellyfin = { };
         };
     };
 }

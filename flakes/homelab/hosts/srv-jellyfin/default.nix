@@ -16,6 +16,23 @@
         };
         proxmox = {
             enable = true;
+            resources = {
+                memory = 16384;
+                cores = 8;
+            };
+            storage = {
+                disk_size = "128G";
+                virtiofs = [
+                    {
+                        name = "data";
+                        mount = true;
+                        id = "DATA";
+                        expose_acl = true;
+                        expose_xattr = true;
+                    }
+                ];
+            };
+            network.primary.bridge = "vmbr3";
         };
         base.users = {
             root = {
@@ -29,4 +46,5 @@
             users = { };
         };
     };
+    environment.systemPackages = [pkgs.sqlite];
 }

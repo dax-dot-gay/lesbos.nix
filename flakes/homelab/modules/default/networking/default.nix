@@ -127,6 +127,14 @@
                     }
                 ];
             };
+            sys-jellyfin = {
+                description = "Separate VM for running Jellyfin specifically";
+                address = "192.168.64.22";
+                dns = [
+                    "srv-jellyfin.lesbos.nix"
+                    "jellyfin.srv"
+                ];
+            };
         };
     };
 }
