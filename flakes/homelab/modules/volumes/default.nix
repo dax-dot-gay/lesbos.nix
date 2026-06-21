@@ -41,7 +41,7 @@ in
                         mkdir -p ${volume.destination}
                         touch ${volume.destination}/.new-volume
                         chmod -R ${volume.resolvedPermission.mode} ${volume.destination}
-                        chown -R ${volume.resolvedPermission.user}:${volume.resolvedPermission.group}
+                        chown -R ${volume.resolvedPermission.user}:${volume.resolvedPermission.group} "${volume.destination}/${subdir}"
                     fi
                 '') volumes)}
             '';
@@ -61,7 +61,7 @@ in
                         if [ ! -d "${volume.destination}/${subdir}" ]; then
                             mkdir -p "${volume.destination}/${subdir}"
                             chmod -R ${volume.resolvedPermission.mode} "${volume.destination}/${subdir}"
-                            chown -R ${volume.resolvedPermission.user}:"${volume.destination}/${subdir}"
+                            chown -R ${volume.resolvedPermission.user}:${volume.resolvedPermission.group} "${volume.destination}/${subdir}"
                         fi
                     '') volume.source.subdirectories)}
                 '') volumes)}
