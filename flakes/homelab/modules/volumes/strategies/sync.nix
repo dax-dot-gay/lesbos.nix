@@ -69,7 +69,7 @@ in
                                     if strategy.restoration then
                                         ''
                                             echo "Restoration is enabled, restoring from ${volume.sourcePath}..."
-                                            rclone copy ${volume.sourcePath} ${volume.destination}
+                                            rclone copy ${volume.sourcePath} ${volume.destination} --create-empty-src-dirs
                                         ''
                                     else
                                         ''
