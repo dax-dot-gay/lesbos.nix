@@ -56,6 +56,7 @@ in
                         ]
                         ++ volume.required_by;
                         before = volume.required_by ++ [ "borgbackup-job-${name}.timer" ];
+                        requiredBy = volume.required_by;
                         path = [ pkgs.borgbackup ];
                         serviceConfig = {
                             Type = "oneshot";

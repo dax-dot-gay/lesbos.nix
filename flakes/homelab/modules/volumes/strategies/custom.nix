@@ -51,6 +51,7 @@ in
                         after = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
                         wantedBy = [ "multi-user.target" ];
                         before = volume.required_by;
+                        requiredBy = volume.required_by;
                         path = strategy.packages;
                         environment = {
                             VOL_SOURCE = volume.sourcePath;
