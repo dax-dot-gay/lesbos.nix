@@ -13,6 +13,8 @@ let
             app.instancename = "lesbos-${name}";
             auth = {
                 enabled = true;
+                required = true;
+                method = "Forms";
             };
             update.mechanism = "external";
             server = {
