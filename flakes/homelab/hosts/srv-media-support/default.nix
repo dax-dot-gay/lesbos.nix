@@ -96,6 +96,9 @@ in
                 };
                 required_by = [
                     "deluged.service"
+                    "sonarr.service"
+                    "radarr.service"
+                    "prowlarr.service"
                 ];
             };
             downloads = {
@@ -118,7 +121,12 @@ in
                     group = "acquisition";
                     permissions = "0770";
                 };
-                required_by = ["deluged.service"];
+                required_by = [
+                    "deluged.service"
+                    "sonarr.service"
+                    "radarr.service"
+                    "prowlarr.service"
+                ];
             };
             service-data = {
                 enable = true;
@@ -148,7 +156,12 @@ in
                     };
                     restoration = false;
                 };
-                required_by = ["deluged.service"];
+                required_by = [
+                    "deluged.service"
+                    "sonarr.service"
+                    "radarr.service"
+                    "prowlarr.service"
+                ];
             };
         };
     };
