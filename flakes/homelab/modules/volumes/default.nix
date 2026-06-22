@@ -41,7 +41,7 @@ in
                         mkdir -p ${volume.destination}
                         touch ${volume.destination}/.new-volume
                         chmod -R ${volume.resolvedPermission.mode} ${volume.destination}
-                        chown -R ${volume.resolvedPermission.user}:${volume.resolvedPermission.group} "${volume.destination}"
+                        chown -R ${volume.resolvedPermission.user}:${volume.resolvedPermission.group} "${volume.destination}/${subdir}"
                     fi
                 '') volumes)}
             '';
