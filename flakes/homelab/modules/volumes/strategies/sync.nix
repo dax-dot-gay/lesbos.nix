@@ -48,10 +48,10 @@ in
                     name = "volume-setup-sync-${name}";
                     value = {
                         enable = true;
-                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-init.service" ];
-                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-init.service" ];
-                        wantedBy = [ "multi-user.target" "volumes-fill.service" ];
-                        before = volume.required_by ++ ["volumes-fill.service"];
+                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
+                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
+                        wantedBy = [ "multi-user.target" ];
+                        before = volume.required_by;
                         path = [ pkgs.rclone ];
                         serviceConfig = {
                             Type = "oneshot";
@@ -59,9 +59,11 @@ in
                             Group = "root";
                         };
                         script = ''
-                            if [ -e "${volume.destination}/.new-volume" ]; then
+                            if [ ! -d "${volume.destination}" ]; then
                                 echo "Destination directory for VOL[${name}] does not exist! Creating it..."
-                                rm -rf "${volume.destination}/.new-volume"
+                                mkdir -p "${volume.destination}"
+                                chmod -R ${strategy.mode} ${volume.destination}
+                                chown -R ${strategy.user}:${strategy.group} ${volume.destination}
 
                                 ${
                                     if strategy.restoration then
