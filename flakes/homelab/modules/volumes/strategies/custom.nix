@@ -87,6 +87,11 @@ in
                                     else
                                         ''
                                             echo "Restoration is disabled, not restoring from ${volume.sourcePath}"
+                                            ${concatStringsSep "\n" (map (sub: ''
+                                                mkdir -p "${volume.destination}/${sub}"
+                                                chmod -R ${strategy.mode} "${volume.destination}/${sub}"
+                                                chown -R ${strategy.user}:${strategy.group} "${volume.destination}/${sub}"
+                                            '') volume.source.subdirectories)}
                                         ''
                                 }
                             fi
