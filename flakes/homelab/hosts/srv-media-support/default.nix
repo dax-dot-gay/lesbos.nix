@@ -146,15 +146,11 @@ in
                     ];
                 };
                 destination = "/media-support/services";
-                strategy.sync = {
+                strategy.bindMapped = {
                     enable = true;
                     user = "root";
                     group = "media-service";
-                    mode = "0770";
-                    timerConfig = {
-                        OnActiveSec = "1h";
-                    };
-                    restoration = false;
+                    permissions = "0770";
                 };
                 required_by = [
                     "deluged.service"
