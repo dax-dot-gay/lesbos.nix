@@ -23,5 +23,32 @@ in
                 extraConfig = preflight;
             };
         };
+        "sonarr.media.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:8989";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
+        "radarr.media.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:7878";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
+        "prowlarr.media.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:9696";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
     };
 }
