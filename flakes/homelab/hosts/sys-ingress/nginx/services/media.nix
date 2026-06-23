@@ -41,7 +41,7 @@ in
                 extraConfig = preflight;
             };
         };
-        "prowlarr.media.dax.gay" = {
+        /*"prowlarr.media.dax.gay" = {
             enableACME = true;
             forceSSL = true;
             locations."/" = {
@@ -49,6 +49,6 @@ in
                 proxyWebsockets = true;
                 extraConfig = preflight;
             };
-        };
+        };*/
     };
 }
