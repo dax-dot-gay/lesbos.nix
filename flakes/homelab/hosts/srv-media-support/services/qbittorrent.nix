@@ -10,26 +10,21 @@ with lib;
         "wg.conf" = {
             mode = "0400";
         };
-        "deluge/authfile" = {
-            owner = "deluge";
-            group = "deluge";
-            mode = "0600";
-        };
     };
 
-    # Declarative deluge config
-    services.deluge = {
+    # Declarative qbittorrent config
+    services.qbittorrent = {
         enable = true;
         declarative = true;
-        authFile = config.sops.secrets."deluge/authfile".path;
-        user = "deluge";
-        group = "deluge";
+        authFile = config.sops.secrets."qbittorrent/authfile".path;
+        user = "qbittorrent";
+        group = "qbittorrent";
         web = {
             enable = true;
             port = 8112;
             openFirewall = true;
         };
-        dataDir = "/media-support/services/deluge";
+        dataDir = "/media-support/services/qbittorrent";
         config = {
             daemon_port = 58846;
             allow_remote = true;
@@ -52,7 +47,7 @@ with lib;
         };
     };
 
-    # Deluge VPN
+    # qbittorrent VPN
     systemd.services."netns@" = {
         description = "%I network namespace";
         before = [ "network.target" ];
@@ -99,40 +94,40 @@ with lib;
         };
     };
 
-    # binding deluged to network namespace
-    systemd.services.deluged.bindsTo = [ "netns@wg.service" ];
-    systemd.services.deluged.requires = [
+    # binding qbittorrent to network namespace
+    systemd.services.qbittorrent.bindsTo = [ "netns@wg.service" ];
+    systemd.services.qbittorrent.requires = [
         "network-online.target"
         "wg.service"
     ];
-    systemd.services.deluged.serviceConfig.NetworkNamespacePath = [ "/var/run/netns/wg" ];
+    systemd.services.qbittorrent.serviceConfig.NetworkNamespacePath = [ "/var/run/netns/wg" ];
 
-    # allowing delugeweb to access deluged in network namespace, a socket is necesarry
-    systemd.sockets."proxy-to-deluged" = {
+    # allowing qbittorrentweb to access qbittorrent in network namespace, a socket is necesarry
+    systemd.sockets."proxy-to-qbittorrent" = {
         enable = true;
-        description = "Socket for Proxy to Deluge Daemon";
+        description = "Socket for Proxy to qbittorrent Daemon";
         listenStreams = [ "58846" ];
         wantedBy = [ "sockets.target" ];
     };
 
     # creating proxy service on socket, which forwards the same port from the root namespace to the isolated namespace
-    systemd.services."proxy-to-deluged" = {
+    systemd.services."proxy-to-qbittorrent" = {
         enable = true;
-        description = "Proxy to Deluge Daemon in Network Namespace";
+        description = "Proxy to qbittorrent Daemon in Network Namespace";
         requires = [
-            "deluged.service"
-            "proxy-to-deluged.socket"
+            "qbittorrent.service"
+            "proxy-to-qbittorrent.socket"
         ];
         after = [
-            "deluged.service"
-            "proxy-to-deluged.socket"
+            "qbittorrent.service"
+            "proxy-to-qbittorrent.socket"
         ];
         unitConfig = {
-            JoinsNamespaceOf = "deluged.service";
+            JoinsNamespaceOf = "qbittorrent.service";
         };
         serviceConfig = {
-            User = "deluge";
-            Group = "deluge";
+            User = "qbittorrent";
+            Group = "qbittorrent";
             ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=5min 127.0.0.1:58846";
             PrivateNetwork = "yes";
         };

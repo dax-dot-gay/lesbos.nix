@@ -1,7 +1,7 @@
 { ... }:
 {
     imports = [
-        ./deluge.nix
+        ./qbittorrent.nix
         ./arr.nix
     ];
 }

@@ -14,7 +14,7 @@ in
                 extraConfig = preflight;
             };
         };
-        /*"deluge.media.dax.gay" = {
+        /*"qbittorrent.media.dax.gay" = {
             enableACME = true;
             forceSSL = true;
             locations."/" = {
