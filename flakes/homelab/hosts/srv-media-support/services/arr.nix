@@ -3,7 +3,7 @@ with lib;
 let
     mkArr = name: port: {
         enable = true;
-        dataDir = if name == "prowlarr" then null else "/media-support/services/arrs/${name}";
+        dataDir = if name == "prowlarr" then "/var/lib/prowlarr" else "/media-support/services/arrs/${name}";
         environmentFiles = [
             config.sops.templates."${name}.env".path
         ];
