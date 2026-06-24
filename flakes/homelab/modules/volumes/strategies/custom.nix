@@ -47,11 +47,11 @@ in
                     name = "volume-setup-custom-${strategy.customClass}-${name}";
                     value = {
                         enable = true;
-                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
-                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
-                        wantedBy = [ "multi-user.target" ];
-                        before = volume.required_by;
-                        requiredBy = volume.required_by;
+                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-initialize-sources.service" ];
+                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-initialize-sources.service" ];
+                        wantedBy = [ "multi-user.target" "lesbos-volumes.target" ];
+                        before = volume.required_by ++ ["lesbos-volumes.target"];
+                        requiredBy = volume.required_by ++ ["lesbos-volumes.target"];
                         path = strategy.packages;
                         environment = {
                             VOL_SOURCE = volume.sourcePath;

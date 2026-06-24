@@ -44,12 +44,13 @@ in
                 options = concatLists [
                     [
                         "bind"
-                        "x-systemd.requires=systemd-tmpfiles-setup.service"
-                        "x-systemd.after=systemd-tmpfiles-setup.service"
                         "nofail"
+                        "x-systemd.requiredBy=lesbos-volumes.target"
+                        "x-systemd.requires=volumes-initialize-sources.service"
+                        "x-systemd.after=volumes-initialize-sources.service"
                     ]
                     (optional volume.strategy.read_only "ro")
-                    (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_by)
+                    (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_b)
                 ];
             };
         }) relevantVolumes;

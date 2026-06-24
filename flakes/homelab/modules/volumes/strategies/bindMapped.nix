@@ -51,8 +51,9 @@ in
                     fsType = "fuse.bindfs";
                     options = concatLists [
                         [
-                            "x-systemd.requires=systemd-tmpfiles-setup.service"
-                            "x-systemd.after=systemd-tmpfiles-setup.service"
+                            "x-systemd.requiredBy=lesbos-volumes.target"
+                            "x-systemd.requires=volumes-initialize-sources.service"
+                            "x-systemd.after=volumes-initialize-sources.service"
                             "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group}"
                             "perms=${volume.strategy.permissions}"
                             "nofail"

@@ -24,17 +24,35 @@ in
     ];
 
     config = {
-        systemd.tmpfiles.rules = flatten (
-            mapAttrsToList (
-                _: vol:
-                [
-                    "d ${vol.volume.sourcePath} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
-                ]
-                ++ (map (
-                    dir:
-                    "d ${vol.volume.sourcePath}/${dir} ${vol.volume.source.ensureSource.mode} ${vol.volume.source.ensureSource.user} ${vol.volume.source.ensureSource.group} - -"
-                ) vol.volume.source.subdirectories)
-            ) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes)
-        );
+        systemd.services.volumes-initialize-sources = {
+            enable = true;
+            requiredBy = ["lesbos-volumes.target"];
+            serviceConfig = {
+                RequiresMountsFor = mapAttrsToList (_: vol: vol.volume.sourcePath) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
+            };
+            script = concatStringsSep "\n" (
+                mapAttrsToList (_: vol: ''
+                    if [ ! -d "${vol.volume.sourcePath}" ]; then
+                        echo "Creating source path: ${vol.volume.sourcePath}"
+                        mkdir -p "${vol.volume.sourcePath}"
+
+                        ${concatStringsSep "\n" (map (s: ''
+                            mkdir -p "${vol.volume.sourcePath}/${s}"
+                        '') vol.volume.source.subdirectories)}
+
+                        chown -R ${vol.volume.source.ensureSource.user}:${vol.volume.source.ensureSource.group} "${vol.volume.sourcePath}"
+                        chmod -R ${vol.volume.source.ensureSource.mode} "${vol.volume.sourcePath}"
+                    fi
+                '') (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes)
+            );
+        };
+
+        systemd.targets.lesbos-volumes = {
+            enable = true;
+            description = "All lesbos volumes are set up and functional";
+            wantedBy = ["multi-user.target" "systemd-tmpfiles-setup.service"];
+            before = ["multi-user.target" "systemd-tmpfiles-setup.service"];
+            requiredBy = unique (flatten (mapAttrsToList (_: v: v.volume.required_by) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes)));
+        };
     };
 }

@@ -48,15 +48,16 @@ in
                     name = "volume-setup-backup-${name}";
                     value = {
                         enable = true;
-                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
-                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" ];
+                        requires = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-initialize-sources.service" ];
+                        after = [ "vols-${volume.source.type}-${volume.source.name}.mount" "volumes-initialize-sources.service" ];
                         wantedBy = [
                             "multi-user.target"
                             "borgbackup-job-volume-${name}.timer"
+                            "lesbos-volumes.target"
                         ]
                         ++ volume.required_by;
-                        before = volume.required_by ++ [ "borgbackup-job-${name}.timer" ];
-                        requiredBy = volume.required_by;
+                        before = volume.required_by ++ [ "borgbackup-job-${name}.timer" "lesbos-volumes.target" ];
+                        requiredBy = volume.required_by ++ ["lesbos-volumes.target"];
                         path = [ pkgs.borgbackup ];
                         serviceConfig = {
                             Type = "oneshot";
