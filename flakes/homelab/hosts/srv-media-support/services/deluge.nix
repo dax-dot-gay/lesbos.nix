@@ -43,7 +43,7 @@ with lib;
             max_active_downloading = 6;
             max_active_limit = 8;
             max_active_seeding = 5;
-            move_completed = true;
+            move_completed = false;
             seed_time_limit = 180;
             seed_time_ratio_limit = 7.0;
             remove_seed_at_ratio = true;
