@@ -24,7 +24,7 @@ in
     ];
 
     users = generateServiceUsers {
-        qbittorrent = [
+        deluge = [
             "acquisition"
             "media-service"
         ];
@@ -95,7 +95,7 @@ in
                     permissions = "0770";
                 };
                 required_by = [
-                    "qbittorrent.service"
+                    "deluged.service"
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
@@ -110,7 +110,8 @@ in
                     ensureSource.enable = true;
                     subdirectories = [
                         "torrents"
-                        "downloads"
+                        "in-progress"
+                        "completed"
                     ];
                 };
                 destination = "/media-support/downloads";
@@ -121,7 +122,7 @@ in
                     permissions = "0770";
                 };
                 required_by = [
-                    "qbittorrent.service"
+                    "deluged.service"
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
@@ -137,7 +138,7 @@ in
                         enable = true;
                     };
                     subdirectories = [
-                        "qbittorrent"
+                        "deluge"
                         "arrs/sonarr"
                         "arrs/radarr"
                         "arrs/prowlarr"
@@ -152,7 +153,7 @@ in
                     permissions = "0770";
                 };
                 required_by = [
-                    "qbittorrent.service"
+                    "deluged.service"
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
