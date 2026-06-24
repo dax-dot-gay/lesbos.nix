@@ -110,8 +110,7 @@ in
                     ensureSource.enable = true;
                     subdirectories = [
                         "torrents"
-                        "in-progress"
-                        "completed"
+                        "downloads"
                     ];
                 };
                 destination = "/media-support/downloads";
