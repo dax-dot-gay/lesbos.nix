@@ -33,7 +33,7 @@ with lib;
         config = {
             daemon_port = 58846;
             allow_remote = true;
-            download_location = "/media-support/downloads/in-progress";
+            download_location = "/media-support/downloads/downloads";
             torrentfiles_location = "/media-support/downloads/torrents";
             max_upload_slots_global = 6;
             enabled_plugins = [
@@ -44,7 +44,6 @@ with lib;
             max_active_limit = 8;
             max_active_seeding = 5;
             move_completed = true;
-            move_completed_path = "/media-support/downloads/completed";
             seed_time_limit = 180;
             seed_time_ratio_limit = 7.0;
             remove_seed_at_ratio = true;
