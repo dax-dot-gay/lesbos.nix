@@ -33,15 +33,13 @@
             volumes = [
                 "/media-support/services/seerr:/app/config"
             ];
-            user = "seerr:media-service";
+            user = "root:root";
             extraOptions = [
                 "--health-cmd=\"wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/settings/public || exit 1\""
                 "--health-start-period=20s"
                 "--health-timeout=3s"
                 "--health-interval=15s"
                 "--health-retries=3"
-                "--uidmap=1000:${toString config.users.users.seerr.uid}"
-                "--gidmap=1000:${toString config.users.groups.media-service.gid}"
             ];
         };
     };
