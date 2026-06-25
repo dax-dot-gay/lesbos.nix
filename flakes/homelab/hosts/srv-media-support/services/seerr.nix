@@ -43,9 +43,5 @@
             ];
         };
     };
-    virtualisation.podman = {
-        enable = true;
-        dockerCompat = true;
-    };
     systemd.timers.podman-auto-update.wantedBy = [ "timers.target" ];
 }
