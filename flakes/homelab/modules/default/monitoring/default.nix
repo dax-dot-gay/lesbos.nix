@@ -43,7 +43,26 @@
             };
             srv-gameservers = { };
             srv-jellyfin = { };
-            srv-media-support = { };
+            srv-media-support = {
+                exporters = {
+                    exportarr-radarr = {
+                        port = 9001;
+                        user = "root";
+                        group = "root";
+                        extraConfig = {
+                            apiKeyFile = "/run/secrets/arr/radarr.key";
+                        };
+                    };
+                    exportarr-sonarr = {
+                        port = 9002;
+                        user = "root";
+                        group = "root";
+                        extraConfig = {
+                            apiKeyFile = "/run/secrets/arr/sonarr.key";
+                        };
+                    };
+                };
+            };
         };
     };
 }
