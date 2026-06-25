@@ -8,13 +8,13 @@
 with lib;
 let
     mkServiceUser = name: groups: {
-        group = "acquisition";
+        group = name;
         extraGroups = groups;
         isSystemUser = true;
     };
     generateServiceUsers = attrs: {
         users = mapAttrs (name: groups: mkServiceUser name groups) attrs;
-        groups = listToAttrs (flatten (mapAttrsToList (name: groups: [{name = name; value = {};}] ++ map (g: {name = g; value = {};}) groups) attrs)) // {acquisition = {};};
+        groups = listToAttrs (flatten (mapAttrsToList (name: groups: [{name = name; value = {};}] ++ map (g: {name = g; value = {};}) groups) attrs));
     };
 in
 {
@@ -25,14 +25,17 @@ in
 
     users = generateServiceUsers {
         deluge = [
+            "acquisition"
             "media-service"
         ];
         sonarr = [
             "arr"
+            "acquisition"
             "media-service"
         ];
         radarr = [
             "arr"
+            "acquisition"
             "media-service"
         ];
         prowlarr = [
@@ -155,6 +158,7 @@ in
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
+                    "seerr.service"
                 ];
             };
         };
