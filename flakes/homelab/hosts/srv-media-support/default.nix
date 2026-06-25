@@ -8,7 +8,7 @@
 with lib;
 let
     mkServiceUser = name: groups: {
-        group = name;
+        group = mkDefault name;
         extraGroups = groups;
         isSystemUser = true;
     };
