@@ -6,43 +6,50 @@
     ...
 }:
 with lib;
-let
-    mkServiceUser = name: groups: {
-        group = mkDefault name;
-        extraGroups = groups;
-        isSystemUser = true;
-    };
-    generateServiceUsers = attrs: {
-        users = mapAttrs (name: groups: mkServiceUser name groups) attrs;
-        groups = listToAttrs (flatten (mapAttrsToList (name: groups: [{name = name; value = {};}] ++ map (g: {name = g; value = {};}) groups) attrs));
-    };
-in
 {
     imports = [
         ./provision-secrets.nix
         ./services
     ];
 
-    users = generateServiceUsers {
-        deluge = [
-            "acquisition"
-            "media-service"
-        ];
-        sonarr = [
-            "arr"
-            "acquisition"
-            "media-service"
-        ];
-        radarr = [
-            "arr"
-            "acquisition"
-            "media-service"
-        ];
-        prowlarr = [
-            "arr"
-            "media-service"
-        ];
-        seerr = [ "media-service" ];
+    users = {
+        users = {
+            deluge = {
+                group = mkDefault "deluge";
+                extraGroups = ["media-service" "acquisition"];
+                isSystemUser = true;
+            };
+            sonarr = {
+                group = mkDefault "sonarr";
+                extraGroups = ["media-service" "acquisition" "arr"];
+                isSystemUser = true;
+            };
+            radarr = {
+                group = mkDefault "radarr";
+                extraGroups = ["media-service" "acquisition" "arr"];
+                isSystemUser = true;
+            };
+            prowlarr = {
+                group = mkDefault "prowlarr";
+                extraGroups = ["media-service" "arr"];
+                isSystemUser = true;
+            };
+            seerr = {
+                group = mkDefault "seerr";
+                extraGroups = ["media-service"];
+                uid = 996;
+            };
+        };
+        groups = {
+            deluge = {};
+            sonarr = {};
+            radarr = {};
+            prowlarr = {};
+            seerr = {};
+            media-service = {gid = 990;};
+            acquisition = {};
+            arr = {};
+        };
     };
 
     lesbos = {
