@@ -41,7 +41,7 @@
                 "--health-interval=15s"
                 "--health-retries=3"
                 "--uidmap=1000:${toString config.users.users.seerr.uid}"
-                "--gidmap:1000:${toString config.users.groups.media-service.gid}"
+                "--gidmap=1000:${toString config.users.groups.media-service.gid}"
             ];
         };
     };
