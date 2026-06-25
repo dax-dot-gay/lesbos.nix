@@ -35,33 +35,18 @@ in
 {
     config = mkIf strategyEnabled {
         environment.systemPackages = [ pkgs.bindfs ];
-        fileSystems = mapAttrs' (_: volume: {
-            name = volume.volume.destination;
-            value =
-                let
+        systemd.mounts = mapAttrsToList (_: volume: let
                     ensure = volume.volume.source.ensureSource;
                     source_user = if ensure.enable then ensure.user else "root";
                     source_group = if ensure.enable then ensure.group else "root";
-                in
-                {
-                    depends = [
-                        volume.volume.sourcePath
-                    ];
-                    device = volume.volume.sourcePath;
-                    fsType = "fuse.bindfs";
-                    options = concatLists [
-                        [
-                            "x-systemd.requiredBy=lesbos-volumes.target"
-                            "x-systemd.requires=volumes-initialize-sources.service"
-                            "x-systemd.after=volumes-initialize-sources.service"
-                            "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group}"
-                            "perms=${volume.strategy.permissions}"
-                            "nofail"
-                        ]
-                        (optional volume.strategy.read_only "ro")
-                        (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_by)
-                    ];
-                };
+                in {
+            type = "fuse.bindfs";
+            what = volume.volume.sourcePath;
+            where = volume.volume.destination;
+            requiredBy = ["lesbos-volumes.target"] ++ volume.volume.required_by;
+            requires = ["volumes-initialize-sources.service"];
+            after = ["volumes-initialize-sources.service"];
+            options = "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group},perms=${volume.strategy.permissions},nofail" + (optionalString volume.strategy.read_only ",ro");
         }) relevantVolumes;
     };
 }
