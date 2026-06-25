@@ -46,7 +46,7 @@ with lib;
             radarr = {};
             prowlarr = {};
             seerr = {};
-            media-service = {gid = 990;};
+            media-service = {gid = 996;};
             acquisition = {};
             arr = {};
         };
