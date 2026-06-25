@@ -107,7 +107,9 @@ in
                     type = "share";
                     name = "data";
                     path = "/systems/srv-media-support/downloads";
-                    ensureSource.enable = true;
+                    ensureSource = {
+                        enable = true;
+                    };
                     subdirectories = [
                         "torrents"
                         "downloads"
