@@ -50,5 +50,14 @@ in
                 extraConfig = preflight;
             };
         };
+        "request.jellyfin.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:5055";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
     };
 }
