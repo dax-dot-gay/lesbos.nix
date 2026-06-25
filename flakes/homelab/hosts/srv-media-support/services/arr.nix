@@ -18,8 +18,8 @@ let
             };
         };
     } // (optionalAttrs (name != "prowlarr") {
-        user = "root";
-        group = "root";
+        user = name;
+        group = "acquisition";
     });
 in
 {

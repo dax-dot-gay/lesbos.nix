@@ -23,7 +23,7 @@ with lib;
         declarative = true;
         authFile = config.sops.secrets."deluge/authfile".path;
         user = "deluge";
-        group = "deluge";
+        group = "acquisition";
         web = {
             enable = true;
             port = 8112;
