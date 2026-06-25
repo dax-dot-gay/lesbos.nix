@@ -74,6 +74,8 @@ with lib;
                     }
                 ];
             };
+            resources.cores = 4;
+            resources.memory = 8192;
         };
         base.users = {
             root = {
