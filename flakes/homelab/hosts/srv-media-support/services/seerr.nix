@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }: with lib;
 {
     lesbos.secrets.system."seerr/seerr.key" = {
         mode = "0400";
@@ -40,6 +40,8 @@
                 "--health-timeout=3s"
                 "--health-interval=15s"
                 "--health-retries=3"
+                "--uidmap=1000:${toString config.users.users.seerr.uid}"
+                "--gidmap:1000:${toString config.users.groups.media-service.gid}"
             ];
         };
     };
