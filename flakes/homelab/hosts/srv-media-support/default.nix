@@ -108,6 +108,7 @@ with lib;
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
+                    "bazarr.service"
                 ];
             };
             downloads = {
@@ -136,6 +137,7 @@ with lib;
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
+                    "bazarr.service"
                 ];
             };
             service-data = {
@@ -152,6 +154,7 @@ with lib;
                         "arrs/sonarr"
                         "arrs/radarr"
                         "arrs/prowlarr"
+                        "arrs/bazarr"
                         "seerr"
                     ];
                 };
@@ -168,6 +171,7 @@ with lib;
                     "radarr.service"
                     "prowlarr.service"
                     "seerr.service"
+                    "bazarr.service"
                 ];
             };
         };

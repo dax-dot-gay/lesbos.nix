@@ -50,6 +50,15 @@ in
                 extraConfig = preflight;
             };
         };
+        "bazarr.media.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:6767";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
         "request.jellyfin.dax.gay" = {
             enableACME = true;
             forceSSL = true;

@@ -65,5 +65,13 @@ in
         sonarr = mkArr "sonarr" 8989;
         radarr = mkArr "radarr" 7878;
         prowlarr = mkArr "prowlarr" 9696;
+        bazarr = {
+            enable = true;
+            listenPort = 6767;
+            user = "bazarr";
+            group = "media-service";
+            openFirewall = true;
+            dataDir = "/media-support/services/arrs/bazarr";
+        };
     };
 }
