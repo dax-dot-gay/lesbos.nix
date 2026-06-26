@@ -207,6 +207,24 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        sys-auth = {
+                            inherit self;
+                            id = 505;
+                            path = ./hosts/sys-auth;
+                            name = "sys-auth";
+                            tags = [
+                                "lesbos.nix"
+                                "infrastructure"
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

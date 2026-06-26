@@ -9,6 +9,7 @@ keys:
     - &homelab-host-srv-jellyfin age10hdmjt5mhg23gm86t2g7as3tjes6hvvvzk3qaskxmz693dz0rc5sc7u6cv
     - &homelab-host-srv-media-support age159mm8phgty5vrg4z5tpnnxqdd443ses25058x3xplua3jnfz459s0vgs4p
     - &homelab-host-sys-datastore age107tadjgsrea8vadpcuk7d2xxl9rzlanfueeh3e5fyr59yc4alftqjhvres
+    - &homelab-host-sys-auth age1zw9axv30aalxswr0r4626slqmd7xctja88fjlvhzufvgt7n2tqvqgp737x
     # @add:key-def
 
 creation_rules:
@@ -25,6 +26,7 @@ creation_rules:
           - *homelab-host-srv-jellyfin
           - *homelab-host-srv-media-support
           - *homelab-host-sys-datastore
+          - *homelab-host-sys-auth
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -39,6 +41,7 @@ creation_rules:
           - *homelab-host-srv-jellyfin
           - *homelab-host-srv-media-support
           - *homelab-host-sys-datastore
+          - *homelab-host-sys-auth
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -90,4 +93,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-sys-datastore
+  - path_regex: secrets/homelab/per-system/sys-auth/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-sys-auth
   # @add:new-path
