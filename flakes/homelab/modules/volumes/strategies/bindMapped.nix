@@ -58,6 +58,7 @@ in
                 ${
                     concatStringsSep "\n" (mapAttrsToList (_: vol: ''
                         if ! mountpoint -q -- "${vol.volume.destination}"; then
+                            echo "$(ls -la ${vol.volume.destination})"
                             echo "Would run: rm -rf ${vol.volume.destination}/*"
                         fi
                     '') relevantVolumes)
