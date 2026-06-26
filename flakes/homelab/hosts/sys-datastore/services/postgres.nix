@@ -94,7 +94,7 @@ in
         };
         ensureDatabases = mapAttrsToList (_: u: u.username) (filterAttrs (_: u: u.ensureDatabase) users);
         ensureUsers = mapAttrsToList (_: user: {
-            name = user.name;
+            name = user.username;
             ensureDBOwnership = user.ensureDatabase;
             ensureClauses =
                 (with user.clauses; {
@@ -105,11 +105,13 @@ in
                         login
                         replication
                         bypassrls
-                        connection_limit
                         ;
                 })
                 // (optionalAttrs (user.authentication.auth_method == "password") {
                     password = user.authentication.password;
+                })
+                // (optionalAttrs (!(isNull user.clauses.connection_limit)) {
+                    connection_limit = user.clauses.connection_limit;
                 });
         }) users;
         authentication = mkOverride 10 ''
