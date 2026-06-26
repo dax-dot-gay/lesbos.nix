@@ -75,7 +75,7 @@ in
             group = "pgadmin";
             mode = "0770";
             timerConfig = {
-                onActiveSec = "1h";
+                OnActiveSec = "1h";
             };
             restoration = true;
         };
