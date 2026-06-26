@@ -54,6 +54,8 @@ in
                         before = volume.required_by ++ ["lesbos-volumes.target"];
                         requiredBy = volume.required_by ++ ["lesbos-volumes.target"];
                         path = [ pkgs.rclone ];
+                        startLimitIntervalSec = 0;
+                        startLimitBurst = 1000;
                         serviceConfig = {
                             Type = "oneshot";
                             User = "root";

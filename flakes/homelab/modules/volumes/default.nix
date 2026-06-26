@@ -26,7 +26,11 @@ in
     config = {
         systemd.services.volumes-initialize-sources = {
             enable = true;
+            requires = ["network.target" "local-fs.target"];
+            after = ["network.target"];
             requiredBy = ["lesbos-volumes.target"];
+            startLimitIntervalSec = 0;
+            startLimitBurst = 1000;
             serviceConfig = {
                 Type = "oneshot";
                 RequiresMountsFor = mapAttrsToList (_: vol: vol.volume.sourcePath) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);

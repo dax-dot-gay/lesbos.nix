@@ -62,6 +62,8 @@ in
                             User = "root";
                             Group = "root";
                         };
+                        startLimitIntervalSec = 0;
+                        startLimitBurst = 1000;
                         script = ''
                             ${
                                 if !(isNull strategy.setupScript) then

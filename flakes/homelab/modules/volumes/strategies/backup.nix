@@ -68,6 +68,8 @@ in
                             BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK = "yes";
                             BORG_RELOCATED_REPO_ACCESS_IS_OK = "yes";
                         };
+                        startLimitIntervalSec = 0;
+                        startLimitBurst = 1000;
                         script = ''
                             if [ ! -d "${volume.destination}" ]; then
                                 echo "Destination directory for VOL[${name}] does not exist! Creating it..."
