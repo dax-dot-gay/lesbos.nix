@@ -89,7 +89,7 @@
                 group = "authentik";
                 mode = "0400";
                 content = ''
-                    AUTHENTIK_TOKEN=${pl."authentik/ldap_token"}
+                    AUTHENTIK_TOKEN=${pl."authentik/ldap/token"}
                     AUTHENTIK_HOST=https://auth.dax.gay
                     AUTHENTIK_INSECURE=False
                 '';
