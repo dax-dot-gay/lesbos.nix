@@ -46,7 +46,7 @@ in
             requiredBy = ["lesbos-volumes.target"] ++ volume.volume.required_by;
             requires = ["volumes-initialize-sources.service"];
             after = ["volumes-initialize-sources.service"];
-            options = "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group},perms=${volume.strategy.permissions},nofail" + (optionalString volume.strategy.read_only ",ro");
+            options = "mirror=${volume.strategy.user}:@${volume.strategy.group},perms=${volume.strategy.permissions},nofail" + (optionalString volume.strategy.read_only ",ro");
         }) relevantVolumes;
     };
 }
