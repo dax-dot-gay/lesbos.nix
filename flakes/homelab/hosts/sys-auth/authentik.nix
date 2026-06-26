@@ -82,6 +82,7 @@
                     AUTHENTIK_POSTGRESQL__NAME=${pl."authentik/main/database/name"}
                     AUTHENTIK_POSTGRESQL__PASSWORD=${pl."authentik/main/database/password"}
                     AUTHENTIK_POSTGRESQL__USER=${pl."authentik/main/database/user"}
+                    AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS=192.168.64.0/24
                 '';
             };
             "authentik-ldap.env" = {
@@ -126,11 +127,6 @@
                 disable_startup_analytics = true;
                 log_level = "debug";
                 cookie_domain = "dax.gay";
-                listen = {
-                    http = "0.0.0.0:9000";
-                    metrics = "0.0.0.0:9300";
-                    trusted_proxy_cidrs = "192.168.64.0/24";
-                };
             };
             nginx.enable = false;
         };
