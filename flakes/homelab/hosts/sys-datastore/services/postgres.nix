@@ -150,4 +150,5 @@ in
             MFA_ENABLED = false;
         };
     };
+    systemd.services.pgadmin.serviceConfig.ReadWritePaths = ["/datastore/pgadmin"];
 }
