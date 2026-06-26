@@ -1,0 +1,18 @@
+{ config, ... }:
+let
+    preflight = import ../preflight.nix;
+    clients = config.lesbos.homelab.net.clients;
+in
+{
+    services.nginx.virtualHosts = {
+        "auth.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.sys-auth.address}:9000";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
+    };
+}

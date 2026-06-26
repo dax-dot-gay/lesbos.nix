@@ -151,6 +151,14 @@
                     "datastore.sys"
                 ];
             };
+            sys-auth = {
+                description = "SSO authentication";
+                address = "192.168.64.14";
+                dns = [
+                    "sys-auth.lesbos.nix"
+                    "auth.sys"
+                ];
+            };
         };
     };
 }

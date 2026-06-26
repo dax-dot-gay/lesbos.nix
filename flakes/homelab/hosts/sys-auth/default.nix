@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ];
+    imports = [ ./provision-secrets.nix ./authentik.nix ];
     lesbos = {
         info = {
             canonicalName = "sys-auth";
@@ -46,5 +46,37 @@
             };
             users = { };
         };
+        volumes = {
+            authentik = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/sys-auth";
+                    ensureSource.enable = true;
+                    subdirectories = [
+                        "media"
+                        "blueprints"
+                        "templates"
+                    ];
+                };
+                destination = "/authentik";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "authentik";
+                    group = "authentik";
+                    permissions = "0770";
+                };
+                required_by = ["authentik.service" "authentik-worker.service" "authentic-migrate.service"];
+            };
+        };
+    };
+
+    users = {
+        users.authentik = {
+            isSystemUser = true;
+            group = "authentik";
+        };
+        groups.authentik = {};
     };
 }
