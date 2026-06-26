@@ -9,7 +9,7 @@ in
             enableACME = true;
             forceSSL = true;
             locations."/" = {
-                proxyPass = "http://${clients.sys-auth.address}:9000";
+                proxyPass = "http://${clients.sys-auth.address}:9300";
                 proxyWebsockets = true;
                 extraConfig = preflight;
             };
