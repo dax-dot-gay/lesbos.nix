@@ -28,6 +28,7 @@ in
             enable = true;
             requiredBy = ["lesbos-volumes.target"];
             serviceConfig = {
+                Type = "oneshot";
                 RequiresMountsFor = mapAttrsToList (_: vol: vol.volume.sourcePath) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
             };
             script = concatStringsSep "\n" (
