@@ -78,10 +78,10 @@
                     AUTHENTIK_BOOTSTRAP_PASSWORD=${pl."authentik/main/bootstrap/password"}
                     AUTHENTIK_BOOTSTRAP_EMAIL=${pl."authentik/main/bootstrap/email"}
                     AUTHENTIK_BOOTSTRAP_TOKEN=${pl."authentik/main/bootstrap/token"}
-                    AUTHENTIK_POSTGRESQL__HOST: ${pl."authentik/main/database/host"}
-                    AUTHENTIK_POSTGRESQL__NAME: ${pl."authentik/main/database/name"}
-                    AUTHENTIK_POSTGRESQL__PASSWORD: ${pl."authentik/main/database/password"}
-                    AUTHENTIK_POSTGRESQL__USER: ${pl."authentik/main/database/user"}
+                    AUTHENTIK_POSTGRESQL__HOST=${pl."authentik/main/database/host"}
+                    AUTHENTIK_POSTGRESQL__NAME=${pl."authentik/main/database/name"}
+                    AUTHENTIK_POSTGRESQL__PASSWORD=${pl."authentik/main/database/password"}
+                    AUTHENTIK_POSTGRESQL__USER=${pl."authentik/main/database/user"}
                 '';
             };
             "authentik-ldap.env" = {
