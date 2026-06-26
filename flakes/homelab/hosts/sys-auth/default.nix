@@ -16,6 +16,24 @@
         };
         proxmox = {
             enable = true;
+            resources = {
+                cores = 4;
+                memory = 2048;
+            };
+            start.order = 4;
+            network.primary.bridge = "vmbr3";
+            storage = {
+                disk_size = "128G";
+                virtiofs = [
+                    {
+                        name = "data";
+                        mount = true;
+                        id = "DATA";
+                        expose_acl = true;
+                        expose_xattr = true;
+                    }
+                ];
+            };
         };
         base.users = {
             root = {

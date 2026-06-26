@@ -21,7 +21,7 @@
                     database_access = "all";
                 };
             };
-            authelia = {
+            authentik = {
                 clauses.login = true;
                 ensureDatabase = true;
                 authentication = {
