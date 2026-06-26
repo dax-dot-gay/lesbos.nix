@@ -32,7 +32,7 @@
                 enable = true;
                 user = "jellyfin";
                 group = "jellyfin";
-                permissions = "0740";
+                permissions = "0770";
             };
             required_by = [
                 "jellyfin.service"
