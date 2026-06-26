@@ -48,5 +48,21 @@ in
             after = ["volumes-initialize-sources.service"];
             options = "map=${source_user}/${volume.strategy.user}:@${source_group}/@${volume.strategy.group},perms=${volume.strategy.permissions},nofail" + (optionalString volume.strategy.read_only ",ro");
         }) relevantVolumes;
+        systemd.services.volumes-bind-pre = {
+            enable = true;
+            requiredBy = ["lesbos-volumes-pre.target"];
+            requires = ["systemd-tmpfiles-setup.service"];
+            after = ["systemd-tmpfiles-setup.service"];
+            serviceConfig = {Type = "oneshot";};
+            script = ''
+                ${
+                    concatStringsSep "\n" (mapAttrsToList (_: vol: ''
+                        if ! mountpoint -q -- "${vol.volume.destination}"; then
+                            echo "Would run: rm -rf ${vol.volume.destination}/*"
+                        fi
+                    '') relevantVolumes)
+                }
+            '';
+        };
     };
 }

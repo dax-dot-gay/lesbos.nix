@@ -24,6 +24,13 @@ in
     ];
 
     config = {
+        systemd.targets.lesbos-volumes-pre = {
+            enable = true;
+            wantedBy = ["volumes-initialize-sources.service"];
+            before = ["volumes-initialize-sources.service"];
+            wants = ["systemd-tmpfiles-setup.service"];
+            after = ["systemd-tmpfiles-setup.service"];
+        };
         systemd.services.volumes-initialize-sources = {
             enable = true;
             requires = ["network.target" "local-fs.target"];
@@ -55,8 +62,8 @@ in
         systemd.targets.lesbos-volumes = {
             enable = true;
             description = "All lesbos volumes are set up and functional";
-            wantedBy = ["multi-user.target" "systemd-tmpfiles-setup.service"];
-            before = ["multi-user.target" "systemd-tmpfiles-setup.service"];
+            wantedBy = ["multi-user.target"];
+            before = ["multi-user.target"];
             requiredBy = unique (flatten (mapAttrsToList (_: v: v.volume.required_by) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes)));
         };
     };
