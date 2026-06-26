@@ -304,6 +304,29 @@ flakes::check() {
     fi
 }
 
+# @cmd                                      Generate password hashes
+password() { :; }
+
+# @cmd                                      Generate a linux system password hash
+# @option       --password=                 Supply password from the commandline
+password::linux() {
+    plain="$(inquire_pass "$argc_password" "Enter a password (leave empty to generate one)")"
+    hashed="$(mkpasswd "$plain")"
+
+    echo "Plain text: $plain"
+    echo "Hashed    : $hashed"
+}
+
+# @cmd                                      Generate a postgresql password hash
+# @option       --password=                 Supply password from the commandline
+password::postgres() {
+    plain="$(inquire_pass "$argc_password" "Enter a password (leave empty to generate one)")"
+    hashed="$(./scripts/doohickey/pgpass.py "$plain")"
+
+    echo "Plain text: $plain"
+    echo "Hashed    : $hashed"
+}
+
 
 
 eval "$(argc --argc-eval "$0" "$@")"

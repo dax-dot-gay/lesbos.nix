@@ -195,9 +195,12 @@
                             path = ./hosts/sys-datastore;
                             name = "sys-datastore";
                             tags = [
+                                "lesbos.nix"
+                                "infrastructure"
                                 # Add tags here
                             ];
                             modules = [
+                                ./modules/volumes
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {
