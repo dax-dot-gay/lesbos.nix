@@ -129,7 +129,7 @@ in
                             ''
                         else
                             ''
-                                host ${authentication.database_access} ${name} ${authentication.source_address} ${
+                                host ${authentication.database_access} ${name} ${authentication.source_address}/24 ${
                                     if authentication.auth_method == "trust" then "trust" else "scram-sha-256"
                                 }
                             ''
