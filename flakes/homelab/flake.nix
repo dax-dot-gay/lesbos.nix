@@ -189,6 +189,21 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        sys-datastore = {
+                            inherit self;
+                            id = 504;
+                            path = ./hosts/sys-datastore;
+                            name = "sys-datastore";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

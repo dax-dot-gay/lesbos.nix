@@ -33,6 +33,7 @@
                 ];
             };
             network.primary.bridge = "vmbr3";
+            start.order = 100;
         };
         base.users = {
             root = {

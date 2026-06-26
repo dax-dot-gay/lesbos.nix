@@ -143,6 +143,14 @@
                     "media-support.srv"
                 ];
             };
+            sys-datastore = {
+                description = "Databases & S3";
+                address = "192.168.64.13";
+                dns = [
+                    "sys-datastore.lesbos.nix"
+                    "datastore.sys"
+                ];
+            };
         };
     };
 }

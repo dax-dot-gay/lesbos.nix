@@ -6,10 +6,10 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ./games ];
+    imports = [ ./provision-secrets.nix ];
     lesbos = {
         info = {
-            canonicalName = "srv-gameservers";
+            canonicalName = "sys-datastore";
             flake = "homelab";
             stateVersion = "26.05";
             runningVersion = "26.05";
@@ -17,8 +17,12 @@
         proxmox = {
             enable = true;
             resources = {
-                cores = 4;
-                memory = 24576;
+                cores = 6;
+                memory = 8192;
+            };
+            start = {
+                order = 2;
+                delay_up = 10;
             };
             storage = {
                 disk_size = "256G";
@@ -32,7 +36,6 @@
                     }
                 ];
             };
-            start.order = 100;
             network.primary.bridge = "vmbr3";
         };
         base.users = {
@@ -41,11 +44,10 @@
                 ssh.enable = true;
                 password = {
                     enable = true;
-                    hash = "$y$j9T$W2qPWNbo55eB8Su29aVIK0$HzJjzyZT/.N1hFQAgprZxgrHC5s/.pANj28Q0GkNvTB";
+                    hash = "$y$j9T$34whXohIvUq1NgZ6YTpIg.$YOcuuiUVVQazVyidwpCSZ4Ui.sPT7l6V895PyI1r5S4";
                 };
             };
             users = { };
         };
     };
-    virtualisation.oci-containers.backend = "podman";
 }

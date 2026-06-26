@@ -32,6 +32,7 @@
                     }
                 ];
             };
+            start.order = 100;
         };
         base.users = {
             root = {

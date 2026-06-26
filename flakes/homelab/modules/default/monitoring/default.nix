@@ -63,6 +63,17 @@
                     };
                 };
             };
+            sys-datastore = {
+                exporters = {
+                    postgres = {
+                        port = 9001;
+                        extraConfig = {
+                            dataSourceName = "user=postgres database=postgres host=/run/postgresql sslmode=disable";
+                            runAsLocalSuperUser = true;
+                        };
+                    };
+                };
+            };
         };
     };
 }

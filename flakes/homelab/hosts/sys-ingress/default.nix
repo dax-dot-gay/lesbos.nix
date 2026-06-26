@@ -20,6 +20,9 @@
         };
         proxmox = {
             enable = true;
+            start = {
+                order = 2;
+            };
         };
         base.users = {
             root = {
