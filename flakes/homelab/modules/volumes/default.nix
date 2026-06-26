@@ -24,13 +24,6 @@ in
     ];
 
     config = {
-        systemd.targets.lesbos-volumes-pre = {
-            enable = true;
-            wantedBy = ["volumes-initialize-sources.service"];
-            before = ["volumes-initialize-sources.service"];
-            wants = ["systemd-tmpfiles-setup.service"];
-            after = ["systemd-tmpfiles-setup.service"];
-        };
         systemd.services.volumes-initialize-sources = {
             enable = true;
             requires = ["network.target" "local-fs.target"];
