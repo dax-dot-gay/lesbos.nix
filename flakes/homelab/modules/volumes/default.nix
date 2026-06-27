@@ -35,7 +35,7 @@ in
                 Type = "oneshot";
                 RequiresMountsFor = mapAttrsToList (_: vol: vol.volume.sourcePath) (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes);
             };
-            script = concatStringsSep "\n" (
+            script = (concatStringsSep "\n" (
                 mapAttrsToList (_: vol: ''
                     if [ ! -d "${vol.volume.sourcePath}" ]; then
                         echo "Creating source path: ${vol.volume.sourcePath}"
@@ -49,7 +49,9 @@ in
                         chmod -R ${vol.volume.source.ensureSource.mode} "${vol.volume.sourcePath}"
                     fi
                 '') (filterAttrs (_: vol: vol.volume.source.ensureSource.enable) volumes)
-            );
+            )) + ''
+                echo "Initialized sources!"
+            '';
         };
 
         systemd.targets.lesbos-volumes = {
