@@ -70,6 +70,23 @@
                 };
                 required_by = ["syncthing.service"];
             };
+            syncthing-data = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/sys-storage/syncthing";
+                    ensureSource.enable = true;
+                };
+                destination = "/syncthing/service";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "syncthing";
+                    group = "syncthing";
+                    permissions = "0770";
+                };
+                required_by = ["syncthing.service"];
+            };
         };
     };
 

@@ -20,6 +20,7 @@
                 };
             };
         };
+        dataDir = "/syncthing/service";
     };
     networking.firewall.allowedTCPPorts = [
         22000
