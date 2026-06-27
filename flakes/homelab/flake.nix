@@ -230,6 +230,25 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-books = {
+                            inherit self;
+                            id = 514;
+                            path = ./hosts/srv-books;
+                            name = "srv-books";
+                            tags = [
+                                "lesbos.nix"
+                                "services"
+                                "media"
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

@@ -10,6 +10,7 @@ keys:
     - &homelab-host-srv-media-support age159mm8phgty5vrg4z5tpnnxqdd443ses25058x3xplua3jnfz459s0vgs4p
     - &homelab-host-sys-datastore age107tadjgsrea8vadpcuk7d2xxl9rzlanfueeh3e5fyr59yc4alftqjhvres
     - &homelab-host-sys-auth age1zw9axv30aalxswr0r4626slqmd7xctja88fjlvhzufvgt7n2tqvqgp737x
+    - &homelab-host-srv-books age1tygtnamnnqml7gt5kwpmsuetzg8pcnhm2c7ezrkrzxfdynlr0sysr2jnz5
     # @add:key-def
 
 creation_rules:
@@ -27,6 +28,7 @@ creation_rules:
           - *homelab-host-srv-media-support
           - *homelab-host-sys-datastore
           - *homelab-host-sys-auth
+          - *homelab-host-srv-books
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -42,6 +44,7 @@ creation_rules:
           - *homelab-host-srv-media-support
           - *homelab-host-sys-datastore
           - *homelab-host-sys-auth
+          - *homelab-host-srv-books
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -98,4 +101,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-sys-auth
+  - path_regex: secrets/homelab/per-system/srv-books/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-srv-books
   # @add:new-path

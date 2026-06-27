@@ -171,6 +171,14 @@
                     "auth.sys"
                 ];
             };
+            srv-books = {
+                description = "Ebooks & Audiobooks";
+                address = "192.168.64.24";
+                dns = [
+                    "srv-books.lesbos.nix"
+                    "books.srv"
+                ];
+            };
         };
     };
 }
