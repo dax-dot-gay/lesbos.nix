@@ -61,7 +61,7 @@
                     name = "data";
                     path = "/data/home/sync";
                 };
-                destination = /syncthing/shared-folders;
+                destination = "/syncthing/shared-folders";
                 strategy.bindMapped = {
                     enable = true;
                     user = "syncthing";
