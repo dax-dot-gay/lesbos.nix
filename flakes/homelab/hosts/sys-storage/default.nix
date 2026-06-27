@@ -68,6 +68,7 @@
                     group = "syncthing";
                     permissions = "0770";
                 };
+                required_by = ["syncthing.service"];
             };
         };
     };
