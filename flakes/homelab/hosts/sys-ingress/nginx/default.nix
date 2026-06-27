@@ -110,6 +110,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "sync.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "https://${clients.sys-storage.address}:8384";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }

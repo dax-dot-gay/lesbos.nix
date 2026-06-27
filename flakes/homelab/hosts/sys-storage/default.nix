@@ -6,7 +6,10 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ];
+    imports = [
+        ./provision-secrets.nix
+        ./syncthing.nix
+    ];
     lesbos = {
         info = {
             canonicalName = "sys-storage";
@@ -50,7 +53,30 @@
             users = {
             };
         };
+        volumes = {
+            sync = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/data/home/sync";
+                };
+                destination = /syncthing/shared-folders;
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "syncthing";
+                    group = "syncthing";
+                    permissions = "0770";
+                };
+            };
+        };
     };
+
+    users.users.syncthing = {
+        group = "syncthing";
+        isSystemUser = true;
+    };
+    users.groups.syncthing = { };
 
     environment.systemPackages = with pkgs; [
         borgbackup

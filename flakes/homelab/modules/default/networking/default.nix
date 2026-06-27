@@ -30,6 +30,18 @@
                     "sys-storage.lesbos.nix"
                     "storage.sys"
                 ];
+                forward_ports = [
+                    {
+                        protocol = "both";
+                        externalPort = 22000;
+                        internalPort = 22000;
+                    }
+                    {
+                        protocol = "both";
+                        externalPort = 21027;
+                        internalPort = 21027;
+                    }
+                ];
             };
             sys-ingress = {
                 description = ''
