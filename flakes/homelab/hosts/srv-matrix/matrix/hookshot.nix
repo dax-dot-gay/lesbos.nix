@@ -107,9 +107,6 @@
                     roomId = "!qGYHmGzixjkUftfkVe:dax.gay";
                     state = {
                         name = "EBook Requests";
-                        waitForComplete = true;
-                        includeHookBody = true;
-                        transformationFunction = "result = \"test message\"";
                     };
                 }
             ];
