@@ -172,7 +172,7 @@ with lib;
                     USER_ID = "${toString config.users.users.grimmory.uid}";
                     GROUP_ID = "${toString config.users.groups.grimmory.gid}";
                     TZ = "America/New_York";
-                    DATABASE_URL = "jbdc:mariadb://localhost:3306/grimmory";
+                    DATABASE_URL = "jdbc:mariadb://localhost:3306/grimmory";
                     DATABASE_USERNAME = "grimmory";
                     BOOKLORE_PORT = "6060";
                 };
