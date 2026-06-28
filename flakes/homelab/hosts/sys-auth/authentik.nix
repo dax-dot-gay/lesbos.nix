@@ -232,7 +232,7 @@
 
     # Networks
     systemd.services."podman-network-authentik_default" = {
-        path = [ pkgs.docker ];
+        path = [ pkgs.podman ];
         serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
