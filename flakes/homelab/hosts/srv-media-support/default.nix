@@ -42,6 +42,7 @@ with lib;
             common = {
                 group = mkDefault "media-service";
                 uid = 1000;
+                isSystemUser = true;
             };
         };
         groups = {
