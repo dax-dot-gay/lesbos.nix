@@ -107,7 +107,7 @@
                     roomId = "!qGYHmGzixjkUftfkVe:dax.gay";
                     state = {
                         name = "EBook Requests";
-                        transformationFunction = "result = {version: \"v2\",empty: false,plain: `--bookevent--`,html: `<b>\${data.event} - \${data.title}</b><br><br>\${data.message}`};";
+                        transformationFunction = "result = {version: \"v2\", plain: \"**\" + data.title + \":** \" + data.message};";
                     };
                 }
             ];
