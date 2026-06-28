@@ -83,8 +83,6 @@
                     AUTHENTIK_POSTGRESQL__PASSWORD=${pl."authentik/main/database/password"}
                     AUTHENTIK_POSTGRESQL__USER=${pl."authentik/main/database/user"}
                     AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS=192.168.64.0/24
-                    AUTHENTIK_LISTEN__HTTP=0.0.0.0:9000
-                    AUTHENTIK_LISTEN__METRICS=0.0.0.0:9300
                 '';
             };
             "postgres.env" = {
