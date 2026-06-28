@@ -163,9 +163,9 @@
             "/authentik/authentik/data:/data:rw"
         ];
         ports = [
-            "8000/tcp"
-            "8300/tcp"
-            "8443/tcp"
+            "0.0.0.0:8000:8000"
+            "0.0.0.0:8300:8300"
+            "0.0.0.0:8443:8443"
         ];
         cmd = [ "server" ];
         dependsOn = [
