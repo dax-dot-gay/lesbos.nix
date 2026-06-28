@@ -101,7 +101,7 @@
                 roomSetupWidget = {
                     addOnInvite = true;
                 };
-                publicUrl = "https://webhooks.matrix.dax.gay/widgetapi/v1/static";
+                publicUrl = "https://widgets.matrix.dax.gay/widgetapi/v1/static";
                 branding = {
                     widgetTitle = "Hookshot Configuration";
                 };
