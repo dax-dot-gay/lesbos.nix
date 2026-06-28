@@ -31,10 +31,6 @@
             url = "github:venkyr77/jellarr";
             inputs.nixpkgs.follows = "nixpkgs";
         };
-        authentik-nix = {
-            url = "github:nix-community/authentik-nix";
-            inputs.nixpkgs.follows = "nixpkgs";
-        };
     };
 
     outputs =
@@ -223,7 +219,6 @@
                             ];
                             modules = [
                                 ./modules/volumes
-                                inputs.authentik-nix.nixosModules.default
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {

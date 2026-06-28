@@ -55,9 +55,10 @@
                     path = "/systems/sys-auth";
                     ensureSource.enable = true;
                     subdirectories = [
-                        "media"
-                        "blueprints"
-                        "templates"
+                        "database"
+                        "authentik/certs"
+                        "authentik/templates"
+                        "authentik/data"
                     ];
                 };
                 destination = "/authentik";
@@ -67,7 +68,7 @@
                     group = "authentik";
                     permissions = "0770";
                 };
-                required_by = ["authentik.service" "authentik-worker.service" "authentik-migrate.service"];
+                required_by = ["docker-network-authentik_default.service"];
             };
         };
     };

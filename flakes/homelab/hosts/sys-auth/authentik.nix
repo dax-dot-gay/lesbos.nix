@@ -71,7 +71,7 @@
             "authentik.env" = {
                 owner = "authentik";
                 group = "authentik";
-                mode = "0400";
+                mode = "0777";
                 content = ''
                     AUTHENTIK_SECRET_KEY=${pl."authentik/main/secret_key"}
                     AUTHENTIK_EMAIL__PASSWORD=${pl."authentik/main/email_password"}
@@ -87,85 +87,171 @@
                     AUTHENTIK_LISTEN__METRICS=0.0.0.0:9000
                 '';
             };
-            "authentik-ldap.env" = {
+            "postgres.env" = {
                 owner = "authentik";
                 group = "authentik";
-                mode = "0400";
+                mode = "0777";
                 content = ''
-                    AUTHENTIK_TOKEN=${pl."authentik/ldap/token"}
-                    AUTHENTIK_HOST=https://auth.dax.gay
-                    AUTHENTIK_INSECURE=False
-                '';
-            };
-            "authentik-proxy.env" = {
-                owner = "authentik";
-                group = "authentik";
-                mode = "0400";
-                content = ''
-                    AUTHENTIK_TOKEN=${pl."authentik/proxy/token"}
-                    AUTHENTIK_HOST=https://auth.dax.gay
-                    AUTHENTIK_INSECURE=False
+                    POSTGRES_DB=${pl."authentik/main/database/name"}
+                    POSTGRES_PASSWORD=${pl."authentik/main/database/password"}
+                    POSTGRES_USER=${pl."authentik/main/database/user"}
                 '';
             };
         };
 
-    services = {
-        authentik = {
-            enable = true;
-            createDatabase = false;
-            environmentFile = config.sops.templates."authentik.env".path;
-            settings = {
-                storage.media.file = lib.mkOverride 10 { path = "/authentik/media"; };
-                media.enableUpload = true;
-                email = {
-                    host = "mail.smtp2go.com";
-                    port = 443;
-                    username = "auth.dax.gay";
-                    use_tls = false;
-                    use_ssl = true;
-                    from = "Lesbos SSO <sso@dax.gay>";
-                };
-                avatars = "initials";
-                disable_startup_analytics = true;
-                log_level = "debug";
-                cookie_domain = "dax.gay";
-            };
-            nginx.enable = false;
-        };
-        authentik-ldap = {
-            enable = true;
-            environmentFile = config.sops.templates."authentik-ldap.env".path;
-        };
+    # Runtime
+    virtualisation.docker = {
+        enable = true;
+        autoPrune.enable = true;
+    };
+    virtualisation.oci-containers.backend = "docker";
 
-        authentik-proxy = {
-            enable = true;
-            environmentFile = config.sops.templates."authentik-proxy.env".path;
-            listenHTTP = "0.0.0.0:9005";
-            listenHTTPS = "0.0.0.0:9004";
+    # Containers
+    virtualisation.oci-containers.containers."authentik-postgresql" = {
+        image = "docker.io/library/postgres:16-alpine";
+        environmentFiles = [config.sops.templates."postgres.env".path];
+        volumes = [
+            "/authentik/database:/var/lib/postgresql/data:rw"
+        ];
+        log-driver = "journald";
+        extraOptions = [
+            "--health-cmd=pg_isready -d authentik -U authentik"
+            "--health-interval=30s"
+            "--health-retries=5"
+            "--health-start-period=20s"
+            "--health-timeout=5s"
+            "--network-alias=postgresql"
+            "--network=authentik_default"
+        ];
+    };
+    systemd.services."docker-authentik-postgresql" = {
+        serviceConfig = {
+            Restart = lib.mkOverride 90 "always";
+            RestartMaxDelaySec = lib.mkOverride 90 "1m";
+            RestartSec = lib.mkOverride 90 "100ms";
+            RestartSteps = lib.mkOverride 90 9;
         };
+        after = [
+            "docker-network-authentik_default.service"
+        ];
+        requires = [
+            "docker-network-authentik_default.service"
+        ];
+        partOf = [
+            "docker-compose-authentik-root.target"
+        ];
+        wantedBy = [
+            "docker-compose-authentik-root.target"
+        ];
+    };
+    virtualisation.oci-containers.containers."authentik-server" = {
+        image = "ghcr.io/goauthentik/server:2026.5.3";
+        environmentFiles = [config.sops.templates."authentik.env".path];
+        volumes = [
+            "/authentik/authentik/templates:/templates:rw"
+            "/authentik/authentik/data:/data:rw"
+        ];
+        ports = [
+            "9000/tcp"
+            "9443/tcp"
+        ];
+        cmd = [ "server" ];
+        dependsOn = [
+            "authentik-postgresql"
+        ];
+        log-driver = "journald";
+        extraOptions = [
+            "--network-alias=server"
+            "--network=authentik_default"
+            "--shm-size=536870912"
+        ];
+    };
+    systemd.services."docker-authentik-server" = {
+        serviceConfig = {
+            Restart = lib.mkOverride 90 "always";
+            RestartMaxDelaySec = lib.mkOverride 90 "1m";
+            RestartSec = lib.mkOverride 90 "100ms";
+            RestartSteps = lib.mkOverride 90 9;
+        };
+        after = [
+            "docker-network-authentik_default.service"
+        ];
+        requires = [
+            "docker-network-authentik_default.service"
+        ];
+        partOf = [
+            "docker-compose-authentik-root.target"
+        ];
+        wantedBy = [
+            "docker-compose-authentik-root.target"
+        ];
+    };
+    virtualisation.oci-containers.containers."authentik-worker" = {
+        image = "ghcr.io/goauthentik/server:2026.5.3";
+        environmentFiles = [config.sops.templates."authentik.env".path];
+        volumes = [
+            "/authentik/authentik/certs:/certs:rw"
+            "/authentik/authentik/templates:/templates:rw"
+            "/authentik/authentik/data:/data:rw"
+            "/var/run/docker.sock:/var/run/docker.sock:rw"
+        ];
+        cmd = [ "worker" ];
+        dependsOn = [
+            "authentik-postgresql"
+        ];
+        user = "root";
+        log-driver = "journald";
+        extraOptions = [
+            "--network-alias=worker"
+            "--network=authentik_default"
+            "--shm-size=536870912"
+        ];
+    };
+    systemd.services."docker-authentik-worker" = {
+        serviceConfig = {
+            Restart = lib.mkOverride 90 "always";
+            RestartMaxDelaySec = lib.mkOverride 90 "1m";
+            RestartSec = lib.mkOverride 90 "100ms";
+            RestartSteps = lib.mkOverride 90 9;
+        };
+        after = [
+            "docker-network-authentik_default.service"
+        ];
+        requires = [
+            "docker-network-authentik_default.service"
+        ];
+        partOf = [
+            "docker-compose-authentik-root.target"
+        ];
+        wantedBy = [
+            "docker-compose-authentik-root.target"
+        ];
     };
 
-    systemd.services.authentik.serviceConfig.ReadWritePaths = [
-        "/authentik/blueprints"
-        "/authentik/templates"
-        "/authentik/media"
-    ];
-    systemd.services.authentik-worker.serviceConfig.ReadWritePaths = [
-        "/authentik/blueprints"
-        "/authentik/templates"
-        "/authentik/media"
-    ];
-    systemd.services.authentik-migrate.serviceConfig.ReadWritePaths = [
-        "/authentik/blueprints"
-        "/authentik/templates"
-        "/authentik/media"
-    ];
+    # Networks
+    systemd.services."docker-network-authentik_default" = {
+        path = [ pkgs.docker ];
+        serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStop = "docker network rm -f authentik_default";
+        };
+        script = ''
+            docker network inspect authentik_default || docker network create authentik_default
+        '';
+        partOf = [ "docker-compose-authentik-root.target" ];
+        wantedBy = [ "docker-compose-authentik-root.target" ];
+    };
 
-    networking.firewall.allowedTCPPorts = [
-        9000
-        9300
-        9004
-        9005
-        3389
-    ];
+    # Root service
+    # When started, this will automatically create all resources and start
+    # the containers. When stopped, this will teardown all resources.
+    systemd.targets."docker-compose-authentik-root" = {
+        unitConfig = {
+            Description = "Root target generated by compose2nix.";
+        };
+        wantedBy = [ "multi-user.target" ];
+    };
+
+    networking.firewall.allowedTCPPorts = [9000 9443];
 }
