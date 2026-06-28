@@ -62,11 +62,6 @@
                     bindAddress = "0.0.0.0";
                     resources = [ "metrics" ];
                 }
-                {
-                    port = 3002;
-                    bindAddress = "0.0.0.0";
-                    resources = [ "widgets" ];
-                }
             ];
             cache = {
                 redisUri = "redis://localhost:2175";
@@ -97,15 +92,37 @@
             bot = {
                 displayname = "Lesbos Notifications";
             };
-            widgets = {
-                roomSetupWidget = {
-                    addOnInvite = true;
-                };
-                publicUrl = "https://widgets.matrix.dax.gay/widgetapi/v1/static";
-                branding = {
-                    widgetTitle = "Hookshot Configuration";
-                };
-            };
+            connections = [
+                {
+                    connectionType = "uk.half-shot.matrix-hookshot.generic.hook";
+                    stateKey = "hook-jellyfin-requests";
+                    roomId = "#pirates.notifications:dax.gay";
+                    state = {
+                        name = "Jellyfin Requests";
+                    };
+                }
+                {
+                    connectionType = "uk.half-shot.matrix-hookshot.generic.hook";
+                    stateKey = "hook-ebook-requests";
+                    roomId = "#pirates.notifications:dax.gay";
+                    state = {
+                        name = "EBook Requests";
+                        transformationFunction = ''
+                            result = {
+                                version: "v2",
+                                empty: false,
+                                plain: `Book event: ''${data.event}`,
+                                html: `<b>''${data.event} - ''${data.title}<b><br><br>''${data.message}`,
+                                msgtype: "m.text",
+                                mentions: {
+                                    room: true,
+                                    user_ids: ["@dax:dax.gay"]
+                                }
+                            };
+                        '';
+                    };
+                }
+            ];
         };
     };
 }
