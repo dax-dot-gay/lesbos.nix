@@ -149,7 +149,7 @@ with lib;
         group = "grimmory";
         mode = "0444";
         content = ''
-            MYSQL_ROOT_PASSWORD=${config.sops.placeholder."db_password"}
+            MYSQL_ROOT_PASSWORD=${config.sops.placeholder."db_password"}_root
             MYSQL_PASSWORD=${config.sops.placeholder."db_password"}
         '';
     };
