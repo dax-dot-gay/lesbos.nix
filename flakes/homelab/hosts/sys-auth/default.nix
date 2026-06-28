@@ -52,23 +52,39 @@
                 source = {
                     type = "share";
                     name = "data";
-                    path = "/systems/sys-auth";
+                    path = "/systems/sys-auth/authentik";
                     ensureSource.enable = true;
                     subdirectories = [
-                        "database"
-                        "authentik/certs"
-                        "authentik/templates"
-                        "authentik/data"
+                        "certs"
+                        "templates"
+                        "data"
                     ];
                 };
-                destination = "/authentik";
+                destination = "/authentik/authentik";
                 strategy.bindMapped = {
                     enable = true;
                     user = "authentik";
                     group = "authentik";
                     permissions = "0770";
                 };
-                required_by = ["podman-network-authentik_default.service"];
+                required_by = ["podman-network-authentik_default.service" "podman-authentik-worker.service" "podman-authentik-server.service" "podman-authentik-postgresql.service"];
+            };
+            authentik-db = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/sys-auth/database";
+                    ensureSource.enable = true;
+                };
+                destination = "/authentik/database";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "postgres";
+                    group = "postgres";
+                    permissions = "0750";
+                };
+                required_by = ["podman-network-authentik_default.service" "podman-authentik-worker.service" "podman-authentik-server.service" "podman-authentik-postgresql.service"];
             };
         };
     };
@@ -79,5 +95,10 @@
             group = "authentik";
         };
         groups.authentik = {};
+        users.postgres = {
+            isSystemUser = true;
+            group = "postgres";
+        };
+        groups.postgres = {};
     };
 }
