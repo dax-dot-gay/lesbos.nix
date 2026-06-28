@@ -56,11 +56,15 @@ in
                     proxyWebsockets = true;
                     extraConfig = preflight;
                 };
-                "/widgets" = {
-                    proxyPass = "http://${clients.srv-matrix.address}:3002";
-                    proxyWebsockets = true;
-                    extraConfig = preflight;
-                };
+            };
+        };
+        "widgets.matrix.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-matrix.address}:3002";
+                proxyWebsockets = true;
+                extraConfig = preflight;
             };
         };
     };
