@@ -96,7 +96,7 @@
                 {
                     connectionType = "uk.half-shot.matrix-hookshot.generic.hook";
                     stateKey = "hook-jellyfin-requests";
-                    roomId = "#pirates.notifications:dax.gay";
+                    roomId = "!qGYHmGzixjkUftfkVe:dax.gay";
                     state = {
                         name = "Jellyfin Requests";
                     };
@@ -104,7 +104,7 @@
                 {
                     connectionType = "uk.half-shot.matrix-hookshot.generic.hook";
                     stateKey = "hook-ebook-requests";
-                    roomId = "#pirates.notifications:dax.gay";
+                    roomId = "!qGYHmGzixjkUftfkVe:dax.gay";
                     state = {
                         name = "EBook Requests";
                         transformationFunction = ''
@@ -112,12 +112,7 @@
                                 version: "v2",
                                 empty: false,
                                 plain: `Book event: ''${data.event}`,
-                                html: `<b>''${data.event} - ''${data.title}<b><br><br>''${data.message}`,
-                                msgtype: "m.text",
-                                mentions: {
-                                    room: true,
-                                    user_ids: ["@dax:dax.gay"]
-                                }
+                                html: `<b>''${data.event} - ''${data.title}</b><br><br>''${data.message}`,
                             };
                         '';
                     };
