@@ -39,6 +39,11 @@ with lib;
                 extraGroups = ["media-service"];
                 uid = 996;
             };
+            shelfarr = {
+                group = mkDefault "shelfarr";
+                extraGroups = ["acquisition" "media-service" "arr"];
+                uid = 995;
+            };
         };
         groups = {
             deluge = {};
@@ -49,6 +54,7 @@ with lib;
             media-service = {gid = 996;};
             acquisition = {};
             arr = {};
+            shelfarr = {gid = 995;};
         };
     };
 
@@ -110,6 +116,7 @@ with lib;
                     "radarr.service"
                     "prowlarr.service"
                     "bazarr.service"
+                    "shelfarr.service"
                 ];
             };
             downloads = {
@@ -157,6 +164,8 @@ with lib;
                         "arrs/prowlarr"
                         "arrs/bazarr"
                         "seerr"
+                        "shelfarr/data"
+                        "shelfarr/downloads"
                     ];
                 };
                 destination = "/media-support/services";
@@ -173,6 +182,7 @@ with lib;
                     "prowlarr.service"
                     "seerr.service"
                     "bazarr.service"
+                    "shelfarr.service"
                 ];
             };
         };
