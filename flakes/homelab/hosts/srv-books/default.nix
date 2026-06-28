@@ -120,6 +120,7 @@ with lib;
 
     users = {
         users.grimmory = {
+            isSystemUser = true;
             group = "grimmory";
             uid = 1000;
         };
