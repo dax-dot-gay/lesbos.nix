@@ -154,52 +154,134 @@ with lib;
         '';
     };
 
-    virtualisation.oci-containers = {
-        backend = "podman";
-        containers = {
-            grimmory = {
-                image = "grimmory/grimmory:latest";
-                dependsOn = [ "mariadb" ];
-                extraOptions = [
-                    "--network=host"
-                ];
-                volumes = [
-                    "/grimmory/data/app:/app/data"
-                    "/grimmory/library:/books"
-                    "/grimmory/data/bookdrop"
-                ];
-                environment = {
-                    USER_ID = "${toString config.users.users.grimmory.uid}";
-                    GROUP_ID = "${toString config.users.groups.grimmory.gid}";
-                    TZ = "America/New_York";
-                    DATABASE_URL = "jdbc:mariadb://localhost:3306/grimmory";
-                    DATABASE_USERNAME = "grimmory";
-                    BOOKLORE_PORT = "6060";
-                };
-                environmentFiles = [ config.sops.templates."grimmory.env".path ];
-            };
-            mariadb = {
-                image = "lscr.io/linuxserver/mariadb:11.4.5";
-                extraOptions = [
-                    "--network=host"
-                    "--health-cmd='[\"CMD-SHELL\", \"mariadb-admin ping -h localhost\"]'"
-                    "--health-interval=5s"
-                    "--health-timeout=5s"
-                    "--health-retries=10"
-                ];
-                volumes = [
-                    "/grimmory/mariadb:/config"
-                ];
-                environment = {
-                    PUID = "${toString config.users.users.grimmory.uid}";
-                    PGID = "${toString config.users.groups.grimmory.gid}";
-                    TZ = "America/New_York";
-                    MYSQL_DATABSE = "grimmory";
-                    MYSQL_USER = "grimmory";
-                };
-                environmentFiles = [ config.sops.templates."mariadb.env".path ];
-            };
+    # Runtime
+    virtualisation.podman = {
+        enable = true;
+        autoPrune.enable = true;
+        dockerCompat = true;
+    };
+
+    # Enable container name DNS for all Podman networks.
+    networking.firewall.interfaces =
+        let
+            matchAll = if !config.networking.nftables.enable then "podman+" else "podman*";
+        in
+        {
+            "${matchAll}".allowedUDPPorts = [ 53 ];
         };
+
+    virtualisation.oci-containers.backend = "podman";
+
+    # Containers
+    virtualisation.oci-containers.containers."grimmory" = {
+        image = "grimmory/grimmory:latest";
+        environmentFiles = [config.sops.templates."grimmory.env".path];
+        environment = {
+            "BOOKLORE_PORT" = "6060";
+            "DATABASE_URL" = "jdbc:mariadb://mariadb:3306/grimmory";
+            "DATABASE_USERNAME" = "grimmory";
+            "GROUP_ID" = "1000";
+            "TZ" = "America/New_York";
+            "USER_ID" = "1000";
+        };
+        volumes = [
+            "/grimmory/data/bookdrop:/bookdrop:rw"
+            "/grimmory/library:/books:rw"
+            "/grimmory/data/app:/app/data:rw"
+        ];
+        ports = [
+            "6060:6060/tcp"
+        ];
+        dependsOn = [
+            "grimmory-mariadb"
+        ];
+        log-driver = "journald";
+        extraOptions = [
+            "--network-alias=grimmory"
+            "--network=grimmory_default"
+        ];
+    };
+    systemd.services."podman-grimmory" = {
+        serviceConfig = {
+            Restart = lib.mkOverride 90 "always";
+        };
+        after = [
+            "podman-network-grimmory_default.service"
+        ];
+        requires = [
+            "podman-network-grimmory_default.service"
+        ];
+        partOf = [
+            "podman-compose-grimmory-root.target"
+        ];
+        wantedBy = [
+            "podman-compose-grimmory-root.target"
+        ];
+    };
+    virtualisation.oci-containers.containers."grimmory-mariadb" = {
+        image = "lscr.io/linuxserver/mariadb:11.4.5";
+        environmentFiles = [config.sops.templates."mariadb.env".path];
+        environment = {
+            "MYSQL_DATABASE" = "grimmory";
+            "MYSQL_USER" = "grimmory";
+            "PGID" = "1000";
+            "PUID" = "1000";
+            "TZ" = "America/New_York";
+        };
+        volumes = [
+            "/grimmory/mariadb:/config:rw"
+        ];
+        log-driver = "journald";
+        extraOptions = [
+            "--health-cmd=[\"mariadb-admin\", \"ping\", \"-h\", \"localhost\"]"
+            "--health-interval=5s"
+            "--health-retries=10"
+            "--health-timeout=5s"
+            "--network-alias=mariadb"
+            "--network=grimmory_default"
+        ];
+    };
+    systemd.services."podman-grimmory-mariadb" = {
+        serviceConfig = {
+            Restart = lib.mkOverride 90 "always";
+        };
+        after = [
+            "podman-network-grimmory_default.service"
+        ];
+        requires = [
+            "podman-network-grimmory_default.service"
+        ];
+        partOf = [
+            "podman-compose-grimmory-root.target"
+        ];
+        wantedBy = [
+            "podman-compose-grimmory-root.target"
+        ];
+    };
+
+    # Networks
+    systemd.services."podman-network-grimmory_default" = {
+        path = [ pkgs.podman ];
+        serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStop = "podman network rm -f grimmory_default";
+        };
+        script = ''
+            podman network inspect grimmory_default || podman network create grimmory_default
+        '';
+        partOf = [ "podman-compose-grimmory-root.target" ];
+        wantedBy = [ "podman-compose-grimmory-root.target" ];
+    };
+
+    # Root service
+    # When started, this will automatically create all resources and start
+    # the containers. When stopped, this will teardown all resources.
+    systemd.targets."podman-compose-grimmory-root" = {
+        unitConfig = {
+            Description = "Root target generated by compose2nix.";
+        };
+        wantedBy = [ "multi-user.target" ];
     };
 
     networking.firewall.allowedTCPPorts = [ 6060 ];
