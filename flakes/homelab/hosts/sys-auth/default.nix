@@ -65,7 +65,7 @@
                     enable = true;
                     user = "authentik";
                     group = "authentik";
-                    permissions = "0770";
+                    permissions = "0777";
                 };
                 required_by = ["podman-network-authentik_default.service" "podman-authentik-worker.service" "podman-authentik-server.service" "podman-authentik-postgresql.service"];
             };
