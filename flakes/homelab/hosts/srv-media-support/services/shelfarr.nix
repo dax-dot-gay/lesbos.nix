@@ -1,5 +1,4 @@
-{ config, lib, ... }:
-with lib;
+{ config, ... }:
 {
     lesbos.secrets.system."shelfarr/key" = {
         owner = "shelfarr";
