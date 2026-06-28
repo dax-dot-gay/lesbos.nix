@@ -25,6 +25,14 @@
         required_by = [ "matrix-hookshot.service" ];
     };
 
+    services.redis = {
+        enable = true;
+        servers.hookshot = {
+            enable = true;
+            port = 6379;
+        };
+    };
+
     services.matrix-hookshot = {
         enable = true;
         registrationFile = config.sops.secrets."hookshot/registration.yml".path;
@@ -55,6 +63,9 @@
                     resources = [ "metrics" ];
                 }
             ];
+            cache = {
+                redisUri = "redis://localhost:6379";
+            };
             encryption = {
                 storagePath = "/var/lib/matrix-hookshot";
             };
