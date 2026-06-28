@@ -17,6 +17,7 @@
         mo
         pwgen
         inetutils
+        compose2nix
     ];
     languages.python = {
         enable = true;
