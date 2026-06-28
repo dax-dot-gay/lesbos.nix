@@ -68,7 +68,7 @@
                     group = "authentik";
                     permissions = "0770";
                 };
-                required_by = ["docker-network-authentik_default.service"];
+                required_by = ["podman-network-authentik_default.service"];
             };
         };
     };
