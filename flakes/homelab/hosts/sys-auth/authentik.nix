@@ -100,16 +100,27 @@
         };
 
     # Runtime
-    virtualisation.docker = {
+    virtualisation.podman = {
         enable = true;
         autoPrune.enable = true;
+        dockerCompat = true;
     };
-    virtualisation.oci-containers.backend = "docker";
+
+    # Enable container name DNS for all Podman networks.
+    networking.firewall.interfaces =
+        let
+            matchAll = if !config.networking.nftables.enable then "podman+" else "podman*";
+        in
+        {
+            "${matchAll}".allowedUDPPorts = [ 53 ];
+        };
+
+    virtualisation.oci-containers.backend = "podman";
 
     # Containers
     virtualisation.oci-containers.containers."authentik-postgresql" = {
         image = "docker.io/library/postgres:16-alpine";
-        environmentFiles = [config.sops.templates."postgres.env".path];
+        environmentFiles = [ config.sops.templates."postgres.env".path ];
         volumes = [
             "/authentik/database:/var/lib/postgresql/data:rw"
         ];
@@ -124,29 +135,26 @@
             "--network=authentik_default"
         ];
     };
-    systemd.services."docker-authentik-postgresql" = {
+    systemd.services."podman-authentik-postgresql" = {
         serviceConfig = {
             Restart = lib.mkOverride 90 "always";
-            RestartMaxDelaySec = lib.mkOverride 90 "1m";
-            RestartSec = lib.mkOverride 90 "100ms";
-            RestartSteps = lib.mkOverride 90 9;
         };
         after = [
-            "docker-network-authentik_default.service"
+            "podman-network-authentik_default.service"
         ];
         requires = [
-            "docker-network-authentik_default.service"
+            "podman-network-authentik_default.service"
         ];
         partOf = [
-            "docker-compose-authentik-root.target"
+            "podman-compose-authentik-root.target"
         ];
         wantedBy = [
-            "docker-compose-authentik-root.target"
+            "podman-compose-authentik-root.target"
         ];
     };
     virtualisation.oci-containers.containers."authentik-server" = {
         image = "ghcr.io/goauthentik/server:2026.5.3";
-        environmentFiles = [config.sops.templates."authentik.env".path];
+        environmentFiles = [ config.sops.templates."authentik.env".path ];
         volumes = [
             "/authentik/authentik/templates:/templates:rw"
             "/authentik/authentik/data:/data:rw"
@@ -167,34 +175,30 @@
             "--shm-size=536870912"
         ];
     };
-    systemd.services."docker-authentik-server" = {
+    systemd.services."podman-authentik-server" = {
         serviceConfig = {
             Restart = lib.mkOverride 90 "always";
-            RestartMaxDelaySec = lib.mkOverride 90 "1m";
-            RestartSec = lib.mkOverride 90 "100ms";
-            RestartSteps = lib.mkOverride 90 9;
         };
         after = [
-            "docker-network-authentik_default.service"
+            "podman-network-authentik_default.service"
         ];
         requires = [
-            "docker-network-authentik_default.service"
+            "podman-network-authentik_default.service"
         ];
         partOf = [
-            "docker-compose-authentik-root.target"
+            "podman-compose-authentik-root.target"
         ];
         wantedBy = [
-            "docker-compose-authentik-root.target"
+            "podman-compose-authentik-root.target"
         ];
     };
     virtualisation.oci-containers.containers."authentik-worker" = {
         image = "ghcr.io/goauthentik/server:2026.5.3";
-        environmentFiles = [config.sops.templates."authentik.env".path];
+        environmentFiles = [ config.sops.templates."authentik.env".path ];
         volumes = [
             "/authentik/authentik/certs:/certs:rw"
             "/authentik/authentik/templates:/templates:rw"
             "/authentik/authentik/data:/data:rw"
-            "/var/run/docker.sock:/var/run/docker.sock:rw"
         ];
         cmd = [ "worker" ];
         dependsOn = [
@@ -208,51 +212,52 @@
             "--shm-size=536870912"
         ];
     };
-    systemd.services."docker-authentik-worker" = {
+    systemd.services."podman-authentik-worker" = {
         serviceConfig = {
             Restart = lib.mkOverride 90 "always";
-            RestartMaxDelaySec = lib.mkOverride 90 "1m";
-            RestartSec = lib.mkOverride 90 "100ms";
-            RestartSteps = lib.mkOverride 90 9;
         };
         after = [
-            "docker-network-authentik_default.service"
+            "podman-network-authentik_default.service"
         ];
         requires = [
-            "docker-network-authentik_default.service"
+            "podman-network-authentik_default.service"
         ];
         partOf = [
-            "docker-compose-authentik-root.target"
+            "podman-compose-authentik-root.target"
         ];
         wantedBy = [
-            "docker-compose-authentik-root.target"
+            "podman-compose-authentik-root.target"
         ];
     };
 
     # Networks
-    systemd.services."docker-network-authentik_default" = {
+    systemd.services."podman-network-authentik_default" = {
         path = [ pkgs.docker ];
         serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
-            ExecStop = "docker network rm -f authentik_default";
+            ExecStop = "podman network rm -f authentik_default";
         };
         script = ''
-            docker network inspect authentik_default || docker network create authentik_default
+            podman network inspect authentik_default || podman network create authentik_default
         '';
-        partOf = [ "docker-compose-authentik-root.target" ];
-        wantedBy = [ "docker-compose-authentik-root.target" ];
+        partOf = [ "podman-compose-authentik-root.target" ];
+        wantedBy = [ "podman-compose-authentik-root.target" ];
     };
 
     # Root service
     # When started, this will automatically create all resources and start
     # the containers. When stopped, this will teardown all resources.
-    systemd.targets."docker-compose-authentik-root" = {
+    systemd.targets."podman-compose-authentik-root" = {
         unitConfig = {
             Description = "Root target generated by compose2nix.";
         };
         wantedBy = [ "multi-user.target" ];
     };
 
-    networking.firewall.allowedTCPPorts = [9000 9443];
+    networking.firewall.allowedTCPPorts = [
+        9000
+        9443
+        9300
+    ];
 }
