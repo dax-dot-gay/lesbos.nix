@@ -162,7 +162,6 @@ with lib;
                 dependsOn = [ "mariadb" ];
                 extraOptions = [
                     "--network=host"
-                    "--restart=unless-stopped"
                 ];
                 volumes = [
                     "/grimmory/data/app:/app/data"
@@ -184,7 +183,6 @@ with lib;
                 image = "lscr.io/linuxserver/mariadb:11.4.5";
                 extraOptions = [
                     "--network=host"
-                    "--restart=unless-stopped"
                     "--health-cmd='[\"CMD-SHELL\", \"mariadb-admin ping -h localhost\"]'"
                     "--health-interval=5s"
                     "--health-timeout=5s"
