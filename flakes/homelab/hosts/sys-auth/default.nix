@@ -18,7 +18,7 @@
             enable = true;
             resources = {
                 cores = 4;
-                memory = 2048;
+                memory = 8192;
             };
             start.order = 4;
             network.primary.bridge = "vmbr3";
