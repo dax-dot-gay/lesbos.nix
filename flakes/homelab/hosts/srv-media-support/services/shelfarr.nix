@@ -9,8 +9,8 @@
                 "0.0.0.0:5056:80"
             ];
             environment = {
-                PUID = "${toString config.users.users.common.uid}";
-                PGID = "${toString config.users.groups.media-service.gid}";
+                PUID = "0";
+                PGID = "0";
                 CHOWN_ON_START = "never";
                 SOLID_QUEUE_IN_PUMA = "1";
             };
