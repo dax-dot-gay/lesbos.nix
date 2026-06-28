@@ -67,7 +67,7 @@
                     group = "authentik";
                     permissions = "0770";
                 };
-                required_by = ["authentik.service" "authentik-worker.service" "authentic-migrate.service"];
+                required_by = ["authentik.service" "authentik-worker.service" "authentik-migrate.service"];
             };
         };
     };
