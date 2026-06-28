@@ -62,6 +62,11 @@
                     bindAddress = "0.0.0.0";
                     resources = [ "metrics" ];
                 }
+                {
+                    port = 3002;
+                    bindAddress = "0.0.0.0";
+                    resources = [ "widgets" ];
+                }
             ];
             cache = {
                 redisUri = "redis://localhost:2175";
@@ -84,13 +89,22 @@
                 enabled = true;
                 outbound = true;
                 urlPrefix = "https://webhooks.matrix.dax.gay/";
-                allowJsTransformationFunctions = false;
+                allowJsTransformationFunctions = true;
                 waitForComplete = false;
                 enableHttpGet = true;
                 userIdPrefix = "hook_";
             };
             bot = {
                 displayname = "Lesbos Notifications";
+            };
+            widgets = {
+                roomSetupWidget = {
+                    addOnInvite = true;
+                };
+                publicUrl = "https://webhooks.matrix.dax.gay/widgets/widgetapi/v1/static";
+                branding = {
+                    widgetTitle = "Hookshot Configuration";
+                };
             };
         };
     };

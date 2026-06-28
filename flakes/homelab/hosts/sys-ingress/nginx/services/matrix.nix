@@ -56,6 +56,11 @@ in
                     proxyWebsockets = true;
                     extraConfig = preflight;
                 };
+                "/widgets" = {
+                    proxyPass = "http://${clients.srv-matrix.address}:3002";
+                    proxyWebsockets = true;
+                    extraConfig = preflight;
+                };
             };
         };
     };
