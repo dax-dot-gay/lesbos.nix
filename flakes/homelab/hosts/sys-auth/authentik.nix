@@ -83,6 +83,11 @@
                     AUTHENTIK_POSTGRESQL__PASSWORD=${pl."authentik/main/database/password"}
                     AUTHENTIK_POSTGRESQL__USER=${pl."authentik/main/database/user"}
                     AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS=192.168.64.0/24
+                    AUTHENTIK_LISTEN__HTTP=0.0.0.0:8000
+                    AUTHENTIK_LISTEN__HTTPS=0.0.0.0:8443
+                    AUTHENTIK_LISTEN__METRICS=0.0.0.0:8300
+                    COMPOSE_PORT_HTTP=8000
+                    COMPOSE_PORT_HTTPS=8443
                 '';
             };
             "postgres.env" = {
@@ -158,9 +163,9 @@
             "/authentik/authentik/data:/data:rw"
         ];
         ports = [
-            "9000/tcp"
-            "9300/tcp"
-            "9443/tcp"
+            "8000/tcp"
+            "8300/tcp"
+            "8443/tcp"
         ];
         cmd = [ "server" ];
         dependsOn = [
@@ -254,8 +259,8 @@
     };
 
     networking.firewall.allowedTCPPorts = [
-        9000
-        9443
-        9300
+        8000
+        8443
+        8300
     ];
 }
