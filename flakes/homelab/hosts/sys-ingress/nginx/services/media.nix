@@ -68,5 +68,14 @@ in
                 extraConfig = preflight;
             };
         };
+        "library.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-books.address}:6060";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
     };
 }
