@@ -39,10 +39,9 @@ with lib;
                 extraGroups = ["media-service"];
                 uid = 996;
             };
-            shelfarr = {
-                group = mkDefault "shelfarr";
-                extraGroups = ["acquisition" "media-service" "arr"];
-                uid = 995;
+            common = {
+                group = mkDefault "media-service";
+                uid = 1000;
             };
         };
         groups = {
@@ -54,7 +53,6 @@ with lib;
             media-service = {gid = 996;};
             acquisition = {};
             arr = {};
-            shelfarr = {gid = 995;};
         };
     };
 
