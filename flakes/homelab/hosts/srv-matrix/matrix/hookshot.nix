@@ -29,7 +29,7 @@
         enable = true;
         servers.hookshot = {
             enable = true;
-            port = 6379;
+            port = 2175;
         };
     };
 
@@ -64,7 +64,7 @@
                 }
             ];
             cache = {
-                redisUri = "redis://localhost:6379";
+                redisUri = "redis://localhost:2175";
             };
             encryption = {
                 storagePath = "/var/lib/matrix-hookshot";
