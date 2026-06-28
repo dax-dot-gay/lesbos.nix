@@ -5,6 +5,7 @@
         ./matrix-auth.nix
         ./synapse.nix
         ./admin.nix
+        ./hookshot.nix
     ];
     networking.firewall.enable = lib.mkForce false;
     users.users = {

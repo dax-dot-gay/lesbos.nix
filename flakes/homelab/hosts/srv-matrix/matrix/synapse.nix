@@ -56,6 +56,9 @@
                 action = "allow";
             }
         ];
+        settings.app_service_config_files = [
+            config.sops.secrets."hookshot/registration.yml".path
+        ];
     };
     lesbos.volumes = {
         matrix-media = {
