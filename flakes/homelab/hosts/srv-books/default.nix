@@ -177,7 +177,6 @@ with lib;
                     BOOKLORE_PORT = "6060";
                 };
                 environmentFiles = [ config.sops.templates."grimmory.env".path ];
-                user = "1000:1000";
             };
             mariadb = {
                 image = "lscr.io/linuxserver/mariadb:11.4.5";
@@ -199,7 +198,6 @@ with lib;
                     MYSQL_USER = "grimmory";
                 };
                 environmentFiles = [ config.sops.templates."mariadb.env".path ];
-                user = "1000:1000";
             };
         };
     };
