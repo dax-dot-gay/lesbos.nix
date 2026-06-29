@@ -119,7 +119,7 @@
             "/media-support/downloads/downloads:/downloads:rw"
             "/media-support/media:/media:rw"
             "/media-support/services/downloaders/gluetun:/gluetun-shared:rw"
-            "/media-support/services/downloaders/slskd:/config:rw"
+            "/media-support/services/downloaders/slskd:/app:rw"
         ];
         labels = {
             "compose2nix.settings.sops.secrets" = "downloaders/slskd.env";
