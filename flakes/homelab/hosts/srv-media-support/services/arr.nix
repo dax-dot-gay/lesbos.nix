@@ -39,6 +39,11 @@ in
             group = "prowlarr";
             mode = "0400";
         };
+        "arr/lidarr.key" = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+        };
     };
     sops.templates = {
         "sonarr.env" = {
@@ -59,12 +64,19 @@ in
             mode = "0400";
             content = "PROWLARR__AUTH__APIKEY=${config.sops.placeholder."arr/prowlarr.key"}";
         };
+        "lidarr.env" = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+            content = "LIDARR__AUTH__APIKEY=${config.sops.placeholder."arr/lidarr.key"}";
+        };
     };
 
     services = {
         sonarr = mkArr "sonarr" 8989;
         radarr = mkArr "radarr" 7878;
         prowlarr = mkArr "prowlarr" 9696;
+        lidarr = mkArr "lidarr" 8686;
         bazarr = {
             enable = true;
             listenPort = 6767;

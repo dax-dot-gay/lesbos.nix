@@ -162,6 +162,7 @@ with lib;
                         "arrs/radarr"
                         "arrs/prowlarr"
                         "arrs/bazarr"
+                        "arrs/lidarr"
                         "seerr"
                         "shelfarr/data"
                         "shelfarr/downloads"
@@ -180,6 +181,7 @@ with lib;
                     "radarr.service"
                     "prowlarr.service"
                     "seerr.service"
+                    "lidarr.service"
                     "bazarr.service"
                     "shelfarr.service"
                 ];
