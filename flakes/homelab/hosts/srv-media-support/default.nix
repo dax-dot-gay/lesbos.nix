@@ -116,6 +116,7 @@ with lib;
                     "prowlarr.service"
                     "bazarr.service"
                     "shelfarr.service"
+                    "lidarr.service"
                 ];
             };
             downloads = {
@@ -145,6 +146,7 @@ with lib;
                     "radarr.service"
                     "prowlarr.service"
                     "bazarr.service"
+                    "lidarr.service"
                 ];
             };
             service-data = {
