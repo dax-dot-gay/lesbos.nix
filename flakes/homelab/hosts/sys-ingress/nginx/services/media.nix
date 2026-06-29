@@ -14,15 +14,6 @@ in
                 extraConfig = preflight;
             };
         };
-        "deluge.media.dax.gay" = {
-            enableACME = true;
-            forceSSL = true;
-            locations."/" = {
-                proxyPass = "http://${clients.srv-media-support.address}:8112";
-                proxyWebsockets = true;
-                extraConfig = preflight;
-            };
-        };
         "sonarr.media.dax.gay" = {
             enableACME = true;
             forceSSL = true;
@@ -91,6 +82,24 @@ in
             forceSSL = true;
             locations."/" = {
                 proxyPass = "http://${clients.srv-media-support.address}:8686";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
+        "seek.dl.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:5030";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
+        "torrent.dl.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:8080";
                 proxyWebsockets = true;
                 extraConfig = preflight;
             };
