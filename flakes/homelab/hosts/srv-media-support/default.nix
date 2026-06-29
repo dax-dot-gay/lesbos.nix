@@ -110,7 +110,7 @@ with lib;
                     permissions = "0770";
                 };
                 required_by = [
-                    "podman-network-downloaders_default"
+                    "podman-network-downloaders_default.service"
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
@@ -141,7 +141,7 @@ with lib;
                     permissions = "0770";
                 };
                 required_by = [
-                    "podman-network-downloaders_default"
+                    "podman-network-downloaders_default.service"
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
@@ -180,7 +180,7 @@ with lib;
                     permissions = "0770";
                 };
                 required_by = [
-                    "podman-network-downloaders_default"
+                    "podman-network-downloaders_default.service"
                     "sonarr.service"
                     "radarr.service"
                     "prowlarr.service"
