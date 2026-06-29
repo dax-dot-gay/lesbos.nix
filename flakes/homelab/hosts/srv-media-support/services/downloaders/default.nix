@@ -50,6 +50,7 @@
         extraOptions = [
             "--network=container:gluetun"
         ];
+        user = "root:root";
     };
     systemd.services."podman-deluge" = {
         serviceConfig = {
@@ -85,6 +86,7 @@
             "--network-alias=gluetun"
             "--network=downloaders_default"
         ];
+        user = "root:root";
     };
     systemd.services."podman-gluetun" = {
         serviceConfig = {
@@ -124,6 +126,7 @@
         extraOptions = [
             "--network=container:gluetun"
         ];
+        user = "root:root";
     };
     systemd.services."podman-slskd" = {
         serviceConfig = {
