@@ -6,8 +6,8 @@
             image = "lscr.io/linuxserver/lidarr:nightly";
             serviceName = "lidarr";
             environment = {
-                PUID = 0;
-                PGID = 0;
+                PUID = "0";
+                PGID = "0";
                 TZ = "America/New_York";
             };
             volumes = [
