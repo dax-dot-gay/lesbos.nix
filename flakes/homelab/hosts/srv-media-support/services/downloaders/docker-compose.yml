@@ -1,0 +1,44 @@
+services:
+    gluetun:
+        container_name: gluetun
+        image: qmcgaw/gluetun
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - /dev/net/tun:/dev/net/tun
+        volumes:
+            - /media-support/services/downloaders/gluetun:/gluetun-shared
+        labels:
+            - "compose2nix.settings.sops.secrets=downloaders/gluetun.env"
+        ports:
+            - 8112:8112
+            - 8000:8000
+            - 5030:5030
+        restart: unless-stopped
+    deluge:
+        image: lscr.io/linuxserver/deluge:latest
+        container_name: deluge
+        network_mode: service:gluetun
+        environment:
+            - PUID=0
+            - PGID=0
+            - TZ=America/New_York
+            - DELUGE_LOGLEVEL=info
+        volumes:
+            - /media-support/services/downloaders/deluge:/config
+            - /media-support/downloads/downloads:/downloads
+            - /media-support/downloads/torrents:/torrents
+            - /media-support/services/downloaders/gluetun:/gluetun-shared
+        restart: unless-stopped
+    slskd:
+        image: slskd/slskd:latest
+        container_name: slskd
+        network_mode: service:gluetun
+        labels:
+            - "compose2nix.settings.sops.secrets=downloaders/slskd.env"
+        volumes:
+            - /media-support/services/downloaders/gluetun:/gluetun-shared
+            - /media-support/services/downloaders/slskd:/config
+            - /media-support/downloads/downloads:/downloads
+            - /media-support/media:/media
+        restart: unless-stopped

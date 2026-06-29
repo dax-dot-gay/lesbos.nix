@@ -159,7 +159,6 @@ with lib;
                         enable = true;
                     };
                     subdirectories = [
-                        "deluge"
                         "arrs/sonarr"
                         "arrs/radarr"
                         "arrs/prowlarr"
@@ -168,6 +167,9 @@ with lib;
                         "seerr"
                         "shelfarr/data"
                         "shelfarr/downloads"
+                        "downloaders/deluge"
+                        "downloaders/slskd"
+                        "downloaders/gluetun"
                     ];
                 };
                 destination = "/media-support/services";
