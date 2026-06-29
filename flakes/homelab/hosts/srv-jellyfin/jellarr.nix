@@ -110,6 +110,11 @@
                         url = "https://www.iamparadox.dev/jellyfin/plugins/manifest.json";
                         enabled = true;
                     }
+                    {
+                        name = "InPlayerEnhancedPreview";
+                        url = "https://raw.githubusercontent.com/Namo2/InPlayerEpisodePreview/master/manifest.json";
+                        enabled = true;
+                    }
                 ];
                 trickplayOptions = {
                     enableHwAcceleration = true;
