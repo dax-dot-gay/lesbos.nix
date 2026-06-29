@@ -120,6 +120,7 @@
             "/media-support/media:/media:rw"
             "/media-support/services/downloaders/gluetun:/gluetun-shared:rw"
             "/media-support/services/downloaders/slskd:/app:rw"
+            "/media-support/media/Songs:/musicshare:ro"
         ];
         labels = {
             "compose2nix.settings.sops.secrets" = "downloaders/slskd.env";
