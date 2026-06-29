@@ -14,7 +14,7 @@
                 "/media-support/services/arrs/lidarr:/config"
                 "/media-support/media/Songs:/music"
                 "/media-support/downloads/downloads:/downloads"
-                "${pkgs.ffmpeg}/bin/ffmpeg:/host-bin/ffmpeg"
+                "${pkgs.ffmpeg}:/host-bin/ffmpeg"
             ];
             ports = [
                 "0.0.0.0:8686:8686"
