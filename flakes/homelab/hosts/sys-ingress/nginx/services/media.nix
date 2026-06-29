@@ -86,5 +86,14 @@ in
                 extraConfig = preflight;
             };
         };
+        "lidarr.media.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:8686";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
     };
 }
