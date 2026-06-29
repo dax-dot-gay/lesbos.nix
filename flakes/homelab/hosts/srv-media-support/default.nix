@@ -167,7 +167,7 @@ with lib;
                         "seerr"
                         "shelfarr/data"
                         "shelfarr/downloads"
-                        "downloaders/deluge"
+                        "downloaders/qbittorrent"
                         "downloaders/slskd"
                         "downloaders/gluetun"
                     ];

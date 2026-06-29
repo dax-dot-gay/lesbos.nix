@@ -11,21 +11,21 @@ services:
         labels:
             - "compose2nix.settings.sops.secrets=downloaders/gluetun.env"
         ports:
-            - 8112:8112
+            - 8080:8080
             - 8000:8000
             - 5030:5030
         restart: unless-stopped
     deluge:
-        image: lscr.io/linuxserver/deluge:latest
-        container_name: deluge
+        image: lscr.io/linuxserver/qbittorrent:latest
+        container_name: qbittorrent
         network_mode: service:gluetun
         environment:
             - PUID=0
             - PGID=0
             - TZ=America/New_York
-            - DELUGE_LOGLEVEL=info
+            - WEBUI_PORT=8080
         volumes:
-            - /media-support/services/downloaders/deluge:/config
+            - /media-support/services/downloaders/qbittorrent:/config
             - /media-support/downloads/downloads:/downloads
             - /media-support/downloads/torrents:/torrents
             - /media-support/services/downloaders/gluetun:/gluetun-shared

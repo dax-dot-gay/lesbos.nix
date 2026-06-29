@@ -20,39 +20,6 @@
   virtualisation.oci-containers.backend = "podman";
 
   # Containers
-  virtualisation.oci-containers.containers."deluge" = {
-    image = "lscr.io/linuxserver/deluge:latest";
-    environment = {
-      "DELUGE_LOGLEVEL" = "info";
-      "PGID" = "0";
-      "PUID" = "0";
-      "TZ" = "America/New_York";
-    };
-    volumes = [
-      "/media-support/downloads/downloads:/downloads:rw"
-      "/media-support/downloads/torrents:/torrents:rw"
-      "/media-support/services/downloaders/deluge:/config:rw"
-      "/media-support/services/downloaders/gluetun:/gluetun-shared:rw"
-    ];
-    dependsOn = [
-      "gluetun"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--network=container:gluetun"
-    ];
-  };
-  systemd.services."podman-deluge" = {
-    serviceConfig = {
-      Restart = lib.mkOverride 90 "always";
-    };
-    partOf = [
-      "podman-compose-downloaders-root.target"
-    ];
-    wantedBy = [
-      "podman-compose-downloaders-root.target"
-    ];
-  };
   virtualisation.oci-containers.containers."gluetun" = {
     image = "qmcgaw/gluetun";
     environmentFiles = [
@@ -62,7 +29,7 @@
       "/media-support/services/downloaders/gluetun:/gluetun-shared:rw"
     ];
     ports = [
-      "8112:8112/tcp"
+      "8080:8080/tcp"
       "8000:8000/tcp"
       "5030:5030/tcp"
     ];
@@ -87,6 +54,39 @@
     requires = [
       "podman-network-downloaders_default.service"
     ];
+    partOf = [
+      "podman-compose-downloaders-root.target"
+    ];
+    wantedBy = [
+      "podman-compose-downloaders-root.target"
+    ];
+  };
+  virtualisation.oci-containers.containers."qbittorrent" = {
+    image = "lscr.io/linuxserver/qbittorrent:latest";
+    environment = {
+      "PGID" = "0";
+      "PUID" = "0";
+      "TZ" = "America/New_York";
+      "WEBUI_PORT" = "8080";
+    };
+    volumes = [
+      "/media-support/downloads/downloads:/downloads:rw"
+      "/media-support/downloads/torrents:/torrents:rw"
+      "/media-support/services/downloaders/gluetun:/gluetun-shared:rw"
+      "/media-support/services/downloaders/qbittorrent:/config:rw"
+    ];
+    dependsOn = [
+      "gluetun"
+    ];
+    log-driver = "journald";
+    extraOptions = [
+      "--network=container:gluetun"
+    ];
+  };
+  systemd.services."podman-qbittorrent" = {
+    serviceConfig = {
+      Restart = lib.mkOverride 90 "always";
+    };
     partOf = [
       "podman-compose-downloaders-root.target"
     ];
