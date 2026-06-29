@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, ... }:
 {
     virtualisation.oci-containers = {
         backend = "podman";
@@ -14,6 +14,7 @@
                 "/media-support/services/arrs/lidarr:/config"
                 "/media-support/media/Songs:/music"
                 "/media-support/downloads/downloads:/downloads"
+                "${pkgs.ffmpeg}/bin/ffmpeg:/host-bin/ffmpeg"
             ];
             ports = [
                 "0.0.0.0:8686:8686"
