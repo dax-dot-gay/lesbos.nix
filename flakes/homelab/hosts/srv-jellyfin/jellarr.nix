@@ -105,6 +105,11 @@
                         url = "https://raw.githubusercontent.com/n00bcodr/jellyfin-plugins/main/10.11/manifest.json";
                         enabled = true;
                     }
+                    {
+                        name = "File Transformation";
+                        url = "https://www.iamparadox.dev/jellyfin/plugins/manifest.json";
+                        enabled = true;
+                    }
                 ];
                 trickplayOptions = {
                     enableHwAcceleration = true;
