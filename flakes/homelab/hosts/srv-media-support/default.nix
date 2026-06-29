@@ -117,6 +117,7 @@ with lib;
                     "bazarr.service"
                     "shelfarr.service"
                     "lidarr.service"
+                    "musicseerr.service"
                 ];
             };
             downloads = {
@@ -147,6 +148,7 @@ with lib;
                     "prowlarr.service"
                     "bazarr.service"
                     "lidarr.service"
+                    "musicseerr.service"
                 ];
             };
             service-data = {
@@ -164,6 +166,8 @@ with lib;
                         "arrs/prowlarr"
                         "arrs/bazarr"
                         "arrs/lidarr"
+                        "musicseerr/config"
+                        "musicseerr/cache"
                         "seerr"
                         "shelfarr/data"
                         "shelfarr/downloads"
@@ -188,6 +192,7 @@ with lib;
                     "lidarr.service"
                     "bazarr.service"
                     "shelfarr.service"
+                    "musicseerr.service"
                 ];
             };
         };
