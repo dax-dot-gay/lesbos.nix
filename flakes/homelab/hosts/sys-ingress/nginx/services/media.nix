@@ -104,5 +104,14 @@ in
                 extraConfig = preflight;
             };
         };
+        "music-request.jellyfin.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:8688";
+                proxyWebsockets = true;
+                extraConfig = preflight;
+            };
+        };
     };
 }
