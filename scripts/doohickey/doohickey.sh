@@ -327,6 +327,16 @@ password::postgres() {
     echo "Hashed    : $hashed"
 }
 
+# @cmd                                      Satisfy my praise kink
+praise() {
+    echo "Current line count across all user code: $(git ls-files flakes templates secrets scripts | xargs cat | wc -l)"
+    echo "Good girl! You're doing such a good job <3"
+    echo "*pats*"
+    pw-play scripts/doohickey/praise.mp3&
+    sleep 0.2
+    pw-play scripts/doohickey/praise.mp3
+}
+
 
 
 eval "$(argc --argc-eval "$0" "$@")"
