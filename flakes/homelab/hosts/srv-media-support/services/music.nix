@@ -11,7 +11,7 @@
                 TZ = "America/New_York";
             };
             volumes = [
-                "/systems/srv-media-support/services/arrs/lidarr:/config"
+                "/media-support/services/arrs/lidarr:/config"
                 "/media-support/media/Songs:/music"
                 "/media-support/downloads/downloads:/downloads"
             ];
