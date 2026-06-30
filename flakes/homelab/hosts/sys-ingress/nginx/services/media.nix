@@ -32,15 +32,6 @@ in
                 extraConfig = preflight;
             };
         };
-        "prowlarr.media.dax.gay" = {
-            enableACME = true;
-            forceSSL = true;
-            locations."/" = {
-                proxyPass = "http://${clients.srv-media-support.address}:9696";
-                proxyWebsockets = true;
-                extraConfig = preflight;
-            };
-        };
         "bazarr.media.dax.gay" = {
             enableACME = true;
             forceSSL = true;
