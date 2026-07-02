@@ -41,6 +41,11 @@
                         externalPort = 21027;
                         internalPort = 21027;
                     }
+                    {
+                        protocol = "both";
+                        externalPort = 2122;
+                        internalPort = 2122;
+                    }
                 ];
             };
             sys-ingress = {
