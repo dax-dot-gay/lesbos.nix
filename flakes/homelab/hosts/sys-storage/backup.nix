@@ -35,7 +35,6 @@
                 environmentFiles = [
                     config.sops.secrets."borgbackup.env".path
                 ];
-                user = "borgwarehouse:borgwarehouse";
                 serviceName = "borgwarehouse";
             };
         };
