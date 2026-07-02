@@ -31,6 +31,8 @@
                     BETTER_AUTH_URL = "https://backups.dax.gay";
                     PUID = "348";
                     PGID = "348";
+                    FQDN_LAN = "192.168.0.64";
+                    SSH_SERVER_PORT_LAN = "2122";
                 };
                 environmentFiles = [
                     config.sops.secrets."borgbackup.env".path
