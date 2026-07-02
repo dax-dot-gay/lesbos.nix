@@ -9,6 +9,7 @@
     imports = [
         ./provision-secrets.nix
         ./syncthing.nix
+        ./backup.nix
     ];
     lesbos = {
         info = {
@@ -27,7 +28,7 @@
                 order = 2;
             };
             resources.cores = 4;
-            resources.memory = 2048;
+            resources.memory = 8192;
             storage = {
                 disk_size = "64G";
                 virtiofs = [
@@ -68,7 +69,7 @@
                     group = "syncthing";
                     permissions = "0770";
                 };
-                required_by = ["syncthing.service"];
+                required_by = [ "syncthing.service" ];
             };
             syncthing-data = {
                 enable = true;
@@ -85,7 +86,46 @@
                     group = "syncthing";
                     permissions = "0770";
                 };
-                required_by = ["syncthing.service"];
+                required_by = [ "syncthing.service" ];
+            };
+            backup-service-data = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/sys-storage/backups";
+                    ensureSource.enable = true;
+                    subdirectories = [
+                        "app"
+                        "ssh/host"
+                        "ssh/user"
+                    ];
+                };
+                destination = "/borgbackup/app";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "borgwarehouse";
+                    group = "borgwarehouse";
+                    permissions = "0770";
+                };
+                required_by = ["borgwarehouse.service"];
+            };
+            backup-repositories = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/data/backups/borg";
+                    ensureSource.enable = true;
+                };
+                destination = "/borgbackup/backups";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "borgwarehouse";
+                    group = "borgwarehouse";
+                    permissions = "0770";
+                };
+                required_by = ["borgwarehouse.service"];
             };
         };
     };
@@ -94,7 +134,15 @@
         group = "syncthing";
         isSystemUser = true;
     };
+    users.users.borgwarehouse = {
+        group = "borgwarehouse";
+        isSystemUser = true;
+        uid = 348;
+    };
     users.groups.syncthing = { };
+    users.groups.borgwarehouse = {
+        gid = 348;
+    };
 
     environment.systemPackages = with pkgs; [
         borgbackup
