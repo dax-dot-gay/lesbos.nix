@@ -106,7 +106,7 @@
                     enable = true;
                     user = "borgwarehouse";
                     group = "borgwarehouse";
-                    permissions = "0770";
+                    permissions = "0700";
                 };
                 required_by = ["borgwarehouse.service"];
             };
@@ -123,7 +123,7 @@
                     enable = true;
                     user = "borgwarehouse";
                     group = "borgwarehouse";
-                    permissions = "0770";
+                    permissions = "0700";
                 };
                 required_by = ["borgwarehouse.service"];
             };
