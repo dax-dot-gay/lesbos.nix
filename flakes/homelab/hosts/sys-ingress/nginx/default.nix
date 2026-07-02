@@ -123,7 +123,7 @@ in
                 enableACME = true;
                 forceSSL = true;
                 locations."/" = {
-                    proxyPass = "https://${clients.sys-storage.address}:3000";
+                    proxyPass = "http://${clients.sys-storage.address}:3000";
                     proxyWebsockets = true;
                     recommendedProxySettings = true;
                 };
