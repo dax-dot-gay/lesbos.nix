@@ -21,7 +21,7 @@
                 volumes = [
                     "/borgbackup/app/app:/home/borgwarehouse/app/config"
                     "/borgbackup/app/ssh/host:/home/borgwarehouse/.ssh"
-                    "/borgbackup/app/ssh/client:/etc/ssh"
+                    "/borgbackup/app/ssh/user:/etc/ssh"
                     "/borgbackup/backups:/home/borgwarehouse/repos"
                 ];
                 environment = {
