@@ -72,7 +72,7 @@
 
     users = {
         users.woodpecker = {
-            isSystemUser = false;
+            isSystemUser = true;
             group = "woodpecker";
         };
         groups.woodpecker = {};
