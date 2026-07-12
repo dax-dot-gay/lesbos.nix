@@ -57,7 +57,7 @@
         };
         woodpecker-agent-docker.serviceConfig = {
             User = "woodpecker";
-            Group = "woodpecker";
+            Group = "podman";
         };
     };
 }
