@@ -17,12 +17,8 @@ steps:
       image: docker.io/nixos/nix:2.34.7
       directory: *flakedir
       commands:
-        - nix-env -iA nixpkgs.diffutils
-        - mkdir -p /tmp/updater
-        - cp flake.lock /tmp/updater/flake.lock
         - nix --extra-experimental-features "nix-command flakes" flake update
         - nix --extra-experimental-features "nix-command flakes" flake check
-        - echo $(diff /tmp/updater/flake.lock flake.lock) > ./auto-update.diff
     - name: Commit & Push Changes
       image: appleboy/drone-git-push
       settings:
