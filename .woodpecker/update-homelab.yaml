@@ -1,0 +1,31 @@
+variables:
+    - &cron_name "update.homelab"
+    - &flakedir "flakes/homelab"
+    - &message "[ci] Update flakes/homelab"
+
+when:
+    - event: cron
+      cron: *cron_name
+    - event: manual
+
+clone:
+    git:
+        image: woodpeckerci/plugin-git
+
+steps:
+    - name: Update & Check
+      image: docker.io/nixos/nix:2.34.7
+      directory: *flakedir
+      commands:
+          - nix --extra-experimental-features "nix-command flakes" flake update
+          - nix --extra-experimental-features "nix-command flakes" flake check
+    - name: Commit & Push Changes
+      image: appleboy/drone-git-push
+      settings:
+          branch: main
+          remote: git@github.com:dax-dot-gay/lesbos.nix.git
+          force: false
+          commit: true
+          commit_message: *message
+          ssh_key:
+              from_secret: deploy-ssh
