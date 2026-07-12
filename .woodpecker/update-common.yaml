@@ -12,12 +12,11 @@ clone:
 
 steps:
     - name: Update & Check
-      image: harbor.vdx.hu/voidcontext/woodpecker-plugin-nix-attic:0.2.0
+      image: docker.io/nixos/nix:2.34.7
       directory: flakes/common
-      settings:
-          script: |
-              nix flake update
-              nix flake check
+      commands:
+        - nix --extra-experimental-features "nix-command flakes" flake update
+        - nix --extra-experimental-features "nix-command flakes" flake check
     - name: Commit & Push Changes
       image: appleboy/drone-git-push
       settings:
