@@ -1,13 +1,20 @@
 { config, pkgs, ... }:
 {
     environment.systemPackages = [
-        pkgs.woodpecker-cli
+        pkgs.writeShellScriptBin "woodpecker-cli" ''
+            env WOODPECKER_SERVER="https://woodpecker.dax.gay" WOODPECKER_TOKEN="$(cat ${config.sops.secrets.woodpecker-token.path})" ${pkgs.woodpecker-cli}/bin/woodpecker-cli $@
+        ''
     ];
     lesbos.secrets.system = {
         "woodpecker.env" = {
             owner = "woodpecker";
             group = "woodpecker";
             mode = "0400";
+        };
+        "woodpecker-token" = {
+            owner = "root";
+            group = "root";
+            mode = "0444";
         };
     };
     services.woodpecker-server = {
