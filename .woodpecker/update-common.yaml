@@ -27,5 +27,7 @@ steps:
           force: false
           commit: true
           commit_message: *message
+          author_name: Lesbos CI
+          author_email: git@dax.gay
           ssh_key:
               from_secret: deploy-ssh
