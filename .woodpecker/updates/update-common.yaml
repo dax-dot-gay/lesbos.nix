@@ -1,0 +1,30 @@
+variables:
+    - &cron_name "update.common"
+
+when:
+    - event: cron
+      cron: *cron_name
+    - event: manual
+
+clone:
+    git:
+        image: woodpeckerci/plugin-git
+
+steps:
+    - name: Update & Check
+      image: harbor.vdx.hu/voidcontext/woodpecker-plugin-nix-attic:0.2.0
+      directory: flakes/common
+      settings:
+          script: |
+              nix flake update
+              nix flake check
+    - name: Commit & Push Changes
+      image: appleboy/drone-git-push
+      settings:
+          branch: main
+          remote: git@github.com:dax-dot-gay/lesbos.nix.git
+          force: false
+          commit: true
+          commit_message: "[ci] Update flakes/common"
+          ssh_key:
+              from_secret: deploy-ssh
