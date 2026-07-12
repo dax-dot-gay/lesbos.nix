@@ -8,5 +8,6 @@
         ./proxmox.nix
         ./monitoring
         ./secrets.nix
+        ./reboot.nix
     ];
 }
