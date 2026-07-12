@@ -50,7 +50,7 @@ in
                         "x-systemd.after=volumes-initialize-sources.service"
                     ]
                     (optional volume.strategy.read_only "ro")
-                    (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_b)
+                    (map (r: "x-systemd.requiredBy=${r}") volume.volume.required_by)
                 ];
             };
         }) relevantVolumes;

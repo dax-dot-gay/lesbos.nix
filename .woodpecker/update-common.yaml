@@ -18,7 +18,7 @@ steps:
       directory: *flakedir
       commands:
         - nix --extra-experimental-features "nix-command flakes" flake update
-        - nix --extra-experimental-features "nix-command flakes" flake check
+        - nix --extra-experimental-features "nix-command flakes" flake check --keep-going
     - name: Commit & Push Changes
       image: appleboy/drone-git-push
       settings:
