@@ -14,7 +14,7 @@
             WOODPECKER_OPEN = "false";
             WOODPECKER_ADMIN = "dax-dot-gay";
             WOODPECKER_SERVER_ADDR = "0.0.0.0:3007";
-            WOODPECKER_GRPC_ADDR = ":9000";
+            WOODPECKER_GRPC_ADDR = ":9800";
         };
         environmentFile = [ config.sops.secrets."woodpecker.env".path ];
     };
@@ -22,7 +22,7 @@
         enable = true;
         extraGroups = [ "podman" ];
         environment = {
-            WOODPECKER_SERVER = "localhost:9000";
+            WOODPECKER_SERVER = "localhost:9800";
             WOODPECKER_BACKEND = "docker";
             DOCKER_HOST = "unix:///run/podman/podman.sock";
             WOODPECKER_MAX_WORKFLOWS = "4";
