@@ -128,6 +128,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "woodpecker.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.sys-cicd.address}:3007";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }
