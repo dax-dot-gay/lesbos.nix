@@ -16,6 +16,16 @@
             group = "root";
             mode = "0444";
         };
+        "deploy-keys/public" = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+        };
+        "deploy-keys/private" = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+        };
     };
     services.woodpecker-server = {
         enable = true;
