@@ -184,6 +184,14 @@
                     "books.srv"
                 ];
             };
+            sys-cicd = {
+                description = "Woodpecker CI";
+                address = "192.168.64.24";
+                dns = [
+                    "sys-cicd.lesbos.nix"
+                    "cicd.sys"
+                ];
+            };
         };
     };
 }

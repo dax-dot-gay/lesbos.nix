@@ -244,6 +244,24 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        sys-cicd = {
+                            inherit self;
+                            id = 506;
+                            path = ./hosts/sys-cicd;
+                            name = "sys-cicd";
+                            tags = [
+                                "lesbos.nix"
+                                "infrastructure"
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

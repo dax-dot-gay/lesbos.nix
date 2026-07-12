@@ -76,6 +76,7 @@
             };
             sys-auth = {};
             srv-books = {};
+            sys-cicd = {};
         };
     };
 }
