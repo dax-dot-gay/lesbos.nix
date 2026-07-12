@@ -42,5 +42,10 @@
                 }
             ];
         };
+        nix.gc = {
+            automatic = true;
+            dates = "Sat *-*-* 01:00:00";
+            options = "--delete-older-than 7d";
+        };
     };
 }
