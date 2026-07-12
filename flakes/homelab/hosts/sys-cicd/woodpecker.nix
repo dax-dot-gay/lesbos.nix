@@ -1,5 +1,8 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
+    environment.systemPackages = [
+        pkgs.woodpecker-cli
+    ];
     lesbos.secrets.system = {
         "woodpecker.env" = {
             owner = "woodpecker";
