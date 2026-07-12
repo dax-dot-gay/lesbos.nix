@@ -1,5 +1,7 @@
 variables:
     - &cron_name "update.common"
+    - &flakedir "flakes/common"
+    - &message "[ci] Update flakes/common"
 
 when:
     - event: cron
@@ -13,10 +15,14 @@ clone:
 steps:
     - name: Update & Check
       image: docker.io/nixos/nix:2.34.7
-      directory: flakes/common
+      directory: *flakedir
       commands:
+        - nix-env -iA nixpkgs.diffutils
+        - mkdir -p /tmp/updater
+        - cp flake.lock /tmp/updater/flake.lock
         - nix --extra-experimental-features "nix-command flakes" flake update
         - nix --extra-experimental-features "nix-command flakes" flake check
+        - echo $(diff /tmp/updater/flake.lock flake.lock) > ./auto-update.diff
     - name: Commit & Push Changes
       image: appleboy/drone-git-push
       settings:
@@ -24,6 +30,6 @@ steps:
           remote: git@github.com:dax-dot-gay/lesbos.nix.git
           force: false
           commit: true
-          commit_message: "[ci] Update flakes/common"
+          commit_message: *message
           ssh_key:
               from_secret: deploy-ssh
