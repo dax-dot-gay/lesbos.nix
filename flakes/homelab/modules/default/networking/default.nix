@@ -186,7 +186,7 @@
             };
             sys-cicd = {
                 description = "Woodpecker CI";
-                address = "192.168.64.24";
+                address = "192.168.64.15";
                 dns = [
                     "sys-cicd.lesbos.nix"
                     "cicd.sys"
