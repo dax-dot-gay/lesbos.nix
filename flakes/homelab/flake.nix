@@ -262,6 +262,24 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-ttrpg = {
+                            inherit self;
+                            id = 515;
+                            path = ./hosts/srv-ttrpg;
+                            name = "srv-ttrpg";
+                            tags = [
+                                "lesbos.nix"
+                                "services"
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

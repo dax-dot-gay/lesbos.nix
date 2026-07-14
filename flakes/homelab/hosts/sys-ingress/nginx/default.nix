@@ -137,6 +137,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "foundry.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.srv-ttrpg.address}:30000";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }

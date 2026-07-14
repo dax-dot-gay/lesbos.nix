@@ -192,6 +192,14 @@
                     "cicd.sys"
                 ];
             };
+            srv-ttrpg = {
+                description = "TTRPG-related services";
+                address = "192.168.64.25";
+                dns = [
+                    "srv-ttrpg.lesbos.nix"
+                    "ttrpg.srv"
+                ];
+            };
         };
     };
 }
