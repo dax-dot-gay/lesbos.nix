@@ -280,6 +280,21 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-misc = {
+                            inherit self;
+                            id = 516;
+                            path = ./hosts/srv-misc;
+                            name = "srv-misc";
+                            tags = [
+                                # Add tags here
+                            ];
+                            modules = [
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

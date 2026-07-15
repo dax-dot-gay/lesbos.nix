@@ -200,6 +200,14 @@
                     "ttrpg.srv"
                 ];
             };
+            srv-misc = {
+                description = "Hosting for miscellaneous services with no specific requirements";
+                address = "192.168.64.26";
+                dns = [
+                    "srv-misc.lesbos.nix"
+                    "misc.srv"
+                ];
+            };
         };
     };
 }

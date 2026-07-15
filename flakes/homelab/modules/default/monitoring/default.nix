@@ -78,6 +78,7 @@
             srv-books = {};
             sys-cicd = {};
             srv-ttrpg = {};
+            srv-misc = {};
         };
     };
 }

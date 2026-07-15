@@ -13,6 +13,7 @@ keys:
     - &homelab-host-srv-books age1tygtnamnnqml7gt5kwpmsuetzg8pcnhm2c7ezrkrzxfdynlr0sysr2jnz5
     - &homelab-host-sys-cicd age1pmg8m24mh2wqtmkaxztvn3905yt3lnqep5seqcq2k9g9apaf74xq238p50
     - &homelab-host-srv-ttrpg age18vg95grtpm6hjyjy38p2e32at06mqrw25k7dsffzt8hj6tjrwcpsalrasc
+    - &homelab-host-srv-misc age172vrtv44uwqg33fhzvd5axumuhcakcj849mpj9tdke99z9upj4wq8glw2y
     # @add:key-def
 
 creation_rules:
@@ -33,6 +34,7 @@ creation_rules:
           - *homelab-host-srv-books
           - *homelab-host-sys-cicd
           - *homelab-host-srv-ttrpg
+          - *homelab-host-srv-misc
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -51,6 +53,7 @@ creation_rules:
           - *homelab-host-srv-books
           - *homelab-host-sys-cicd
           - *homelab-host-srv-ttrpg
+          - *homelab-host-srv-misc
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -122,4 +125,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-srv-ttrpg
+  - path_regex: secrets/homelab/per-system/srv-misc/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-srv-misc
   # @add:new-path
