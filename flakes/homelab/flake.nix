@@ -286,9 +286,12 @@
                             path = ./hosts/srv-misc;
                             name = "srv-misc";
                             tags = [
+                                "lesbos.nix"
+                                "services"
                                 # Add tags here
                             ];
                             modules = [
+                                ./modules/volumes
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {
