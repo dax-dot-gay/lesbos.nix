@@ -41,7 +41,7 @@
                 image = "postgres:latest";
                 environmentFiles = [ config.sops.templates."resume/postgres.env".path ];
                 ports = [
-                    "localhost:15432:5432"
+                    "127.0.0.1:15432:5432"
                 ];
                 volumes = [
                     "/services/resume/postgres:/var/lib/postgresql"
