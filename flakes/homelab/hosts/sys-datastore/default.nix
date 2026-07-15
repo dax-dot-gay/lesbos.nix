@@ -32,6 +32,17 @@
                     password = "SCRAM-SHA-256$4096:miP/9bCnD2KvyYCczOgddg==$r0J8Sebz8e3jtsz4lJ2H8wc/E0h12eb8w3dZ5uk9MNM=:nM86G4OcRJEiTuXCgjz7YzKIvSjlJvYKb+fdMce45m4=";
                 };
             };
+            resume = {
+                clauses.login = true;
+                ensureDatabase = true;
+                authentication = {
+                    source_type = "remote";
+                    source_address = "192.168.64.26";
+                    database_access = "sameuser";
+                    auth_method = "password";
+                    password = "SCRAM-SHA-256$4096:ITQJSEbX91IlPsh/Vd8vSg==:bUYMN6AQpQbDvyd00Hh81+uXKvYCaji3JAHKEnV94lQ=";
+                };
+            };
         };
     };
 
