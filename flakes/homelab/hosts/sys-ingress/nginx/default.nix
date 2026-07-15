@@ -146,6 +146,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "resume.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.srv-misc.address}:3000";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }

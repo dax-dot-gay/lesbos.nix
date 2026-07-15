@@ -18,8 +18,6 @@
             stateVersion = "26.05";
             runningVersion = "26.05";
         };
-        autoUpgrade.activationMode = "boot";
-        reboot.enable = true;
         proxmox = {
             enable = true;
             start = {
