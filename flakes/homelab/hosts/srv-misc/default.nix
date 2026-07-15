@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ];
+    imports = [ ./provision-secrets.nix ./services ];
     lesbos = {
         info = {
             canonicalName = "srv-misc";
@@ -16,6 +16,24 @@
         };
         proxmox = {
             enable = true;
+            storage = {
+                disk_size = "64G";
+                virtiofs = [
+                    {
+                        name = "data";
+                        mount = true;
+                        id = "DATA";
+                        expose_acl = true;
+                        expose_xattr = true;
+                    }
+                ];
+            };
+            resources = {
+                cores = 4;
+                memory = 8192;
+            };
+            start.order = 100;
+            network.primary.bridge = "vmbr3";
         };
         base.users = {
             root = {
@@ -27,6 +45,42 @@
                 };
             };
             users = { };
+        };
+        volumes = {
+            resume-data = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/srv-misc/resume/app-data";
+                    ensureSource.enable = true;
+                };
+                destination = "/services/resume/app";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "root";
+                    group = "root";
+                    permissions = "0777";
+                };
+                required_by = ["resume-app.service" "resume-postgres.service"];
+            };
+            resume-postgres = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/srv-misc/resume/postgres";
+                    ensureSource.enable = true;
+                };
+                destination = "/services/resume/postgres";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "root";
+                    group = "root";
+                    permissions = "0777";
+                };
+                required_by = ["resume-app.service" "resume-postgres.service"];
+            };
         };
     };
 }
