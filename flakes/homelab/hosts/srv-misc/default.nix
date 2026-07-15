@@ -58,9 +58,9 @@
                 destination = "/services/resume/app";
                 strategy.bindMapped = {
                     enable = true;
-                    user = "root";
-                    group = "root";
-                    permissions = "0777";
+                    user = "node";
+                    group = "node";
+                    permissions = "0750";
                 };
                 required_by = ["resume-app.service" "resume-postgres.service"];
             };
@@ -75,12 +75,25 @@
                 destination = "/services/resume/postgres";
                 strategy.bindMapped = {
                     enable = true;
-                    user = "root";
-                    group = "root";
-                    permissions = "0777";
+                    user = "postgres";
+                    group = "postgres";
+                    permissions = "0750";
                 };
                 required_by = ["resume-app.service" "resume-postgres.service"];
             };
         };
+    };
+
+    users = {
+        users.postgres = {
+            isSystemUser = true;
+            group = "postgres";
+        };
+        groups.postgres = {};
+        users.node = {
+            isSystemUser = true;
+            group = "node";
+        };
+        groups.node = {};
     };
 }
