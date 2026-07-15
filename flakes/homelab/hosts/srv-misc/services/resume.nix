@@ -38,7 +38,7 @@
                 environment = {
                     TZ = "America/New_York";
                     APP_URL = "https://resume.dax.gay";
-                    FLAG_DISABLE_SIGNUPS = "false";
+                    FLAG_DISABLE_SIGNUPS = "true";
                 };
                 volumes = [
                     "/services/resume:/app/data"
