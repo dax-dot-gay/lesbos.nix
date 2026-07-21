@@ -208,6 +208,14 @@
                     "misc.srv"
                 ];
             };
+            peer-samantha = {
+                description = "Samantha's ingress";
+                address = "192.168.64.50";
+                dns = [
+                    "peer-samantha.lesbos.nix"
+                    "samantha.peer"
+                ];
+            };
         };
     };
 }

@@ -79,6 +79,7 @@
             sys-cicd = {};
             srv-ttrpg = {};
             srv-misc = {};
+            peer-samantha = {};
         };
     };
 }

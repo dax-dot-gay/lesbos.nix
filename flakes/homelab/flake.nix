@@ -298,6 +298,25 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        peer-samantha = {
+                            inherit self;
+                            id = 550;
+                            path = ./hosts/peer-samantha;
+                            name = "peer-samantha";
+                            tags = [
+                                "lesbos.nix"
+                                "peer"
+                                "samantha"
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }
