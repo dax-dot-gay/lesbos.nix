@@ -47,7 +47,10 @@
             users = {
                 samantha = {
                     enable = true;
-                    ssh.enable = true;
+                    ssh = {
+                        enable = true;
+                        authorizedKeys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMtv697nzcNal/a/n87sy8rSqnFxRi9N0U61kKHyEc1z"];
+                    };
                     password = {
                         enable = true;
                         hash = "$y$j9T$7IY5ppGGRfesUXTmqHsQ.1$HqBSWUc1Ykla97b7gs/BeKMXo9FRrKW2fu99r99vpa3";
