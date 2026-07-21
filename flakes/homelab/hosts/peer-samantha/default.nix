@@ -110,4 +110,5 @@
     # (Optional but recommended for faster boot with VPNs)
     systemd.network.wait-online.enable = false;
     boot.initrd.systemd.network.wait-online.enable = false;
+    services.openssh.settings.PasswordAuthentication = lib.mkForce true;
 }
