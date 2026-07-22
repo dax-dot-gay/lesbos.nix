@@ -263,4 +263,6 @@
         8443
         8300
     ];
+
+    systemd.timers.podman-auto-update.wantedBy = [ "timers.target" ];
 }
