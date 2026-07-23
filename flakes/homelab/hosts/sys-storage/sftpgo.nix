@@ -66,6 +66,10 @@
         };
     };
 
+    networking.firewall.allowedTCPPorts = [
+        8192
+        8193
+    ];
     services.sftpgo = {
         enable = true;
         user = "sftpgo";
