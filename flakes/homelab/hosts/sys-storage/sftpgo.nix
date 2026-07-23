@@ -103,7 +103,7 @@
                         enable_web_admin = true;
                         enable_web_client = true;
                         enable_rest_api = true;
-                        disabled_login_methods = 8;
+                        disabled_login_methods = 9;
                         proxy_allowed = [
                             "192.168.64.0/24"
                         ];
