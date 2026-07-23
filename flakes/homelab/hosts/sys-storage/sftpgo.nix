@@ -4,6 +4,28 @@
     lib,
     ...
 }:
+let
+    pre-login = pkgs.writeShellScriptBin "pre-login" ''
+        /run/current-system/sw/bin/rm -rf /sftpgo/login.json
+        echo "$SFTPGO_LOGIND_USER" > /sftpgo/login.json
+        USER_ID="$(/run/current-system/sw/bin/jq .id /sftpgo/login.json)"
+        USER_NAME="$(/run/current-system/sw/bin/jq .username /sftpgo/login.json)"
+
+        if [ $USER_ID -eq 0 ]; then
+            if [ $SFTPGO_LOGIND_PROTOCOL = "OIDC" ]; then
+                JQ_OUT=$(/run/current-system/sw/bin/printf '{"status": 1,"username": %s,"has_password": false,"permissions": {"/": ["*"], "/shares/public": ["list", "download"]},"groups": [{"type": 1, "name": "default"}]}' "''${USER_NAME}")
+
+                echo -e $JQ_OUT
+            else
+                echo ""
+            fi
+        else
+            echo ""
+        fi
+
+        /run/current-system/sw/bin/rm -rf /sftpgo/login.json
+    '';
+in
 {
     lesbos.secrets.system = {
         "sftpgo/oidc_client_secret" = {
@@ -12,6 +34,10 @@
             group = "sftpgo";
         };
     };
+
+    environment.systemPackages = [
+        pkgs.jq
+    ];
 
     lesbos.volumes = {
         sftpgo-app = {
@@ -92,6 +118,7 @@
         user = "sftpgo";
         group = "sftpgo";
         dataDir = "/sftpgo/app";
+        extraReadWriteDirs = ["/sftpgo"];
         settings = {
             httpd = {
                 cookie_lifetime = 720;
@@ -133,6 +160,7 @@
             data_provider = {
                 driver = "bolt";
                 name = "sftpgo.bolt.db";
+                pre_login_hook = "${pre-login}/bin/pre-login";
             };
         };
     };
