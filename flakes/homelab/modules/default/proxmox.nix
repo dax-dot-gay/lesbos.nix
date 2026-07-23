@@ -116,6 +116,9 @@ let
 
                 STORAGE_PATH=$(pvesh get /storage --output-format json | jq -r '.[] | select(.storage | contains("${cfg.storage.volume}")) | .path')
 
+                qm stop ${toString cfg.metadata.id}
+                qm destroy ${toString cfg.metadata.id}
+
                 qmrestore "$STORAGE_PATH/dump/vzdump-qemu-${toString cfg.metadata.id}-${cfg.metadata.name}.vma.zst" ${toString cfg.metadata.id} --unique --force
                 qm set ${toString cfg.metadata.id} --efidisk0 ${cfg.storage.volume}:1,format=raw,efitype=4m,pre-enrolled-keys=0
                 ${concatStringsSep "\n" (
