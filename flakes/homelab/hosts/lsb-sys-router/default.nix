@@ -11,6 +11,7 @@
         ./routing.nix
     ];
 
+    nixos-utilities.services.autoUpgrade.enable = lib.mkForce false;
     lesbos = {
         info = {
             canonicalName = "lsb-sys-router";
@@ -18,8 +19,7 @@
             stateVersion = "26.05";
             runningVersion = "26.05";
         };
-        reboot.enable = true;
-        autoUpgrade.activationMode = "boot";
+        reboot.enable = false;
         proxmox = {
             enable = true;
             network = {
