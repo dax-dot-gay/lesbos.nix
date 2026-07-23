@@ -6,7 +6,7 @@
 }:
 {
     lesbos.secrets.system = {
-        "sftpgo.oidc_client_secret" = {
+        "sftpgo/oidc_client_secret" = {
             mode = "0400";
             owner = "sftpgo";
             group = "sftpgo";
@@ -89,7 +89,7 @@
                         oidc = {
                             config_url = "https://auth.dax.gay/application/o/sftpgo/";
                             client_id = "XKcmdext7KdObjQGpKU72Mp7TkAxCh2kmxJBBc04";
-                            client_secret_file = "${config.sops.secrets."sftpgo.oidc_client_secret".path}";
+                            client_secret_file = "${config.sops.secrets."sftpgo/oidc_client_secret".path}";
                             redirect_base_url = "https://fs.dax.gay";
                             scopes = [
                                 "openid"
