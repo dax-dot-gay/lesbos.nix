@@ -10,6 +10,7 @@
         ./provision-secrets.nix
         ./syncthing.nix
         ./backup.nix
+        ./sftpgo.nix
     ];
     lesbos = {
         info = {
