@@ -64,6 +64,23 @@
             };
             required_by = [ "sftpgo.service" ];
         };
+        sftpgo-public = {
+            enable = true;
+            source = {
+                type = "share";
+                name = "data";
+                path = "/homes/public";
+                ensureSource.enable = true;
+            };
+            destination = "/sftpgo/shares/public";
+            strategy.bindMapped = {
+                enable = true;
+                user = "sftpgo";
+                group = "sftpgo";
+                permissions = "0770";
+            };
+            required_by = [ "sftpgo.service" ];
+        };
     };
 
     networking.firewall.allowedTCPPorts = [
