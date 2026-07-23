@@ -12,6 +12,7 @@ let
         USER_NAME="$(/run/current-system/sw/bin/jq .username /sftpgo/login.json)"
 
         if [ $USER_ID -eq 0 ]; then
+            echo "$SFTPGO_LOGIND_PROTOCOL" > /sftpgo/protocol
             if [ $SFTPGO_LOGIND_PROTOCOL = "OIDC" ]; then
                 JQ_OUT=$(/run/current-system/sw/bin/printf '{"status": 1,"username": %s,"has_password": false,"permissions": {"/": ["*"], "/shares/public": ["list", "download"]},"groups": [{"type": 1, "name": "default"}]}' "''${USER_NAME}")
 
@@ -23,7 +24,7 @@ let
             echo ""
         fi
 
-        /run/current-system/sw/bin/rm -rf /sftpgo/login.json
+        #/run/current-system/sw/bin/rm -rf /sftpgo/login.json
     '';
 in
 {
