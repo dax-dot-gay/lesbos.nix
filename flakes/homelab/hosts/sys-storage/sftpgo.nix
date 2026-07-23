@@ -119,6 +119,7 @@
                             ];
                             username_field = "preferred_username";
                             implicit_roles = true;
+                            debug = true;
                         };
                     }
                 ];
