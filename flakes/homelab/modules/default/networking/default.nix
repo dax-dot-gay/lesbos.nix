@@ -46,6 +46,11 @@
                         externalPort = 2122;
                         internalPort = 2122;
                     }
+                    {
+                        protocol = "tcp";
+                        externalPort = 8193;
+                        internalPort = 8193;
+                    }
                 ];
             };
             sys-ingress = {
@@ -214,13 +219,6 @@
                 dns = [
                     "peer-samantha.lesbos.nix"
                     "samantha.peer"
-                ];
-                forward_ports = [
-                    {
-                        protocol = "tcp";
-                        externalPort = 8193;
-                        internalPort = 8193;
-                    }
                 ];
             };
         };
