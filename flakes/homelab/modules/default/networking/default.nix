@@ -215,6 +215,13 @@
                     "peer-samantha.lesbos.nix"
                     "samantha.peer"
                 ];
+                forward_ports = [
+                    {
+                        protocol = "tcp";
+                        externalPort = 8193;
+                        internalPort = 8193;
+                    }
+                ];
             };
         };
     };

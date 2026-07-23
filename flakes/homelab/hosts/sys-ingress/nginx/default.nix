@@ -155,6 +155,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "fs.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.sys-storage.address}:8192";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }
