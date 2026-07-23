@@ -14,7 +14,7 @@ let
         if [ $USER_ID -eq 0 ]; then
             echo "$SFTPGO_LOGIND_PROTOCOL" > /sftpgo/app/protocol
             if [ $SFTPGO_LOGIND_PROTOCOL = "OIDC" ]; then
-                JQ_OUT=$(/run/current-system/sw/bin/printf '{"status": 1,"username": "%s","has_password": false,"permissions": {"/": ["*"], "/shares/public": ["list", "download"]},"groups": [{"type": 1, "name": "default"}], "home_dir": "/sftpgo/shares/homes/%s"}' "''${USER_NAME}")
+                JQ_OUT=$(/run/current-system/sw/bin/printf '{"status": 1,"username": "%s","has_password": false,"permissions": {"/": ["*"], "/shares/public": ["list", "download"]},"groups": [{"type": 1, "name": "default"}], "home_dir": "/sftpgo/shares/homes/%s"}' "''${USER_NAME}" "''${USER_NAME}")
 
                 echo -e $JQ_OUT
             else
