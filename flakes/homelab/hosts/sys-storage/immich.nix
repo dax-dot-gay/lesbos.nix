@@ -54,9 +54,7 @@
             enable = true;
             user = "immich";
         };
-        machine-learning = {
-            enable = false;
-        };
+        machine-learning.enable = false;
         mediaLocation = "/immich/media";
     };
 
