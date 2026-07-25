@@ -45,14 +45,11 @@
         host = "0.0.0.0";
         port = 2283;
         openFirewall = true;
-        user = "immich";
-        group = "immich";
         redis = {
             enable = true;
         };
         database = {
             enable = true;
-            user = "immich";
         };
         machine-learning.enable = false;
         mediaLocation = "/immich/media";
