@@ -49,6 +49,9 @@
             };
             users = { };
         };
+        secrets.system = {
+            "immich/encryption-pass" = {};
+        };
         volumes = {
             immich-media = {
                 enable = true;
@@ -64,6 +67,25 @@
                     user = "immich";
                     group = "immich";
                     permissions = "0770";
+                };
+            };
+            immich-database = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/srv-immich/database";
+                    ensureSource.enable = true;
+                };
+                destination = "/immich/database-backups";
+                strategy.backup = {
+                    enable = true;
+                    encryption = {
+                        enable = true;
+                        passwordFile = config.sops.secrets."immich/encryption-pass".path;
+                    };
+                    restoration = false;
+                    onCalendar = "hourly";
                 };
             };
         };

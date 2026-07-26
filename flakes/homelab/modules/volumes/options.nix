@@ -67,7 +67,86 @@ let
         };
     };
 
-    strategies = {
+    borgmaticOptions = configName: {
+        configurationName = mkOption {
+            description = "Name of this borgmatic configuration";
+            type = types.str;
+            default = configName;
+        };
+        repositoryLabel = mkOption {
+            description = "Label of the associated borgmatic repository";
+            type = types.str;
+            default = "${configName}-repo";
+        };
+        encryption = mkOption {
+            description = "Config for encrypting this repository";
+            type = types.submodule {
+                options = {
+                    enable = mkEnableOption "repository encryption";
+                    passwordFile = mkOption {
+                        description = "Non-store path to a file containing the repository's password";
+                        type = types.path;
+                    };
+                };
+            };
+            default = {enable = false;};
+        };
+        quota = mkOption {
+            description = "Storage quota (sets only on repository creation)";
+            type = types.nullOr types.singleLineStr;
+            default = null;
+            example = "5G";
+        };
+        append_only = mkOption {
+            description = "Whether the repository should be append-only (sets only on repository creation)";
+            type = types.bool;
+            default = false;
+        };
+        archive_format = mkOption {
+            description = "Archive name format";
+            type = types.str;
+            default = "volumes-${configName}-{now}";
+        };
+        keep = {
+            hourly = mkOption {
+                description = "Keep this many hourly backups";
+                type = types.ints.unsigned;
+                default = 6;
+            };
+            daily = mkOption {
+                description = "Keep this many daily backups";
+                type = types.ints.unsigned;
+                default = 7;
+            };
+            weekly = mkOption {
+                description = "Keep this many weekly backups";
+                type = types.ints.unsigned;
+                default = 2;
+            };
+            monthly = mkOption {
+                description = "Keep this many monthly backups";
+                type = types.ints.unsigned;
+                default = 4;
+            };
+        };
+        onCalendar = {
+            description = "Setting for systemd timer";
+            type = types.singleLineStr;
+            default = "hourly";
+        };
+        restoration = {
+            description = ''
+                Enable restoration of data to the destination from the source.
+
+                If enabled, on each boot the setup service will check if the destination directory exists, copying all data from the source to it if it does not.
+                Services that rely on this volume will not be started until restoration is complete.
+            '';
+            type = types.boool;
+            default = false;
+        };
+    };
+
+    mkStrategyOptions = configName: {
         bind = mkStrategy "Bind-mount this path as the owning user" {
             read_only = mkEnableOption "Mount as read-only";
         };
@@ -101,67 +180,14 @@ let
                     // ownershipOptions
                     // replicationOptions
                 );
-        backup =
-            mkStrategy
-                ''
-                    Periodically backs up the destination to the source with `borgbackup`, optionally with encryption and automatic restoration
+        backup = mkStrategy ''
+            Uses `borgmatic` to clone the destination to the source, optionally restoring data if the destination folder does not yet exist.
 
-                    This does not provide any direct mount for the endpoint, and the files are only accessible by *this host*
-                    This strategy should not be used for data shared between machines/volumes
-                ''
-                (
-                    {
-                        mode = mkOption {
-                            description = "Mode of the created directory";
-                            type = types.str;
-                            default = "0770";
-                        };
-                        encryption = mkOption {
-                            description = "Backup encryption config";
-                            type = types.submodule {
-                                options = {
-                                    enable = mkEnableOption "borg encryption";
-                                    passwordFile = mkOption {
-                                        description = "File containing encryption key";
-                                        type = types.str;
-                                    };
-                                };
-                            };
-                            default = {
-                                enable = false;
-                            };
-                        };
-                        compression = mkOption {
-                            description = "Borg encryption method";
-                            type = types.strMatching "none|(auto,)?(lz4|zstd|zlib|lzma)(,[[:digit:]]{1,2})?";
-                            default = "lz4";
-                        };
-                        restoration = mkOption {
-                            description = ''
-                                Enable restoration of data to the destination from the source.
-
-                                If enabled, on each boot the setup service will check if the destination directory exists, copying all data from the source to it if it does not.
-                                Services that rely on this volume will not be started until restoration is complete.
-                            '';
-                            type = types.bool;
-                            default = true;
-                        };
-                        startAt = lib.mkOption {
-                            type = types.either types.str (types.listOf types.str);
-                            default = "daily";
-                            description = ''
-                                When or how often the backup should run.
-                                Must be in the format described in
-                                {manpage}`systemd.time(7)`.
-                                If you do not want the backup to start
-                                automatically, use `[ ]`.
-                                It will generate a systemd service borgbackup-job-NAME.
-                                You may trigger it manually via systemctl restart borgbackup-job-NAME.
-                            '';
-                        };
-                    }
-                    // ownershipOptions
-                );
+            This does not provide any direct mount for the endpoint, and data on the source will only be accessible by this machine.
+        '' (
+            (borgmaticOptions configName) //
+            ownershipOptions
+        );
         custom =
             mkStrategy
                 ''
@@ -285,7 +311,7 @@ let
                 strategy = mkOption {
                     description = "Which strategy to use. Exactly one must be enabled";
                     type = types.submodule {
-                        options = strategies;
+                        options = mkStrategyOptions config._module.args.name;
                     };
                 };
                 required_by = mkOption {
