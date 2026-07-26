@@ -21,6 +21,7 @@
                 user = "immich";
                 group = "immich";
             };
+            required_by = ["immich-server.service" "postgresql.service"];
         };
         immich-database = {
             enable = true;
@@ -29,6 +30,7 @@
                 name = "data";
                 path = "/systems/sys-storage/immich/database";
                 ensureSource.enable = true;
+                subdirectories = ["/postgresql"];
             };
             destination = "/immich/database";
             strategy.bindMapped = {
@@ -37,6 +39,7 @@
                 user = "immich";
                 group = "immich";
             };
+            required_by = ["immich-server.service" "postgresql.service"];
         };
     };
 
@@ -55,5 +58,5 @@
         mediaLocation = "/immich/media";
     };
 
-    services.postgresql.dataDir = lib.mkForce "/immich/database";
+    services.postgresql.dataDir = lib.mkForce "/immich/database/postgresql";
 }
