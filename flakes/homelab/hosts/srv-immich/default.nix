@@ -16,6 +16,27 @@
         };
         proxmox = {
             enable = true;
+            network.primary.bridge = "vmbr3";
+            watchdog.enable = true;
+            start = {
+                on_boot = true;
+                on_deploy = true;
+                order = 100;
+            };
+            resources.cores = 4;
+            resources.memory = 8192;
+            storage = {
+                disk_size = "128G";
+                virtiofs = [
+                    {
+                        name = "data";
+                        mount = true;
+                        id = "DATA";
+                        expose_acl = true;
+                        expose_xattr = true;
+                    }
+                ];
+            };
         };
         base.users = {
             root = {
@@ -27,6 +48,24 @@
                 };
             };
             users = { };
+        };
+        volumes = {
+            immich-media = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/data/media/Photos";
+                    ensureSource.enable = true;
+                };
+                destination = "/immich/media";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "immich";
+                    group = "immich";
+                    permissions = "0770";
+                };
+            };
         };
     };
 }
