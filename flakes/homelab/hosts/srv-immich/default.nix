@@ -49,9 +49,6 @@
             };
             users = { };
         };
-        secrets.system = {
-            "immich/encryption-pass" = {};
-        };
         volumes = {
             immich-media = {
                 enable = true;
@@ -69,27 +66,16 @@
                     permissions = "0770";
                 };
             };
+        };
+        backups = {
             immich-database = {
                 enable = true;
-                source = {
-                    type = "share";
-                    name = "data";
-                    path = "/systems/srv-immich/database";
-                    ensureSource.enable = true;
+                settings = {
+                    encryption.enable = true;
+                    quota = "128G";
                 };
-                destination = "/immich/database-backups";
-                strategy.backup = {
-                    enable = true;
-                    encryption = {
-                        enable = true;
-                        passwordFile = config.sops.secrets."immich/encryption-pass".path;
-                    };
-                    restoration = false;
-                    onCalendar = "hourly";
-                    user = "postgres";
-                    group = "postgres";
-                    mode = "0750";
-                };
+                schedule = "hourly";
+                
             };
         };
     };

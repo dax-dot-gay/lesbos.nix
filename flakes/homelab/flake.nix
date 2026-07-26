@@ -329,6 +329,7 @@
                             ];
                             modules = [
                                 ./modules/volumes
+                                ./modules/backups
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {
