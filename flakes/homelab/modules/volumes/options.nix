@@ -143,7 +143,7 @@ let
                 If enabled, on each boot the setup service will check if the destination directory exists, copying all data from the source to it if it does not.
                 Services that rely on this volume will not be started until restoration is complete.
             '';
-            type = types.boool;
+            type = types.bool;
             default = false;
         };
     };

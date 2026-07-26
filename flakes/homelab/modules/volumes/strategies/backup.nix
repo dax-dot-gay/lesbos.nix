@@ -82,17 +82,10 @@ in
                 nameValuePair strategy.configurationName (
                     {
                         repositories = [
-                            (
-                                {
-                                    label = strategy.repositoryLabel;
-                                    path = volume.sourcePath;
-                                    encryption = if strategy.encryption.enable then "repokey-blake2" else "none";
-                                    append_only = strategy.append_only;
-                                }
-                                // (optionalAttrs (!(isNull strategy.quota)) {
-                                    quota = strategy.quota;
-                                })
-                            )
+                            {
+                                label = strategy.repositoryLabel;
+                                path = volume.sourcePath;
+                            }
                         ];
                         archive_name_format = strategy.archive_format;
                         keep_hourly = strategy.keep.hourly;
@@ -166,7 +159,9 @@ in
                     script = ''
                         if [ ! -e "${volume.sourcePath}/config" ]; then
                             echo "Source directory for VOL[${name}] does not contain a borg repo! Creating it..."
-                            borgmatic repo-create --repository "${volume.sourcePath}"
+                            borgmatic repo-create --repository "${volume.sourcePath}" ${optionalString strategy.encryption.enable "-e repokey"} ${optionalString strategy.append_only "--append-only"} ${
+                                optionalString (!(isNull strategy.quota)) "--storage-quota ${strategy.quota}"
+                            }
                             touch "${volume.sourcePath}/.new-repo"
                         fi
 
