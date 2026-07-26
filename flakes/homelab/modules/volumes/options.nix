@@ -129,12 +129,12 @@ let
                 default = 4;
             };
         };
-        onCalendar = {
+        onCalendar = mkOption {
             description = "Setting for systemd timer";
             type = types.str;
             default = "hourly";
         };
-        restoration = {
+        restoration = mkOption {
             description = ''
                 Enable restoration of data to the destination from the source.
 
