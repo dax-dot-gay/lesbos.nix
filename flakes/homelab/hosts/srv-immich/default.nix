@@ -68,4 +68,18 @@
             };
         };
     };
+
+    services.immich = {
+        enable = true;
+        port = 2283;
+        user = "immich";
+        group = "immich";
+        environment = {
+            IMMICH_LOG_LEVEL = "debug";
+            TZ = "America/New_York";
+            IMMICH_API_METRICS_PORT = "8085";
+            IMMICH_MICROSERVICES_METRICS_PORT = "8086";
+            IMMICH_TRUSTED_PROXIES = "192.168.64.11";
+        };
+    };
 }

@@ -43,17 +43,6 @@
                     password = "SCRAM-SHA-256$4096:ITQJSEbX91IlPsh/Vd8vSg==:bUYMN6AQpQbDvyd00Hh81+uXKvYCaji3JAHKEnV94lQ=";
                 };
             };
-            immich = {
-                clauses.login = true;
-                ensureDatabase = true;
-                authentication = {
-                    source_type = "remote";
-                    source_address = "192.168.64.27";
-                    database_access = "sameuser";
-                    auth_method = "password";
-                    password = "SCRAM-SHA-256$4096:gSF7VZqmVm7RjUSGYEs0Mw==$NduZSNNpNfdH8WSP0ZwvxHzgIp7HI8AzVvPXYcswisk=:kHgONA4MaxNbfB4T5YUdi2DslTOhIqxQdkl3LQDFPrA=";
-                };
-            };
         };
     };
 
