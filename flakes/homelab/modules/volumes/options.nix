@@ -131,7 +131,7 @@ let
         };
         onCalendar = {
             description = "Setting for systemd timer";
-            type = types.singleLineStr;
+            type = types.str;
             default = "hourly";
         };
         restoration = {
