@@ -11,7 +11,6 @@
     ./syncthing.nix
     ./backup.nix
     ./sftpgo.nix
-    ./immich.nix
   ];
   lesbos = {
     info = {
