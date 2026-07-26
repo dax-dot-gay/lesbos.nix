@@ -86,6 +86,9 @@
                     };
                     restoration = false;
                     onCalendar = "hourly";
+                    user = "postgres";
+                    group = "postgres";
+                    mode = "0750";
                 };
             };
         };

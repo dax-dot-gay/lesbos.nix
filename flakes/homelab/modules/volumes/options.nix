@@ -89,7 +89,9 @@ let
                     };
                 };
             };
-            default = {enable = false;};
+            default = {
+                enable = false;
+            };
         };
         quota = mkOption {
             description = "Storage quota (sets only on repository creation)";
@@ -180,14 +182,24 @@ let
                     // ownershipOptions
                     // replicationOptions
                 );
-        backup = mkStrategy ''
-            Uses `borgmatic` to clone the destination to the source, optionally restoring data if the destination folder does not yet exist.
+        backup =
+            mkStrategy
+                ''
+                    Uses `borgmatic` to clone the destination to the source, optionally restoring data if the destination folder does not yet exist.
 
-            This does not provide any direct mount for the endpoint, and data on the source will only be accessible by this machine.
-        '' (
-            (borgmaticOptions configName) //
-            ownershipOptions
-        );
+                    This does not provide any direct mount for the endpoint, and data on the source will only be accessible by this machine.
+                ''
+                (
+                    (borgmaticOptions configName)
+                    // ownershipOptions
+                    // {
+                        mode = mkOption {
+                            description = "Mode of the created directory";
+                            type = types.str;
+                            default = "0770";
+                        };
+                    }
+                );
         custom =
             mkStrategy
                 ''
@@ -295,7 +307,7 @@ let
                     subdirectories = mkOption {
                         description = "A list of subdirectories (as relative paths from the source path) to create in the source directory";
                         type = types.listOf types.str;
-                        default = [];
+                        default = [ ];
                     };
                 };
                 sourcePath = mkOption {
