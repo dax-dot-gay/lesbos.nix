@@ -26,7 +26,7 @@
       start = {
         on_boot = true;
         on_deploy = true;
-        order = 2;
+        order = 6;
       };
       resources.cores = 4;
       resources.memory = 8192;
