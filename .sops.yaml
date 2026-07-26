@@ -15,6 +15,7 @@ keys:
     - &homelab-host-srv-ttrpg age18vg95grtpm6hjyjy38p2e32at06mqrw25k7dsffzt8hj6tjrwcpsalrasc
     - &homelab-host-srv-misc age172vrtv44uwqg33fhzvd5axumuhcakcj849mpj9tdke99z9upj4wq8glw2y
     - &homelab-host-peer-samantha age1d9kk940etpucgfzm9cnuwyn0tjq5kkt5s88xjcn6z4pvs26c59pq5yx05t
+    - &homelab-host-srv-immich age1lrm3rdeunh02866tw4k2mcsx8du8d3fyxj7esrwvfrr7p6kpgdvsvcupcq
     # @add:key-def
 
 creation_rules:
@@ -37,6 +38,7 @@ creation_rules:
           - *homelab-host-srv-ttrpg
           - *homelab-host-srv-misc
           - *homelab-host-peer-samantha
+          - *homelab-host-srv-immich
           # @add:key-ref
   - path_regex: secrets/homelab/global.yaml$
     key_groups:
@@ -57,6 +59,7 @@ creation_rules:
           - *homelab-host-srv-ttrpg
           - *homelab-host-srv-misc
           - *homelab-host-peer-samantha
+          - *homelab-host-srv-immich
           # @add:homelab:key-ref
   - path_regex: secrets/personal/global.yaml$
     key_groups:
@@ -138,4 +141,9 @@ creation_rules:
       - age:
           - *root
           - *homelab-host-peer-samantha
+  - path_regex: secrets/homelab/per-system/srv-immich/system.yaml$
+    key_groups:
+      - age:
+          - *root
+          - *homelab-host-srv-immich
   # @add:new-path

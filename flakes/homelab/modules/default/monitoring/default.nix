@@ -80,6 +80,7 @@
             srv-ttrpg = {};
             srv-misc = {};
             peer-samantha = {};
+            srv-immich = {};
         };
     };
 }

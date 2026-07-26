@@ -317,6 +317,24 @@
                                 # Add extra specialArgs here
                             };
                         };
+                        srv-immich = {
+                            inherit self;
+                            id = 517;
+                            path = ./hosts/srv-immich;
+                            name = "srv-immich";
+                            tags = [
+                                "lesbos.nix"
+                                "services"
+                                # Add tags here
+                            ];
+                            modules = [
+                                ./modules/volumes
+                                # Add extra modules here
+                            ];
+                            extraSpecialArgs = {
+                                # Add extra specialArgs here
+                            };
+                        };
                         # @add:host:proxmox
                     };
                 }

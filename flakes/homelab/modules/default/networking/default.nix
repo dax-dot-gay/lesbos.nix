@@ -221,6 +221,14 @@
                     "samantha.peer"
                 ];
             };
+            srv-immich = {
+                description = "Immich & related services";
+                address = "192.168.64.27";
+                dns = [
+                    "srv-immich.lesbos.nix"
+                    "immich.srv"
+                ];
+            };
         };
     };
 }
