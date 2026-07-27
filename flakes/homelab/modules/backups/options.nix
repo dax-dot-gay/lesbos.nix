@@ -188,7 +188,6 @@ let
                         };
                         commands = mkPrefixedCommands "sudo -u postgres " [
                             "pg_dump"
-                            "pg_dumpall"
                             "pg_restore"
                             "psql"
                         ];

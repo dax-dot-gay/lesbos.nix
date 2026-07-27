@@ -235,8 +235,7 @@ in
                                     hostname = options.hostname;
                                     format = options.format;
                                     username = options.username;
-                                    pg_dump_command =
-                                        if options.database == "all" then options.commands.pg_dumpall else options.commands.pg_dump;
+                                    pg_dump_command = options.commands.pg_dump;
                                     pg_restore_command = options.commands.pg_restore;
                                     psql_command = options.commands.psql;
                                 }
