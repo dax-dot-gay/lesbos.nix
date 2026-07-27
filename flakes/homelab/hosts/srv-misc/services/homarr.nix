@@ -35,7 +35,7 @@
             AUTH_OIDC_SCOPE_OVERWRITE = "openid email profile groups";
             AUTH_OIDC_GROUPS_ATTRIBUTE = "groups";
             AUTH_LOGOUT_REDIRECT_URL = "https://auth.dax.gay/application/o/homarr/end-session/";
-            AUTH_OIDC_AUTO_LOGIN = "true";
+            AUTH_OIDC_AUTO_LOGIN = "false";
             ADMIN_GROUP = "app:homarr:admin";
         };
         autoStart = true;
