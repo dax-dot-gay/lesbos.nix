@@ -164,6 +164,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "img.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.srv-immich.address}:2283";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }
