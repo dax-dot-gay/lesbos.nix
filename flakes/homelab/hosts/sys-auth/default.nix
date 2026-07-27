@@ -141,6 +141,8 @@
         };
     };
 
+    systemd.tmpfiles.rules = [ "d /authentik/postgresql 1750 postgres postgres -" ];
+
     users = {
         users.authentik = {
             isSystemUser = true;
