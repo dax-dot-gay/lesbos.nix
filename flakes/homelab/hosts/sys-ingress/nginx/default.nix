@@ -174,6 +174,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "home.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.srv-misc.address}:7575";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }
