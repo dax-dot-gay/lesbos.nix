@@ -40,7 +40,7 @@
                     source_address = "192.168.64.26";
                     database_access = "sameuser";
                     auth_method = "password";
-                    password = "SCRAM-SHA-256$4096:ITQJSEbX91IlPsh/Vd8vSg==:bUYMN6AQpQbDvyd00Hh81+uXKvYCaji3JAHKEnV94lQ=";
+                    password = "SCRAM-SHA-256$4096:APRiBD9uKRh7GTzgTfXAKg==$Zz6X4f7frP+e85U6O2ona0ulqS8VzCvCb/pwMaD6M1A=:mez6rAoID4AVReg9jz/UYe19R661qB3cAOcFecEiQCM=";
                 };
             };
         };
