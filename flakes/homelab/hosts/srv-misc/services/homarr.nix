@@ -37,6 +37,7 @@
             AUTH_LOGOUT_REDIRECT_URL = "https://auth.dax.gay/application/o/homarr/end-session/";
             AUTH_OIDC_AUTO_LOGIN = "true";
             LOG_LEVEL = "debug";
+            NODE_TLS_REJECT_UNAUTHORIZED = "0";
         };
         autoStart = true;
     };
