@@ -209,7 +209,7 @@ in
                     {
                         name = name;
                         value = {
-                            archive_format = settings.archive_format;
+                            archive_name_format = settings.archive_format;
                             keep_hourly = settings.keep.hourly;
                             keep_daily = settings.keep.daily;
                             keep_weekly = settings.keep.weekly;
