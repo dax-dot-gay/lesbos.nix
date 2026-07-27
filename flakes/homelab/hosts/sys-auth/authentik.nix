@@ -156,7 +156,7 @@
         ];
     };
     virtualisation.oci-containers.containers."authentik-server" = {
-        image = "ghcr.io/goauthentik/server:2026.5.3";
+        image = "ghcr.io/goauthentik/server:2026.5.6";
         environmentFiles = [ config.sops.templates."authentik.env".path ];
         volumes = [
             "/authentik/authentik/templates:/templates:rw"
@@ -196,7 +196,7 @@
         ];
     };
     virtualisation.oci-containers.containers."authentik-worker" = {
-        image = "ghcr.io/goauthentik/server:2026.5.3";
+        image = "ghcr.io/goauthentik/server:2026.5.6";
         environmentFiles = [ config.sops.templates."authentik.env".path ];
         volumes = [
             "/authentik/authentik/certs:/certs:rw"
