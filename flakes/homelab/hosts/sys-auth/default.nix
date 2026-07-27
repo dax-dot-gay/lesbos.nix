@@ -119,9 +119,9 @@
                             username = "authentik";
                             passwordFile = config.sops.secrets."authentik/main/database/password".path;
                             commands = {
-                                pg_dump = "podman exec authentik-postgresql pg_dump";
-                                pg_restore = "podman exec authentik-postgresql pg_restore";
-                                psql = "podman exec authentik-postgresql psql";
+                                pg_dump = "pg_dump";
+                                pg_restore = "pg_restore";
+                                psql = "psql";
                             };
                         };
                     };
