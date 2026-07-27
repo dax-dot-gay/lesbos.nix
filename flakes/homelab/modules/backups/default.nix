@@ -96,7 +96,10 @@ in
             )) pkgs.postgresql)
             ++ (optional (any (v: (any (r: r.type == "sqlite") (attrValues v.sources))) (
                 attrValues enabledBackups
-            )) pkgs.sqlite));
+            )) pkgs.sqlite))
+            ++ (optional (any (v: (any (r: r.type == "postgresql" && (!(isNull r.postgresql.container))) (attrValues v.sources))) (
+                attrValues enabledBackups
+            )) pkgs.podman);
 
             lesbos.secrets.system = mapAttrs' (
                 _:

@@ -6,7 +6,10 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ./authentik.nix ];
+    imports = [
+        ./provision-secrets.nix
+        ./authentik.nix
+    ];
     lesbos = {
         info = {
             canonicalName = "sys-auth";
@@ -67,7 +70,12 @@
                     group = "authentik";
                     permissions = "0777";
                 };
-                required_by = ["podman-network-authentik_default.service" "podman-authentik-worker.service" "podman-authentik-server.service" "podman-authentik-postgresql.service"];
+                required_by = [
+                    "podman-network-authentik_default.service"
+                    "podman-authentik-worker.service"
+                    "podman-authentik-server.service"
+                    "podman-authentik-postgresql.service"
+                ];
             };
             authentik-db = {
                 enable = true;
@@ -84,7 +92,51 @@
                     group = "postgres";
                     permissions = "0750";
                 };
-                required_by = ["podman-network-authentik_default.service" "podman-authentik-worker.service" "podman-authentik-server.service" "podman-authentik-postgresql.service"];
+                required_by = [
+                    "podman-network-authentik_default.service"
+                    "podman-authentik-worker.service"
+                    "podman-authentik-server.service"
+                    "podman-authentik-postgresql.service"
+                ];
+            };
+        };
+        backups = {
+            authentik-postgresql = {
+                enable = true;
+                settings = {
+                    encryption.enable = true;
+                    quota = "256G";
+                };
+                schedule = "hourly";
+                sources = {
+                    psql = {
+                        enable = true;
+                        type = "postgresql";
+                        postgresql = {
+                            database = "all";
+                            container = "authentik-postgresql";
+                            port = 5432;
+                            username = "authentik";
+                            passwordFile = config.sops.secrets."authentik/main/database/password".path;
+                            commands = {
+                                pg_dump = "podman exec authentik-postgresql pg_dump";
+                                pg_restore = "podman exec authentik-postgresql pg_restore";
+                                psql = "podman exec authentik-postgresql psql";
+                            };
+                        };
+                    };
+                };
+                repositories = {
+                    authentik-psql-backup = {
+                        enable = true;
+                        type = "volume";
+                        volume = {
+                            type = "share";
+                            name = "data";
+                            path = "/systems/sys-auth/psql-backups";
+                        };
+                    };
+                };
             };
         };
     };
@@ -94,11 +146,11 @@
             isSystemUser = true;
             group = "authentik";
         };
-        groups.authentik = {};
+        groups.authentik = { };
         users.postgres = {
             isSystemUser = true;
             group = "postgres";
         };
-        groups.postgres = {};
+        groups.postgres = { };
     };
 }
