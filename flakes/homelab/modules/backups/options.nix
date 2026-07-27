@@ -109,7 +109,7 @@ let
                 value = mkOption {
                     description = "Override default command for `${cmd}`";
                     type = types.str;
-                    default = "sudo -u postgres ${cmd}";
+                    default = "${prefix}${cmd}";
                 };
             }) commands
         ));
@@ -186,7 +186,7 @@ let
                             type = types.nullOr types.path;
                             default = null;
                         };
-                        commands = mkCommands [
+                        commands = mkPrefixedCommands "sudo -u postgres " [
                             "pg_dump"
                             "pg_dumpall"
                             "pg_restore"
