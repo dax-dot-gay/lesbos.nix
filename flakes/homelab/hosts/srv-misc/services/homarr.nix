@@ -28,7 +28,7 @@
         environment = {
             BASE_URL = "https://home.dax.gay";
             NEXTAUTH_URL = "https://home.dax.gay";
-            AUTH_PROVIDERS = "oidc";
+            AUTH_PROVIDERS = "oidc,credentials";
             AUTH_OIDC_ISSUER = "https://auth.dax.gay/application/o/homarr/";
             AUTH_OIDC_URI = "https://auth.dax.gay/application/o/authorize/";
             AUTH_OIDC_CLIENT_NAME = "Lesbos SSO";
