@@ -114,7 +114,7 @@
         redis.enable = true;
         mediaLocation = "/immich/media";
         machine-learning = {
-            enable = true;
+            enable = false;
         };
     };
 
