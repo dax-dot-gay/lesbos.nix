@@ -125,7 +125,7 @@
         image = "docker.io/library/postgres:16-alpine";
         environmentFiles = [ config.sops.templates."postgres.env".path ];
         volumes = [
-            "/authentik/database:/var/lib/postgresql/data:rw"
+            "/authentik/postgresql:/var/lib/postgresql/data:rw"
         ];
         log-driver = "journald";
         extraOptions = [
