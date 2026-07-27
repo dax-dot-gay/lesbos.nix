@@ -77,28 +77,6 @@
                     "podman-authentik-postgresql.service"
                 ];
             };
-            authentik-db = {
-                enable = true;
-                source = {
-                    type = "share";
-                    name = "data";
-                    path = "/systems/sys-auth/database";
-                    ensureSource.enable = true;
-                };
-                destination = "/authentik/database";
-                strategy.bindMapped = {
-                    enable = true;
-                    user = "postgres";
-                    group = "postgres";
-                    permissions = "0750";
-                };
-                required_by = [
-                    "podman-network-authentik_default.service"
-                    "podman-authentik-worker.service"
-                    "podman-authentik-server.service"
-                    "podman-authentik-postgresql.service"
-                ];
-            };
         };
         backups = {
             authentik-postgresql = {
