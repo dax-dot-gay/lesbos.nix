@@ -117,7 +117,6 @@ in
                     {
                         name,
                         settings,
-                        repositories,
                         ...
                     }:
                     nameValuePair "lesbos-backup-${name}-setup" {
@@ -146,7 +145,6 @@ in
                     _:
                     {
                         name,
-                        repositories,
                         ...
                     }:
                     nameValuePair "lesbos-backup-${name}-run" {
@@ -220,7 +218,7 @@ in
                         // (optionalAttrs settings.encryption.enable {
                             encryption_passcommand = "${mkPasswordScript name
                                 config.sops.secrets."${settings.encryption.secret}".path
-                            }";
+                            }/bin/backups-cat-password-${name}.sh";
                         })
                         // (ifSources backup "paths" (paths: {
                             source_directories = flatten paths;
