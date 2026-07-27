@@ -64,6 +64,23 @@
                 };
                 required_by = ["resume-app.service"];
             };
+            homarr-data = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/srv-misc/homarr";
+                    ensureSource.enable = true;
+                };
+                destination = "/services/homarr";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "root";
+                    group = "root";
+                    permissions = "0777";
+                };
+                required_by = ["homarr.service"];
+            };
         };
     };
 }
