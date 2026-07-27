@@ -103,6 +103,17 @@ let
             }) commands
         ));
 
+    mkPrefixedCommands = prefix: commands: (listToAttrs (
+            map (cmd: {
+                name = cmd;
+                value = mkOption {
+                    description = "Override default command for `${cmd}`";
+                    type = types.str;
+                    default = "sudo -u postgres ${cmd}";
+                };
+            }) commands
+        ));
+
     mkSrcType =
         type: desc: opts:
         (mkOption {
@@ -152,8 +163,8 @@ let
                         };
                         port = mkOption {
                             description = "Port to connect to over the network";
-                            type = types.port;
-                            default = 5432;
+                            type = types.nullOr types.port;
+                            default = null;
                         };
                         format = mkOption {
                             description = "Dump output format";

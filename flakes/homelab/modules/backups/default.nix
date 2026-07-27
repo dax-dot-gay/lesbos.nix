@@ -233,7 +233,6 @@ in
                                     name = options.database;
                                     label = options.label;
                                     hostname = options.hostname;
-                                    port = options.port;
                                     format = options.format;
                                     username = options.username;
                                     pg_dump_command =
@@ -242,6 +241,7 @@ in
                                     psql_command = options.commands.psql;
                                 }
                                 // (optionalAttrs (!(isNull options.container)) { container = options.container; })
+                                // (optionalAttrs (!(isNull options.port)) { port = options.port; })
                                 // (optionalAttrs (!(isNull options.passwordFile)) {
                                     password = "{credential file ${options.passwordFile}}";
                                 })
