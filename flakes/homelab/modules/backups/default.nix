@@ -181,7 +181,7 @@ in
                 _:
                 {
                     name,
-                    settings,
+                    schedule,
                     ...
                 }:
                 nameValuePair "lesbos-backup-${name}-run" {
@@ -190,7 +190,7 @@ in
                     requires = [ "lesbos-backup-${name}-setup.service" ];
                     timerConfig = {
                         Unit = "lesbos-backup-${name}-run.service";
-                        OnCalendar = settings.schedule;
+                        OnCalendar = schedule;
                     };
                 }
             ) enabledBackups);
