@@ -47,6 +47,8 @@ in
             proxy_buffer_size 256k;
             proxy_busy_buffers_size 512k;
             large_client_header_buffers 8 256k;
+
+            client_max_body_size 256G;
         '';
 
         virtualHosts = {
