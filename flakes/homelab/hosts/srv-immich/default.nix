@@ -77,14 +77,14 @@
                 schedule = "hourly";
                 sources.postgres = {
                     enable = true;
-                    type = ["postgresql"];
+                    type = "postgresql";
                     postgresql = {
                         database = "all";
                     };
                 };
                 repositories.data = {
                     enable = true;
-                    type = ["volume"];
+                    type = "volume";
                     volume = {
                         type = "share";
                         name = "data";
@@ -107,5 +107,11 @@
             IMMICH_MICROSERVICES_METRICS_PORT = "8086";
             IMMICH_TRUSTED_PROXIES = "192.168.64.11";
         };
+        database.enable = true;
+        redis.enable = true;
+        mediaLocation = "/immich/media";
+        machine-learning.enable = false;
     };
+
+    networking.firewall.allowedTCPPorts = [ 2283 8085 8086 ];
 }

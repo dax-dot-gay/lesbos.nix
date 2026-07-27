@@ -17,10 +17,10 @@ let
         }:
         if enable then
             (
-                if (any (_: { enable, ... }: enable) (attrValues repositories)) then
+                if (any ({ enable, ... }: enable) (attrValues repositories)) then
                     true
                 else
-                    (any (_: { enable, ... }: enable) (attrValues sources))
+                    (any ({ enable, ... }: enable) (attrValues sources))
             )
         else
             false
@@ -75,15 +75,16 @@ let
             sources = getSources backup type;
         in
         (optionalAttrs ((length sources) > 0) (wrapper (map iterator sources)));
+    
+    actuallyEnabled = ((length (attrValues enabledBackups)) > 0);
 in
 {
     imports = [
         ./options.nix
     ];
 
-    config =
-        mkIf ((length (attrValues enabledBackups)) > 0) {
-            environment.systemPackages = [
+    config = {
+            environment.systemPackages = optionals actuallyEnabled ([
                 pkgs.borgbackup
                 pkgs.borgmatic
             ]
@@ -95,7 +96,7 @@ in
             )) pkgs.postgresql)
             ++ (optional (any (v: (any (r: r.type == "sqlite") (attrValues v.sources))) (
                 attrValues enabledBackups
-            )) pkgs.sqlite);
+            )) pkgs.sqlite));
 
             lesbos.secrets.system = mapAttrs' (
                 _:
@@ -266,8 +267,6 @@ in
                     }
                 ) enabledBackups;
             };
-        }
-        // (optionalAttrs ((length volumeInfo) > 0) {
             lesbos.volumes = listToAttrs (
                 map (
                     {
@@ -289,5 +288,5 @@ in
                     }
                 ) volumeInfo
             );
-        });
+        };
 }
