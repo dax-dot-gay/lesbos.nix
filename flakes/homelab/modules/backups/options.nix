@@ -1,7 +1,6 @@
-{ config, lib, ... }:
+{ lib, ... }:
 with lib;
 let
-    cfg = config.lesbos.backups;
 
     repoKind = types.enum [
         "volume"
@@ -30,58 +29,61 @@ let
             types.submodule (
                 { config, ... }:
                 {
-                    enable = (mkEnableOption "this repository") // {
-                        default = true;
-                    };
-                    type = mkOption {
-                        description = "What type of repository this is";
-                        type = repoKind;
-                    };
-                    label = mkOption {
-                        description = "Repository label";
-                        type = types.singleLineStr;
-                        default = "${backup_name}.${config._module.args.name}";
-                    };
-                    volume = mkRepoType "volume" "Repository stored on VirtioFS volume" {
+                    options = {
+                        enable = (mkEnableOption "this repository") // {
+                            default = true;
+                        };
                         type = mkOption {
-                            description = "Source volume type (disk or virtiofs share)";
-                            type = types.enum [
-                                "disk"
-                                "share"
-                            ];
+                            description = "What type of repository this is";
+                            type = repoKind;
                         };
-                        name = mkOption {
-                            description = "Name of source volume (volume mounted at `/vols/<type>/<name>`)";
+                        label = mkOption {
+                            description = "Repository label";
                             type = types.singleLineStr;
+                            default = "${backup_name}.${config._module.args.name}";
+                            readOnly = true;
                         };
-                        path = mkOption {
-                            description = "Path within the source volume to expose/refer to (must begin with `/`)";
-                            type = types.singleLineStr // {
-                                check = (x: hasPrefix "/" x);
+                        volume = mkRepoType "volume" "Repository stored on VirtioFS volume" {
+                            type = mkOption {
+                                description = "Source volume type (disk or virtiofs share)";
+                                type = types.enum [
+                                    "disk"
+                                    "share"
+                                ];
                             };
-                            default = "/";
+                            name = mkOption {
+                                description = "Name of source volume (volume mounted at `/vols/<type>/<name>`)";
+                                type = types.singleLineStr;
+                            };
+                            path = mkOption {
+                                description = "Path within the source volume to expose/refer to (must begin with `/`)";
+                                type = types.singleLineStr // {
+                                    check = (x: hasPrefix "/" x);
+                                };
+                                default = "/";
+                            };
                         };
-                    };
-                    local = mkRepoType "local" "Repository stored locally" {
-                        path = mkOption {
-                            description = "Path for local repository";
-                            type = types.str;
+                        local = mkRepoType "local" "Repository stored locally" {
+                            path = mkOption {
+                                description = "Path for local repository";
+                                type = types.str;
+                            };
                         };
-                    };
-                    ssh = mkRepoType "ssh" "Repository stored on an SSH/SFTP remote" {
-                        url = mkOption {
-                            description = "SSH/SFTP URL";
-                            type = types.str;
+                        ssh = mkRepoType "ssh" "Repository stored on an SSH/SFTP remote" {
+                            url = mkOption {
+                                description = "SSH/SFTP URL";
+                                type = types.str;
+                            };
                         };
-                    };
-                    rclone = mkRepoType "rclone" "Repository stored on an rclone remote" {
-                        remote = mkOption {
-                            description = "Name of rclone remote";
-                            type = types.str;
-                        };
-                        path = mkOption {
-                            description = "Path on the selected remote";
-                            type = types.str;
+                        rclone = mkRepoType "rclone" "Repository stored on an rclone remote" {
+                            remote = mkOption {
+                                description = "Name of rclone remote";
+                                type = types.str;
+                            };
+                            path = mkOption {
+                                description = "Path on the selected remote";
+                                type = types.str;
+                            };
                         };
                     };
                 }
@@ -114,82 +116,84 @@ let
         types.submodule (
             { config, ... }:
             {
-                enable = (mkEnableOption "this source") // {
-                    default = true;
-                };
-                type = mkOption {
-                    description = "What type of source this is";
-                    type = srcKind;
-                };
-                paths = mkSrcType "paths" "Backup selected source directories" {
-                    source_directories = mkOption {
-                        description = "Directories to source from";
-                        type = types.listOf types.str;
+                options = {
+                    enable = (mkEnableOption "this source") // {
+                        default = true;
                     };
-                };
-                postgresql = mkSrcType "postgresql" "Backup selected postgresql database(s)" {
-                    database = mkOption {
-                        description = "Database name to backup, or `all` for all databases";
-                        type = types.str;
+                    type = mkOption {
+                        description = "What type of source this is";
+                        type = srcKind;
                     };
-                    label = mkOption {
-                        description = "Label in backup";
-                        type = types.str;
-                        default = "psql-${config._module.args.name}";
+                    paths = mkSrcType "paths" "Backup selected source directories" {
+                        source_directories = mkOption {
+                            description = "Directories to source from";
+                            type = types.listOf types.str;
+                        };
                     };
-                    container = mkOption {
-                        description = "Container to connect to instead of host";
-                        type = types.nullOr types.str;
-                        default = null;
-                    };
-                    hostname = mkOption {
-                        description = "Hostname to connect to, or unix socket";
-                        type = types.str;
-                        default = "/run/postgresql";
-                    };
-                    port = mkOption {
-                        description = "Port to connect to over the network";
-                        type = types.port;
-                        default = 5432;
-                    };
-                    format = mkOption {
-                        description = "Dump output format";
-                        type = types.enum [
-                            "plain"
-                            "custom"
-                            "directory"
-                            "tar"
+                    postgresql = mkSrcType "postgresql" "Backup selected postgresql database(s)" {
+                        database = mkOption {
+                            description = "Database name to backup, or `all` for all databases";
+                            type = types.str;
+                        };
+                        label = mkOption {
+                            description = "Label in backup";
+                            type = types.str;
+                            default = "psql-${config._module.args.name}";
+                        };
+                        container = mkOption {
+                            description = "Container to connect to instead of host";
+                            type = types.nullOr types.str;
+                            default = null;
+                        };
+                        hostname = mkOption {
+                            description = "Hostname to connect to, or unix socket";
+                            type = types.str;
+                            default = "/run/postgresql";
+                        };
+                        port = mkOption {
+                            description = "Port to connect to over the network";
+                            type = types.port;
+                            default = 5432;
+                        };
+                        format = mkOption {
+                            description = "Dump output format";
+                            type = types.enum [
+                                "plain"
+                                "custom"
+                                "directory"
+                                "tar"
+                            ];
+                            default = "custom";
+                        };
+                        username = mkOption {
+                            description = "Username to pass to the database";
+                            type = types.str;
+                            default = "postgres";
+                        };
+                        passwordFile = mkOption {
+                            description = "Path to a file containing the connection password, or null";
+                            type = types.nullOr types.path;
+                            default = null;
+                        };
+                        commands = mkCommands [
+                            "pg_dump"
+                            "pg_dumpall"
+                            "pg_restore"
+                            "psql"
                         ];
-                        default = "custom";
                     };
-                    username = mkOption {
-                        description = "Username to pass to the database";
-                        type = types.str;
-                        default = "postgres";
+                    sqlite = mkSrcType "sqlite" "Backup selected sqlite database" {
+                        path = mkOption {
+                            description = "Path to sqlite file";
+                            type = types.str;
+                        };
+                        label = mkOption {
+                            description = "Label in backup";
+                            type = types.str;
+                            default = "sqlite-${config._module.args.name}";
+                        };
+                        commands = mkCommands [ "sqlite3" ];
                     };
-                    passwordFile = mkOption {
-                        description = "Path to a file containing the connection password, or null";
-                        type = types.nullOr types.path;
-                        default = null;
-                    };
-                    commands = mkCommands [
-                        "pg_dump"
-                        "pg_dumpall"
-                        "pg_restore"
-                        "psql"
-                    ];
-                };
-                sqlite = mkSrcType "sqlite" "Backup selected sqlite database" {
-                    path = mkOption {
-                        description = "Path to sqlite file";
-                        type = types.str;
-                    };
-                    label = mkOption {
-                        description = "Label in backup";
-                        type = types.str;
-                        default = "sqlite-${config._module.args.name}";
-                    };
-                    commands = mkCommands [ "sqlite3" ];
                 };
             }
         )

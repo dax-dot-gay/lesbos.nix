@@ -75,7 +75,22 @@
                     quota = "128G";
                 };
                 schedule = "hourly";
-                
+                sources.postgres = {
+                    enable = true;
+                    type = ["postgresql"];
+                    postgresql = {
+                        database = "all";
+                    };
+                };
+                repositories.data = {
+                    enable = true;
+                    type = ["volume"];
+                    volume = {
+                        type = "share";
+                        name = "data";
+                        path = "/systems/srv-immich/postgresql";
+                    };
+                };
             };
         };
     };
