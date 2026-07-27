@@ -129,9 +129,9 @@ in
                             Type = "oneshot";
                             User = "root";
                             Group = "root";
-                            ReadWritePaths = map (r: r.path) (
+                            /*ReadWritePaths = map (r: r.path) (
                                 filter (r: (hasPrefix "/" r.path) || (hasPrefix "~" r.path)) (mapAttrsToList mkRepos repositories)
-                            );
+                            );*/
                         };
                         startLimitIntervalSec = 0;
                         startLimitBurst = 1000;
@@ -156,9 +156,9 @@ in
                             Type = "oneshot";
                             User = "root";
                             Group = "root";
-                            ReadWritePaths = map (r: r.path) (
+                            /*ReadWritePaths = map (r: r.path) (
                                 filter (r: (hasPrefix "/" r.path) || (hasPrefix "~" r.path)) (mapAttrsToList mkRepos repositories)
-                            );
+                            );*/
                         };
                         startLimitIntervalSec = 0;
                         startLimitBurst = 1000;
