@@ -113,7 +113,9 @@
         database.enable = true;
         redis.enable = true;
         mediaLocation = "/immich/media";
-        machine-learning.enable = false;
+        machine-learning = {
+            enable = true;
+        };
     };
 
     networking.firewall.allowedTCPPorts = [ 2283 8085 8086 ];
