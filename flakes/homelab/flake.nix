@@ -2,6 +2,7 @@
     description = "Flake containing configs for my homelab";
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+        nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
         sops-nix = {
             url = "github:Mic92/sops-nix";
             inputs.nixpkgs.follows = "nixpkgs";
@@ -34,7 +35,7 @@
     };
 
     outputs =
-        { self, lesbos-common, ... }@inputs:
+        { self, lesbos-common, nixpkgs-unstable, ... }@inputs:
         lesbos-common.lib.hydrateFlake
             {
                 inherit self inputs;
@@ -333,6 +334,7 @@
                                 # Add extra modules here
                             ];
                             extraSpecialArgs = {
+                                pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
                                 # Add extra specialArgs here
                             };
                         };

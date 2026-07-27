@@ -3,6 +3,7 @@
     lib,
     pkgs,
     inputs,
+    pkgs-unstable,
     ...
 }:
 {
@@ -101,6 +102,7 @@
         port = 2283;
         user = "immich";
         group = "immich";
+        package = pkgs-unstable.immich;
         environment = {
             IMMICH_LOG_LEVEL = "debug";
             TZ = "America/New_York";
