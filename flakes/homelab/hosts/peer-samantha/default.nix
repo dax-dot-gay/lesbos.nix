@@ -111,5 +111,5 @@
     systemd.network.wait-online.enable = false;
     boot.initrd.systemd.network.wait-online.enable = false;
     services.openssh.settings.PasswordAuthentication = lib.mkForce true;
-    environment.systemPackages = [pkgs.rclone];
+    environment.systemPackages = [pkgs.rclone pkgs.rsync];
 }
