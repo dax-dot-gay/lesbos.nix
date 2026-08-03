@@ -122,13 +122,23 @@
                 };
             };
             encoding = {
-                hardwareAccelerationType = "nvenc";
+                enableHardwareEncoding = true;
+                hardwareAccelerationType = "qsv";
                 hardwareDecodingCodecs = [
                     "h264"
+                    "hevc"
                     "mpeg2video"
                     "vp9"
                     "vc1"
+                    "vp8"
+                    "av1"
                 ];
+                enableDecodingColorDepth10Hevc = true;
+                enableDecodingColorDepth10HevcRext = true;
+                enableDecodingColorDepth12HevcRext = true;
+                enableDecodingColorDepth10Vp9 = true;
+                allowHevcEncoding = true;
+                allowAv1Encoding = true;
             };
             library = {
                 virtualFolders = [

@@ -6,7 +6,10 @@
     ...
 }:
 {
-    imports = [ ./provision-secrets.nix ./jellarr.nix ];
+    imports = [
+        ./provision-secrets.nix
+        ./jellarr.nix
+    ];
     lesbos = {
         info = {
             canonicalName = "srv-jellyfin";
@@ -47,19 +50,48 @@
             users = { };
         };
     };
-    
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_535;
-    hardware.nvidia.open = false;
-    hardware.nvidia.powerManagement.enable = false;
-    services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.graphics.enable = true;
-    environment.systemPackages = with pkgs; [
-        libva-utils
-        libva-vdpau-driver
-        jellyfin
-        jellyfin-ffmpeg
-        jellyfin-web
-        id3v2
-        sqlite
-    ];
+
+    /*
+      NVIDIA configs
+
+      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_535;
+      hardware.nvidia.open = false;
+      hardware.nvidia.powerManagement.enable = false;
+      services.xserver.videoDrivers = [ "nvidia" ];
+      hardware.graphics.enable = true;
+      environment.systemPackages = with pkgs; [
+          libva-utils
+          libva-vdpau-driver
+          jellyfin
+          jellyfin-ffmpeg
+          jellyfin-web
+          id3v2
+          sqlite
+      ];
+    */
+
+    hardware.intel-gpu-tools.enable = true;
+    hardware.graphics = {
+        enable = true;
+        extraPackages = with pkgs; [
+            intel-media-driver
+            intel-vaapi-driver
+            intel-compute-runtime
+            vpl-gpu-rt
+            libva-vdpau-driver
+            libva-utils
+            jellyfin
+            jellyfin-ffmpeg
+            jellyfin-web
+            id3v2
+            sqlite
+        ];
+    };
+    environment.sessionVariables = {
+        LIBVA_DRIVER_NAME = "iHD";
+    };
+    hardware.enableRedistributableFirmware = true;
+    boot.kernelParams = [ "i915.enable_guc=3" ];
+    services.xserver.videoDrivers = [ "modesetting" ];
+    users.users.jellyfin.extraGroups = ["video" "render"];
 }
