@@ -85,6 +85,7 @@
             jellyfin-web
             id3v2
             sqlite
+            nvtopPackages.intel
         ];
     };
     environment.sessionVariables = {
