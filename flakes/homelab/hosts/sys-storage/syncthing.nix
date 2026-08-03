@@ -31,5 +31,4 @@
         22000
         21027
     ];
-    systemd.services.syncthing-init.enable = false;
 }
