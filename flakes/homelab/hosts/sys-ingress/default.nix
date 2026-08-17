@@ -23,6 +23,7 @@
             start = {
                 order = 2;
             };
+            storage.disk_size = "128G";
         };
         base.users = {
             root = {
