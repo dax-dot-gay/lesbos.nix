@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, lib, ... }:
 let
     pl = config.sops.placeholder;
 in
@@ -29,4 +29,16 @@ in
         ports = [ "0.0.0.0:5984:5984" ];
     };
     networking.firewall.allowedTCPPorts = [ 5984 ];
+    pkgs = [
+        pkgs.deno
+        pkgs.curl
+        pkgs.writeShellScriptBin "provision-livesync" ''
+            DBNAME=$1
+            export hostname=https://obsidian-livesync.dax.gay
+            export database=$DBNAME
+            export username="$(cat ${config.sops.secrets."obsidian-livesync/username".path})"
+            export password="$(cat ${config.sops.secrets."obsidian-livesync/password".path})"
+            curl -s https://raw.githubusercontent.com/vrtmrz/obsidian-livesync/main/utils/couchdb/couchdb-init.sh | bash
+        ''
+    ];
 }
