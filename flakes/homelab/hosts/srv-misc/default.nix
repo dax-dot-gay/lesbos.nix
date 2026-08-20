@@ -81,6 +81,24 @@
                 };
                 required_by = ["homarr.service"];
             };
+            obsidian-livesync = {
+                enable = true;
+                source = {
+                    type = "share";
+                    name = "data";
+                    path = "/systems/srv-misc/obsidian-livesync";
+                    ensureSource.enable = true;
+                    subdirectories = ["data" "etc"];
+                };
+                destination = "/services/obsidian-livesync";
+                strategy.bindMapped = {
+                    enable = true;
+                    user = "root";
+                    group = "root";
+                    permissions = "0777";
+                };
+                required_by = ["obsidian-livesync.service"];
+            };
         };
     };
 }
