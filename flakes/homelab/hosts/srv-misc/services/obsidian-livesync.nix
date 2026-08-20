@@ -29,7 +29,7 @@ in
         ports = [ "0.0.0.0:5984:5984" ];
     };
     networking.firewall.allowedTCPPorts = [ 5984 ];
-    pkgs = [
+    environment.systemPackages = [
         pkgs.deno
         pkgs.curl
         (pkgs.writeShellScriptBin "provision-livesync" ''
