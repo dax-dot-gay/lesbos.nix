@@ -32,13 +32,13 @@ in
     pkgs = [
         pkgs.deno
         pkgs.curl
-        pkgs.writeShellScriptBin "provision-livesync" ''
+        (pkgs.writeShellScriptBin "provision-livesync" ''
             DBNAME=$1
             export hostname=https://obsidian-livesync.dax.gay
             export database=$DBNAME
             export username="$(cat ${config.sops.secrets."obsidian-livesync/username".path})"
             export password="$(cat ${config.sops.secrets."obsidian-livesync/password".path})"
             curl -s https://raw.githubusercontent.com/vrtmrz/obsidian-livesync/main/utils/couchdb/couchdb-init.sh | bash
-        ''
+        '')
     ];
 }
