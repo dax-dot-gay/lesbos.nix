@@ -28,4 +28,5 @@ in
         ];
         ports = [ "0.0.0.0:5984:5984" ];
     };
+    networking.firewall.allowedTCPPorts = [ 5984 ];
 }

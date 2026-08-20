@@ -183,6 +183,15 @@ in
                     recommendedProxySettings = true;
                 };
             };
+            "obsidian-livesync.dax.gay" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                    proxyPass = "http://${clients.srv-misc.address}:5984";
+                    proxyWebsockets = true;
+                    recommendedProxySettings = true;
+                };
+            };
         };
     };
 }
