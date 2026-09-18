@@ -4,6 +4,11 @@ let
     clients = config.lesbos.homelab.net.clients;
 in
 {
+    lesbos.secrets.system = {
+        "htpasswd/yubal/content" = {
+            mode = "0444";
+        };
+    };
     services.nginx.virtualHosts = {
         "jellyfin.dax.gay" = {
             enableACME = true;
@@ -102,6 +107,18 @@ in
                 proxyPass = "http://${clients.srv-media-support.address}:8688";
                 proxyWebsockets = true;
                 extraConfig = preflight;
+            };
+        };
+        "ytm.dl.dax.gay" = {
+            enableACME = true;
+            forceSSL = true;
+            locations."/" = {
+                proxyPass = "http://${clients.srv-media-support.address}:8690";
+                proxyWebsockets = true;
+                extraConfig = preflight + ''
+                    auth_basic "ytm.dl.dax.gay"
+                    auth_basic_user_file ${config.sops.secrets."htpasswd/yubal/content".path}
+                '';
             };
         };
     };

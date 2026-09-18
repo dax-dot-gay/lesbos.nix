@@ -38,6 +38,25 @@
                 "/media-support/media/Songs:/music:ro"
             ];
         };
+        containers.yubal = {
+            image = "ghcr.io/guillevc/yubal:latest";
+            serviceName = "yubal";
+            ports = ["0.0.0.0:8690:8690"];
+            environment = {
+                PUID = "0";
+                PGID = "0";
+                YUBAL_SCHEDULER_CRON = "0 0 * * *";
+                YUBAL_DOWNLOAD_UGC = "false";
+                YUBAL_TZ = "US/Eastern";
+                YUBAL_AUDIO_FORMAT = "mp3";
+                YUBAL_AUDIO_QUALITY = "0";
+                YUBAL_PORT = "8690";
+            };
+            volumes = [
+                "/media-support/services/yubal:/app/config"
+                "/media-support/media/YoutubeSongs:/app/data"
+            ];
+        };
     };
-    networking.firewall.allowedTCPPorts = [ 8686 8688 ];
+    networking.firewall.allowedTCPPorts = [ 8686 8688 8690 ];
 }
