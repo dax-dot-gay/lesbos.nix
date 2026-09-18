@@ -116,8 +116,8 @@ in
                 proxyPass = "http://${clients.srv-media-support.address}:8690";
                 proxyWebsockets = true;
                 extraConfig = preflight + ''
-                    auth_basic "ytm.dl.dax.gay"
-                    auth_basic_user_file ${config.sops.secrets."htpasswd/yubal/content".path}
+                    auth_basic           "ytm.dl.dax.gay";
+                    auth_basic_user_file ${config.sops.secrets."htpasswd/yubal/content".path};
                 '';
             };
         };
