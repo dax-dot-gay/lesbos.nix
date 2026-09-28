@@ -94,7 +94,7 @@
                         "postgres"
                     ];
                 };
-                destination = "/serrvices/osync";
+                destination = "/services/osync";
                 strategy.bindMapped = {
                     enable = true;
                     user = "root";
