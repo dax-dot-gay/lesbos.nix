@@ -100,8 +100,8 @@
                     user = "root";
                     group = "root";
                     permissions = "0777";
-                    required_by = ["podman-network-osync_default.service"];
                 };
+                required_by = ["podman-network-osync_default.service"];
             };
         };
     };
