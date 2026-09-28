@@ -34,6 +34,9 @@ in
         "osync/s3/kms_secret" = { };
         "osync/auth/better_auth" = { };
         "osync/auth/sync" = { };
+        "osync/auth/sync" = { };
+        "osync/admin/email" = {};
+        "osync/admin/password" = {};
     };
     sops.templates."osync.env" = {
         mode = "0444";
@@ -84,7 +87,10 @@ in
             CORS_ORIGIN=https://osync.dax.gay
             SELF_HOSTED=true
             SYNC_TOKEN_TTL_SECONDS=120
-            COORDINATOR_DATA_DIR=/data/coordinators        
+            COORDINATOR_DATA_DIR=/data/coordinators
+
+            ADMIN_EMAIL=${pl "admin/email"}
+            ADMIN_PASSWORD=${pl "admin/password"}
         '';
     };
 
@@ -96,7 +102,7 @@ in
             "/services/osync/app:/data/coordinators:rw"
         ];
         ports = [
-            "0.0.0.0:4500:3000/tcp"
+            "0.0.0.0:7500:3000/tcp"
         ];
         dependsOn = [
             "osync-minio"
@@ -132,7 +138,7 @@ in
             "/services/osync/minio:/data:rw"
         ];
         ports = [
-            "0.0.0.0:4501:9001/tcp"
+            "0.0.0.0:7501:9001/tcp"
         ];
         log-driver = "journald";
         extraOptions = [
@@ -220,7 +226,7 @@ in
         wantedBy = [ "multi-user.target" ];
     };
     networking.firewall.allowedTCPPorts = [
-        4500
-        4501
+        7500
+        7501
     ];
 }
