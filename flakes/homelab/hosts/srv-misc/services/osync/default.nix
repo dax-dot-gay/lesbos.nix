@@ -42,7 +42,7 @@ in
             POSTGRES_USER=osync
             POSTGRES_PASSWORD=${pl "postgres/password"}
             POSTGRES_DB=osync
-            DATABASE_URL = postgresql://osync:@postgres:5432/osync    
+            DATABASE_URL=postgresql://osync:@postgres:5432/osync    
 
             # ── MinIO (S3-compatible storage) ────────────────────────────
             S3_ACCESS_KEY=${pl "s3/access_key"}
