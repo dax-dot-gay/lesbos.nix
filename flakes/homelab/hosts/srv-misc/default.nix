@@ -99,7 +99,7 @@
                     enable = true;
                     user = "root";
                     group = "root";
-                    permissions = "0777";
+                    permissions = "0750";
                 };
                 required_by = ["podman-network-osync_default.service"];
             };
