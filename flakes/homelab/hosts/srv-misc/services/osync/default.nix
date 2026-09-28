@@ -58,7 +58,12 @@ in
             MINIO_PUBLIC_URL=https://s3.osync.dax.gay
             MINIO_ROOT_USER=${pl "s3/access_key"}
             MINIO_ROOT_PASSWORD=${pl "s3/secret_key"}
+            MINIO_SKIP_CHOWN=true
             MINIO_KMS_AUTO_ENCRYPTION=on
+            MINIO_ADDRESS = 0.0.0.0:9000
+            MINIO_CONSOLE_ADDRESS = 0.0.0.0:9001
+            MINIO_HEALTHCHECK_CODE = 200
+            MINIO_HEALTHCHECK_URL = http://0.0.0.0:9000/minio/health/live
 
             # ── Auth ──────────────────────────────────────────────────────
             # Generate: openssl rand -hex 32
@@ -121,7 +126,7 @@ in
         ];
     };
     virtualisation.oci-containers.containers."osync-minio" = {
-        image = "quay.io/minio/aistor/minio:latest";
+        image = "docker.io/webhippie/minio:2025-07-23";
         environmentFiles = [ config.sops.templates."osync.env".path ];
         volumes = [
             "/services/osync/minio:/data:rw"
