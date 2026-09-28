@@ -134,12 +134,6 @@ in
         ports = [
             "0.0.0.0:4501:9001/tcp"
         ];
-        cmd = [
-            "server"
-            "/data"
-            "--console-address"
-            ":9001"
-        ];
         log-driver = "journald";
         extraOptions = [
             "--health-cmd=[\"curl\", \"-f\", \"http://localhost:9000/minio/health/live\"]"
