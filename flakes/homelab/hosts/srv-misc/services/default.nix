@@ -3,7 +3,7 @@
     imports = [
         ./resume.nix
         ./homarr.nix
-        ./obsidian-livesync.nix
+        ./osync
     ];
 
     systemd.timers.podman-auto-update.wantedBy = [ "timers.target" ];

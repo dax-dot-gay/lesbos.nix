@@ -81,23 +81,27 @@
                 };
                 required_by = ["homarr.service"];
             };
-            obsidian-livesync = {
+            osync-data = {
                 enable = true;
                 source = {
                     type = "share";
                     name = "data";
-                    path = "/systems/srv-misc/obsidian-livesync";
+                    path = "/systems/srv-misc/osync";
                     ensureSource.enable = true;
-                    subdirectories = ["data" "etc"];
+                    subdirectories = [
+                        "app"
+                        "minio"
+                        "postgres"
+                    ];
                 };
-                destination = "/services/obsidian-livesync";
+                destination = "/serrvices/osync";
                 strategy.bindMapped = {
                     enable = true;
                     user = "root";
                     group = "root";
                     permissions = "0777";
+                    required_by = ["podman-network-osync_default.service"];
                 };
-                required_by = ["obsidian-livesync.service"];
             };
         };
     };
