@@ -121,7 +121,7 @@ in
         ];
     };
     virtualisation.oci-containers.containers."osync-minio" = {
-        image = "minio/minio";
+        image = "quay.io/minio/aistor/minio:latest";
         environmentFiles = [ config.sops.templates."osync.env".path ];
         volumes = [
             "/services/osync/minio:/data:rw"
