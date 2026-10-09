@@ -46,7 +46,7 @@
                 PUID = "0";
                 PGID = "0";
                 YUBAL_SCHEDULER_CRON = "0 0 * * *";
-                YUBAL_DOWNLOAD_UGC = "false";
+                YUBAL_DOWNLOAD_UGC = "true";
                 YUBAL_TZ = "US/Eastern";
                 YUBAL_AUDIO_FORMAT = "mp3";
                 YUBAL_AUDIO_QUALITY = "0";
