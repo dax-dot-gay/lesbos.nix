@@ -1,7 +1,4 @@
 # BorgWarehouse cron jobs
-# Adjust frequency to your needs. Default: every hour.
-# Documentation: https://borgwarehouse.com/docs/admin-manual/scheduled-tasks/
-#
 # Status check: updates repo status (last save, alert state) and sends notifications
 0 * * * * curl -sf --data "" -H "Authorization: Bearer $CRONJOB_KEY" "http://host.containers.internal:3000/api/v1/cron/status"
 # Storage check: updates storage usage for each repository
