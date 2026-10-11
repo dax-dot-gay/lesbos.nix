@@ -9,6 +9,11 @@
         group = "borgwarehouse";
         mode = "0440";
     };
+    lesbos.secrets.system."borgcron.env" = {
+        owner = "borgwarehouse";
+        group = "borgwarehouse";
+        mode = "0440";
+    };
     virtualisation.oci-containers = {
         backend = "podman";
         containers = {
@@ -38,6 +43,17 @@
                     config.sops.secrets."borgbackup.env".path
                 ];
                 serviceName = "borgwarehouse";
+            };
+            borgcron = {
+                image = "ghcr.io/aptible/supercronic:latest";
+                dependsOn = ["borgwarehouse"];
+                environmentFiles = [
+                    config.sops.secrets."borgcron.env".path
+                ];
+                volumes = [
+                    "${./backup.cron}:/app/crontab:ro"
+                ];
+                cmd = [ "/app/crontab" ];
             };
         };
     };
