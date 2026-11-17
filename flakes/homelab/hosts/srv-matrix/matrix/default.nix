@@ -42,7 +42,7 @@
         "ember/ooye/registration.yml" = {
             owner = "root";
             group = "root";
-            mode = "0400";
+            mode = "0444";
         };
     };
 }
