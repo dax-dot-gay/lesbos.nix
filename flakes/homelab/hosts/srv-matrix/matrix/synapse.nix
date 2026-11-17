@@ -55,9 +55,14 @@
                 user_id = "@asterisms_apsis:matrix.org";
                 action = "allow";
             }
+            {
+                user_id = "*:corviform.gay";
+                action = "allow";
+            }
         ];
         settings.app_service_config_files = [
             config.sops.secrets."hookshot/registration.yml".path
+            config.sops.secrets."ember/ooye/registration.yml".path
         ];
     };
     lesbos.volumes = {

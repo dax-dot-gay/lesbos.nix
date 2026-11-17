@@ -39,5 +39,10 @@
             group = "root";
             mode = "0400";
         };
+        "ember/ooye/registration.yml" = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+        };
     };
 }
